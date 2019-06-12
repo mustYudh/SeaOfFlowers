@@ -11,11 +11,11 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
-      tools:ignore="GoogleAppIndexingWarning"
-      tools:replace="android:supportsRtl,theme,label,appComponentFactory"
-      >
+      tools:ignore="GoogleAppIndexingWarning">
 
-
+    <meta-data
+        android:name="com.baidu.lbsapi.API_KEY"
+        android:value="${BAIDU_LOCATION}"/>
     <!-- 友盟key -->
     <meta-data
         android:name="UMENG_APPKEY"
@@ -28,7 +28,7 @@
         android:value="${UMENG_CHANNEL}"/>
 
 
-    <activity android:name=".MainActivity">
+    <activity android:name=".SplashActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
