@@ -3,7 +3,10 @@ package com.hzrcht.seaofflowers.module.testFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import com.hzrcht.seaofflowers.R;
+import com.hzrcht.seaofflowers.action.ActionHeads;
+import com.hzrcht.seaofflowers.action.BaseActionHelper;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.yu.common.toast.ToastUtils;
 
 /**
  * @author yudenghao
@@ -18,11 +21,15 @@ public class TestFragment extends BaseFragment {
 
   }
 
-
   @Override protected void loadData() {
-    bindText(R.id.test,"测试1");
-
+    bindText(R.id.test, "测试1");
+    bindView(R.id.show_test, v -> {
+      BaseActionHelper.with(getActivity())
+          .handleAction(ActionHeads.HOME_CENTER_TAB_STATUS_SHOW);
+    });
+    bindView(R.id.hide_test, v -> {
+      BaseActionHelper.with(getActivity())
+          .handleAction(ActionHeads.HOME_CENTER_TAB_STATUS_HIDE);
+    });
   }
-
-
 }

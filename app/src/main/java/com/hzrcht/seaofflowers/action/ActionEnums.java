@@ -12,7 +12,8 @@ public enum ActionEnums {
   /**
    *
    */
-  TEST_LOGIN(ActionHeads.TEST_LOGIN);
+  TEST_LOGIN(ActionHeads.TEST_LOGIN),
+  HOME_CENTER_TAB_STATUS(ActionHeads.HOME_CENTER_TAB_STATUS);
 
   private String head;
 

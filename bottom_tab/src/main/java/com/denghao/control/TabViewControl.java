@@ -18,9 +18,8 @@ public interface TabViewControl {
     /**
      * 添加TabVie
      *
-     * @param view TabView
      */
-    void addViewTabView(View view);
+    void addViewTabView(int position);
 
     /**
      * 移除所有的TabView
@@ -47,6 +46,6 @@ public interface TabViewControl {
     void setOnTabClickListener(TabClickListener onTabClickListener);
 
      interface TabClickListener {
-        void onTabClickListener(int position,View view);
+        void onTabClickListener(int position, View view);
     }
 }
