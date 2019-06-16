@@ -3,14 +3,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/lb_cm_black_font"
+    android:gravity="center"
+    android:orientation="vertical"
     >
 
   <TextView
       android:id="@+id/test"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:gravity="center"
       android:text="123124"
+      android:textColor="@color/lb_cm_white"
+      />
+
+
+  <Button
+      android:id="@+id/show_test"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="显示"
+      />
+
+
+  <Button
+      android:id="@+id/hide_test"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="隐藏"
       />
 
 
