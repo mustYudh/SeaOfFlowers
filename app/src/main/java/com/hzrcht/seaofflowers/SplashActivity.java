@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
-import com.hzrcht.seaofflowers.module.login.SelectLoginActivity;
+import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 
 public class SplashActivity extends BaseBarActivity {
 

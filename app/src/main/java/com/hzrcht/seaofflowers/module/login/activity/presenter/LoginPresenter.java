@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.login.presenter;
+package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
 import android.app.Activity;
 import android.content.ComponentName;

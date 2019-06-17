@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".module.login.SelectGenderActivity">
+        <activity android:name=".module.login.activity.SelectGenderActivity">
         </activity>
-        <activity android:name=".module.login.SelectLoginActivity">
+        <activity android:name=".module.login.activity.SelectLoginActivity">
         </activity>
 
         <meta-data
@@ -47,7 +47,7 @@
             android:name=".module.web.WebViewActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".module.login.LoginActivity"
+            android:name=".module.login.activity.LoginActivity"
             android:screenOrientation="portrait"/>
     </application>
 

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.data.UserProfile;
-import com.hzrcht.seaofflowers.module.login.LoginActivity;
+import com.hzrcht.seaofflowers.module.login.activity.LoginActivity;
 import com.yu.common.launche.LauncherHelper;
 
 /**

@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.login;
+package com.hzrcht.seaofflowers.module.login.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
-import com.hzrcht.seaofflowers.module.login.presenter.LoginPresenter;
-import com.hzrcht.seaofflowers.module.login.presenter.LoginViewer;
+import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginPresenter;
+import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginViewer;
 import com.yu.common.login.LoginRedirectHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 

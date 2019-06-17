@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.login;
+package com.hzrcht.seaofflowers.module.login.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
