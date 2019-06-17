@@ -3,6 +3,7 @@ package com.hzrcht.seaofflowers.module.home;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+
 import com.denghao.control.TabItem;
 import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
@@ -11,18 +12,20 @@ import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
+import com.hzrcht.seaofflowers.module.home.mine.fragment.MineFragment;
 import com.hzrcht.seaofflowers.module.testFragment.TestFragment;
 import com.hzrcht.seaofflowers.module.testFragment.TestFragment1;
 import com.hzrcht.seaofflowers.module.testFragment.TestFragment2;
-import com.hzrcht.seaofflowers.module.testFragment.TestFragment4;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.PressHandle;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yudenghao
@@ -46,7 +49,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     items.add(new TabView(1, new TestFragment1()));
     items.add(new TabView(2, null));
     items.add(new TabView(3, new TestFragment2()));
-    items.add(new TabView(4, new TestFragment4()));
+    items.add(new TabView(4, new MineFragment()));
     mBottomNavigationView.initControl(this).setPagerView(items, 0);
     mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
       if (position == 2) {

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".module.login.SelectGenderActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="请选择您的性别"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="将根据能性别来为您推荐"
+        android:textColor="@color/color_999999"
+        android:textSize="15sp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="31dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginRight="31dp">
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="215dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_login_woman_normal"/>
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="215dp"
+            android:layout_marginLeft="18dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_login_man_normal"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:includeFontPadding="false"
+        android:text="*性别选择后无法修改，请选择真实的性别哦！"
+        android:textColor="@color/color_9897E7"
+        android:textSize="15sp"
+        />
+</LinearLayout>

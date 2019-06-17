@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_bar_all_height"
+                android:background="@color/lb_cm_white"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_height_top"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/action_bar_center_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="18dp"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/color_9897E7"
+            android:textSize="17sp"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
