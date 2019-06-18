@@ -12,9 +12,6 @@
       android:supportsRtl="true"
       android:theme="@style/AppTheme"
       tools:ignore="GoogleAppIndexingWarning">
-    <activity
-        android:name=".test.NewTestActivity"
-        android:screenOrientation="portrait"/>
     <activity android:name=".module.home.mine.activity.MineAttentionActivity">
     </activity>
     <activity android:name=".module.login.activity.SelectGenderActivity">
