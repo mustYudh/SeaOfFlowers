@@ -4,6 +4,6 @@ import com.yu.common.mvp.Viewer;
 
 
 
-public interface ${fragmentClass}Viewer extends Viewer {
+public interface ${activityClass}Viewer extends Viewer {
 
 }
