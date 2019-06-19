@@ -4,9 +4,9 @@ import android.support.annotation.LayoutRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.hzrcht.seaofflowers.R;
-import com.yu.common.ui.BarIconContainer;
 import com.yu.common.utils.BarUtils;
 
 public abstract class BaseBarActivity extends BaseActivity {
@@ -41,7 +41,7 @@ public abstract class BaseBarActivity extends BaseActivity {
   }
 
   private void initBack() {
-    BarIconContainer back = findViewById(R.id.action_back);
+    LinearLayout back = findViewById(R.id.action_back);
     if (back != null) {
       back.setOnClickListener(v -> finish());
     }
