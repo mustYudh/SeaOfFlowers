@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp">
+
+
+        <ImageView
+            android:id="@+id/iv_headimg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder"/>
+
+        <LinearLayout
+            android:layout_width="55dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/shape_home_online"
+            android:gravity="center_vertical">
+
+
+            <TextView
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/shape_green_point"
+                android:visibility="visible"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:includeFontPadding="false"
+                android:text="在线"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                />
+        </LinearLayout>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="xiaoxiao"
+            android:textColor="@color/color_333333"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/shape_home_age"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="4dp"
+            android:text="18"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/shape_home_job"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="7dp"
+            android:paddingTop="4dp"
+            android:paddingRight="7dp"
+            android:paddingBottom="4dp"
+            android:text="模特"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="12dp"
+        android:includeFontPadding="false"
+        android:text="聊天吧"
+        android:textColor="@color/color_999999"
+        android:textSize="12sp"
+        />
+</LinearLayout>

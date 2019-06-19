@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.home.mine.activity;
+package com.hzrcht.seaofflowers.module.mine.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
-import com.hzrcht.seaofflowers.module.home.mine.adapter.MineAttentionRvAdapter;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineAttentionRvAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.home.mine.adapter;
+package com.hzrcht.seaofflowers.module.home.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -8,10 +8,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
-public class MineAttentionRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class HomeLimitRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     private Context context;
 
-    public MineAttentionRvAdapter(int layoutResId, @Nullable List<String> data, Context context) {
+    public HomeLimitRvAdapter(int layoutResId, @Nullable List<String> data, Context context) {
         super(layoutResId, data);
         this.context = context;
     }

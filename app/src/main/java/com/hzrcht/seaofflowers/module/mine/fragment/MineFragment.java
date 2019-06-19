@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.home.mine.fragment;
+package com.hzrcht.seaofflowers.module.mine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
-import com.hzrcht.seaofflowers.module.home.mine.activity.MineAttentionActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
