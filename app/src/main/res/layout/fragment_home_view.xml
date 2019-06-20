@@ -8,24 +8,39 @@
     >
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_all_height"
         android:background="@drawable/shape_top_bar"
+        android:gravity="center_vertical"
         android:paddingTop="@dimen/action_bar_height_top"
         >
 
-        <net.lucode.hackware.magicindicator.MagicIndicator
-            android:id="@+id/magic_indicator"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_transparent"
-            android:overScrollMode="never"
-            android:paddingBottom="5dp"
-            android:scrollbars="none"
-            />
+            android:gravity="center">
 
-    </LinearLayout>
+            <net.lucode.hackware.magicindicator.MagicIndicator
+                android:id="@+id/magic_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/color_transparent"
+                android:overScrollMode="never"
+                android:paddingBottom="5dp"
+                android:scrollbars="none"
+                />
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_search"/>
+    </FrameLayout>
 
 
     <android.support.v4.view.ViewPager

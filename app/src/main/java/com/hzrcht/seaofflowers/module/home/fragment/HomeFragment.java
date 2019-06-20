@@ -54,9 +54,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
         mDataList.add("新人");
         mDataList.add("附近");
         mDataList.add("视频");
-        mDataList.add("美女");
-        mDataList.add("帅哥");
-        mDataList.add("其他");
         mViewPager = bindView(R.id.view_pager);
 
 
@@ -131,5 +128,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
         magicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicator, mViewPager);
 
+        mViewPager.setCurrentItem(1);
     }
 }

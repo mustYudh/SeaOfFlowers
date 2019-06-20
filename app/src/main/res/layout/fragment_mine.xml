@@ -91,10 +91,43 @@
                                     android:layout_height="wrap_content"
                                     android:includeFontPadding="false"
                                     android:text="聊友:2137"
-                                    android:textColor="#ffffffff"
+                                    android:textColor="@color/white"
                                     android:textSize="18sp"
                                     />
 
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="29dp"
+                                    android:background="@drawable/shape_home_age"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="5dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingRight="7dp"
+                                    android:paddingBottom="3dp">
+
+                                    <ImageView
+                                        android:layout_width="9dp"
+                                        android:layout_height="9dp"
+                                        android:src="@drawable/ic_man_logo"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="4dp"
+                                        android:includeFontPadding="false"
+                                        android:text="18"
+                                        android:textColor="@color/white"
+                                        android:textSize="9sp"
+                                        />
+                                </LinearLayout>
+
+                                <ImageView
+                                    android:layout_width="19dp"
+                                    android:layout_height="16dp"
+                                    android:layout_marginLeft="13dp"
+                                    android:src="@drawable/ic_vip"/>
                             </LinearLayout>
 
 
@@ -104,7 +137,7 @@
                                 android:layout_marginTop="10dp"
                                 android:includeFontPadding="false"
                                 android:text="ID:2137"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
 
@@ -114,7 +147,7 @@
                                 android:layout_marginTop="3dp"
                                 android:includeFontPadding="false"
                                 android:text="这个人很懒，什么都没留下~"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
 
@@ -140,7 +173,7 @@
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
                                 android:text="0"
-                                android:textColor="#ffffffff"
+                                android:textColor="@color/white"
                                 android:textSize="15sp"
                                 />
 
@@ -150,7 +183,7 @@
                                 android:layout_marginTop="5dp"
                                 android:includeFontPadding="false"
                                 android:text="相册"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
                         </LinearLayout>
@@ -168,7 +201,7 @@
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
                                 android:text="0"
-                                android:textColor="#ffffffff"
+                                android:textColor="@color/white"
                                 android:textSize="15sp"
                                 />
 
@@ -178,7 +211,7 @@
                                 android:layout_marginTop="5dp"
                                 android:includeFontPadding="false"
                                 android:text="动态"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
                         </LinearLayout>
@@ -197,7 +230,7 @@
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
                                 android:text="3"
-                                android:textColor="#ffffffff"
+                                android:textColor="@color/white"
                                 android:textSize="15sp"
                                 />
 
@@ -207,7 +240,7 @@
                                 android:layout_marginTop="5dp"
                                 android:includeFontPadding="false"
                                 android:text="关注"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
                         </LinearLayout>
@@ -225,7 +258,7 @@
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
                                 android:text="10"
-                                android:textColor="#ffffffff"
+                                android:textColor="@color/white"
                                 android:textSize="15sp"
                                 />
 
@@ -235,7 +268,7 @@
                                 android:layout_marginTop="5dp"
                                 android:includeFontPadding="false"
                                 android:text="师徒"
-                                android:textColor="#fff6e3fb"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 />
                         </LinearLayout>
@@ -275,7 +308,7 @@
                             android:layout_marginTop="4dp"
                             android:includeFontPadding="false"
                             android:text="红包"
-                            android:textColor="#ff999999"
+                            android:textColor="@color/color_999999"
                             android:textSize="13sp"
                             />
 
@@ -301,7 +334,7 @@
                             android:layout_marginTop="4dp"
                             android:includeFontPadding="false"
                             android:text="充值"
-                            android:textColor="#ff999999"
+                            android:textColor="@color/color_999999"
                             android:textSize="13sp"
                             />
 
@@ -327,7 +360,7 @@
                             android:layout_marginTop="4dp"
                             android:includeFontPadding="false"
                             android:text="VIP"
-                            android:textColor="#ff999999"
+                            android:textColor="@color/color_999999"
                             android:textSize="13sp"
                             />
 
@@ -353,7 +386,7 @@
                             android:layout_marginTop="4dp"
                             android:includeFontPadding="false"
                             android:text="申请主播"
-                            android:textColor="#ff999999"
+                            android:textColor="@color/color_999999"
                             android:textSize="13sp"
                             />
 
@@ -422,6 +455,7 @@
 
 
             <LinearLayout
+                android:id="@+id/ll_balance"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -434,16 +468,17 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="10,980.00"
-                    android:textColor="#ff9897e7"
+                    android:textColor="@color/color_9897E7"
                     android:textSize="22sp"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:includeFontPadding="false"
                     android:text="账户余额（元）"
-                    android:textColor="#ff999999"
+                    android:textColor="@color/color_999999"
                     android:textSize="12sp"
                     />
             </LinearLayout>
@@ -468,16 +503,17 @@
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
                     android:text="0.00"
-                    android:textColor="#ff9897e7"
+                    android:textColor="@color/color_9897E7"
                     android:textSize="22sp"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:includeFontPadding="false"
                     android:text="可提现（元）"
-                    android:textColor="#ff999999"
+                    android:textColor="@color/color_999999"
                     android:textSize="12sp"
                     />
             </LinearLayout>

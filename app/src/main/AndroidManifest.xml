@@ -1,56 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.hzrcht.seaofflowers">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.hzrcht.seaofflowers">
 
-  <application
-      android:name=".APP"
-      android:allowBackup="true"
-      android:icon="@mipmap/ic_launcher"
-      android:label="@string/app_name"
-      android:roundIcon="@mipmap/ic_launcher_round"
-      android:supportsRtl="true"
-      android:theme="@style/AppTheme"
-      tools:ignore="GoogleAppIndexingWarning">
-    <activity android:name=".module.mine.activity.MineAttentionActivity">
-    </activity>
-    <activity android:name=".module.login.activity.SelectGenderActivity">
-    </activity>
-    <activity android:name=".module.login.activity.SelectLoginActivity">
-    </activity>
+    <application
+        android:name=".APP"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".module.mine.activity.MineBalanceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".module.mine.activity.MineAttentionActivity">
+        </activity>
+        <activity android:name=".module.login.activity.SelectGenderActivity">
+        </activity>
+        <activity android:name=".module.login.activity.SelectLoginActivity">
+        </activity>
 
-    <meta-data
-        android:name="com.baidu.lbsapi.API_KEY"
-        android:value="${BAIDU_LOCATION}"/> <!-- 友盟key -->
-    <meta-data
-        android:name="UMENG_APPKEY"
-        android:value="${UMENG_APPKEY}"/>
-    <meta-data
-        android:name="UMENG_CHANNEL"
-        android:value="${UMENG_CHANNEL}"/>
-    <meta-data
-        android:name="SENSORS_ANALYTICS_UTM_SOURCE"
-        android:value="${UMENG_CHANNEL}"/>
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="${BAIDU_LOCATION}"/> <!-- 友盟key -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="${UMENG_APPKEY}"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL}"/>
+        <meta-data
+            android:name="SENSORS_ANALYTICS_UTM_SOURCE"
+            android:value="${UMENG_CHANNEL}"/>
 
-    <activity android:name=".SplashActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity
-        android:name=".module.home.HomePageActivity"
-        android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
-        android:launchMode="singleTask"
-        android:screenOrientation="portrait"
-        android:windowSoftInputMode="adjustNothing"/>
-    <activity
-        android:name=".module.web.WebViewActivity"
-        android:screenOrientation="portrait"/>
-    <activity
-        android:name=".module.login.activity.LoginActivity"
-        android:screenOrientation="portrait"/>
-  </application>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".module.home.HomePageActivity"
+            android:configChanges="keyboard|orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity
+            android:name=".module.web.WebViewActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.login.activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+    </application>
 
 </manifest>
