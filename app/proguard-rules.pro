@@ -69,3 +69,6 @@
 -keep class com.tencent.mm.sdk.** {
     *;
 }
+
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.yu.common.glide.ImageLoader;
 
 /**
  * @author yudenghao
@@ -21,6 +22,7 @@ public class TestFragment1 extends BaseFragment {
 
   @Override protected void loadData() {
     bindText(R.id.test,"测试2");
+    ImageLoader.getInstance().displayImage(bindView(R.id.image),"http://pic37.nipic.com/20140113/8800276_184927469000_2.png");
   }
 
 
