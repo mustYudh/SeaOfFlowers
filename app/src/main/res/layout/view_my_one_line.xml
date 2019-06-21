@@ -16,11 +16,11 @@
         android:id="@+id/ll_root"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@android:color/white"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="31dp"
+        android:paddingLeft="23dp"
+        android:paddingRight="17dp"
         >
 
         <!--item左边的Icon-->
@@ -51,8 +51,8 @@
     <!--item的下分割线-->
     <View
         android:id="@+id/divider_bottom"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E5E5E5"/>
+        android:background="@color/color_E5E5E5"/>
 
 </LinearLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:includeFontPadding="false"
+        android:text="上传本人正面照片"
+        android:textColor="@color/color_333333"
+        android:textSize="15sp"
+        />
+
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_authentication"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="注：1、图片清晰可见，色彩明亮；\n         2、本照片仅用于认证，不会对外公开"
+        android:textColor="@color/color_9897E7"
+        android:textSize="15sp"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_authentication"
+        android:gravity="center"
+        android:text="立即认证"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="认证即代表您已经阅读并同意《平台绿色协议书》"
+        android:textColor="@color/color_666666"
+        android:textSize="12sp"
+        />
+</LinearLayout>

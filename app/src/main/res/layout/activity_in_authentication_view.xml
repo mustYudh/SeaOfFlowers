@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+    >
+
+
+    <ImageView
+        android:layout_width="164dp"
+        android:layout_height="111dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_in_authentication"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:includeFontPadding="false"
+        android:text="你提交的资料我们已经收到"
+        android:textColor="@color/color_333333"
+        android:textSize="17sp"
+        />
+
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="65dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:gravity="center_horizontal"
+        android:text="请加客服微信进行认证\n谢谢合作"
+        android:textColor="@color/color_999999"
+        android:textSize="15sp"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_authentication"
+        android:gravity="center"
+        android:text="知道了，去编辑资料"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        />
+</LinearLayout>

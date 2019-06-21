@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
@@ -28,6 +29,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     protected void loadData() {
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_balance = bindView(R.id.ll_balance);
+        LinearLayout ll_authentication = bindView(R.id.ll_authentication);
         MyOneLineView view_invitation_code = bindView(R.id.view_invitation_code);
         MyOneLineView view_accept_apprentice = bindView(R.id.view_accept_apprentice);
         MyOneLineView view_open_msg = bindView(R.id.view_open_msg);
@@ -41,6 +43,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
+        ll_authentication.setOnClickListener(this);
     }
 
     @Override
@@ -51,6 +54,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.ll_balance:
                 getLaunchHelper().startActivity(MineBalanceActivity.class);
+                break;
+            case R.id.ll_authentication:
+                getLaunchHelper().startActivity(ApplyAuthenticationActivity.class);
+//                getLaunchHelper().startActivity(InAuthenticationActivity.class);
                 break;
         }
     }

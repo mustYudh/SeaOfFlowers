@@ -3,10 +3,13 @@ package com.hzrcht.seaofflowers.base;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+
 import com.hzrcht.seaofflowers.R;
 import com.yu.common.utils.BarUtils;
 
@@ -61,7 +64,13 @@ public abstract class BaseBarFragment extends BaseFragment {
   }
 
   public void setTitle(CharSequence charSequence) {
-    bindText(R.id.title, charSequence);
+//    bindText(R.id.title, charSequence);
+    if (!TextUtils.isEmpty(charSequence)) {
+      TextView title = (TextView) findViewById(R.id.action_title);
+      if (title != null) {
+        title.setText(charSequence);
+      }
+    }
   }
 
   public void showBack(boolean back) {

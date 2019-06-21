@@ -13,6 +13,21 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.message.activity.SystemMessageActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.message.activity.MineCallActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.PhoneVerificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.InAuthenticationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.ApplyAuthenticationActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.MineBalanceActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".module.mine.activity.MineAttentionActivity">

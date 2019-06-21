@@ -14,8 +14,8 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.fragment.HomeFragment;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
+import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
-import com.hzrcht.seaofflowers.module.testFragment.TestFragment2;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.PressHandle;
@@ -51,7 +51,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         items.add(new TabView(0, new HomeFragment()));
         items.add(new TabView(1, new DynamicFragment()));
         items.add(new TabView(2, null));
-        items.add(new TabView(3, new TestFragment2()));
+        items.add(new TabView(3, new MessageFragment()));
         items.add(new TabView(4, new MineFragment()));
         mBottomNavigationView.initControl(this).setPagerView(items, 0);
         mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {

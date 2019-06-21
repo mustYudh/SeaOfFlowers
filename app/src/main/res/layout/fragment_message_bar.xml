@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_bar_all_height"
+                android:background="@drawable/shape_mine_headimg"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_height_top"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/action_bar_center_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/action_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxWidth="190dp"
+            android:maxLines="1"
+            android:textColor="@color/lb_cm_white"
+            android:textSize="16sp"
+            tools:text="消息"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="22dp"
+        android:gravity="center"
+        android:text="清空"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        />
+
+</RelativeLayout>

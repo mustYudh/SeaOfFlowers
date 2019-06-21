@@ -280,7 +280,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/lb_cm_white"
+                android:background="@color/white"
                 android:orientation="vertical">
 
 
@@ -368,6 +368,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/ll_authentication"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
