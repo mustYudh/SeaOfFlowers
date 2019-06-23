@@ -12,12 +12,13 @@ import android.widget.TextView;
 import com.hzrcht.seaofflowers.R;
 import com.yu.common.utils.DensityUtils;
 
+import ch.ielse.view.SwitchView;
+
 public class MyOneLineView extends LinearLayout {
     /**
      * 上下分割线，默认隐藏上面分割线
      */
     private View dividerTop, dividerBottom;
-
     /**
      * 最外层容器
      */
@@ -30,12 +31,18 @@ public class MyOneLineView extends LinearLayout {
      * 中间的文字内容
      */
     private TextView tvTextContent;
-
+    /**
+     * 右边的文字内容
+     */
+    private TextView tvTextRight;
     /**
      * 右边的icon 通常是箭头
      */
     private ImageView ivRightIcon;
-
+    /**
+     * 开关
+     */
+    private SwitchView switchView;
 
     /**
      * 整个一行被点击
@@ -44,12 +51,18 @@ public class MyOneLineView extends LinearLayout {
         void onRootClick(View view);
     }
 
-
     /**
      * 右边箭头的点击事件
      */
     public static interface OnArrowClickListener {
         void onArrowClick(View view);
+    }
+
+    /**
+     * 开关的点击事件
+     */
+    public interface SwitchListener {
+        void onSwitch(boolean switchStatus);
     }
 
     public MyOneLineView(Context context) {
@@ -68,9 +81,11 @@ public class MyOneLineView extends LinearLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.view_my_one_line, this, true);
         llRoot = (LinearLayout) findViewById(R.id.ll_root);
         dividerTop = findViewById(R.id.divider_top);
+        switchView = findViewById(R.id.switch_button);
         dividerBottom = findViewById(R.id.divider_bottom);
         ivLeftIcon = (ImageView) findViewById(R.id.iv_left_icon);
         tvTextContent = (TextView) findViewById(R.id.tv_text_content);
+        tvTextRight = (TextView) findViewById(R.id.tv_right);
         ivRightIcon = (ImageView) findViewById(R.id.iv_right_icon);
         return this;
     }
@@ -85,6 +100,7 @@ public class MyOneLineView extends LinearLayout {
         init();
         setTextContent(textContent);
         showLeftIcon(false);
+        showArrow(false);
         return this;
     }
 
@@ -109,7 +125,7 @@ public class MyOneLineView extends LinearLayout {
      * @param iconRes     icon图片
      * @param textContent 文字内容
      */
-    public MyOneLineView initMine(int iconRes, String textContent, boolean showArrow,boolean showBottomLine) {
+    public MyOneLineView initMine(int iconRes, String textContent, boolean showArrow, boolean showBottomLine) {
         init(iconRes, textContent);
         showDivider(false, showBottomLine);
         showArrow(showArrow);
@@ -266,6 +282,17 @@ public class MyOneLineView extends LinearLayout {
     }
 
     /**
+     * 设置右边的文字内容
+     *
+     * @param textRight
+     * @return
+     */
+    public MyOneLineView setTextRight(String textRight) {
+        tvTextRight.setText(textRight);
+        return this;
+    }
+
+    /**
      * 设置中间的文字颜色
      *
      * @return
@@ -317,6 +344,36 @@ public class MyOneLineView extends LinearLayout {
         return ivRightIcon;
     }
 
+
+    /**
+     * 设置右边显示与否
+     *
+     * @param showRightText
+     */
+    public MyOneLineView showRightText(boolean showRightText) {
+        if (showRightText) {
+            tvTextRight.setVisibility(VISIBLE);
+        } else {
+            tvTextRight.setVisibility(GONE);
+        }
+        return this;
+    }
+
+
+    /**
+     * 设置开关显示与否
+     *
+     * @param showSwitchView
+     */
+    public MyOneLineView showSwitchView(boolean showSwitchView) {
+        if (showSwitchView) {
+            switchView.setVisibility(VISIBLE);
+        } else {
+            switchView.setVisibility(GONE);
+        }
+        return this;
+    }
+
     //----------------------下面是一些点击事件
 
     public MyOneLineView setOnRootClickListener(final OnRootClickListener onRootClickListener, final int tag) {
@@ -339,6 +396,40 @@ public class MyOneLineView extends LinearLayout {
                 onArrowClickListener.onArrowClick(ivRightIcon);
             }
         });
+        return this;
+    }
+
+    public boolean getSwitched() {
+        if (switchView != null) {
+            return switchView.isOpened();
+        }
+        return false;
+    }
+
+    public MyOneLineView setSwichButton(boolean selected) {
+        if (switchView != null) {
+            switchView.toggleSwitch(selected);
+        }
+        return this;
+    }
+
+
+    public MyOneLineView setSwichlistener(SwitchListener swichlistener) {
+        if (switchView != null && swichlistener != null) {
+            switchView.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
+                @Override
+                public void toggleToOn(SwitchView view) {
+                    switchView.toggleSwitch(true);
+                    swichlistener.onSwitch(true);
+                }
+
+                @Override
+                public void toggleToOff(SwitchView view) {
+                    switchView.toggleSwitch(false);
+                    swichlistener.onSwitch(false);
+                }
+            });
+        }
         return this;
     }
 }

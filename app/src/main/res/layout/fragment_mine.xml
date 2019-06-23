@@ -423,23 +423,23 @@
                 <com.hzrcht.seaofflowers.module.view.MyOneLineView
                     android:id="@+id/view_invitation_code"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
+                    android:layout_height="wrap_content"/>
 
                 <com.hzrcht.seaofflowers.module.view.MyOneLineView
                     android:id="@+id/view_accept_apprentice"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
+                    android:layout_height="wrap_content"/>
 
                 <com.hzrcht.seaofflowers.module.view.MyOneLineView
                     android:id="@+id/view_open_msg"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
+                    android:layout_height="wrap_content"/>
 
 
                 <com.hzrcht.seaofflowers.module.view.MyOneLineView
                     android:id="@+id/view_system_settings"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
+                    android:layout_height="wrap_content"/>
 
 
             </LinearLayout>
