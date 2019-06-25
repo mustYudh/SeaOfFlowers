@@ -3,6 +3,7 @@ package com.hzrcht.seaofflowers.module.mine.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
@@ -10,6 +11,7 @@ import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineRedactDataActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 
@@ -28,6 +30,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void loadData() {
+        ImageView iv_redact = bindView(R.id.iv_redact);
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_balance = bindView(R.id.ll_balance);
         LinearLayout ll_authentication = bindView(R.id.ll_authentication);
@@ -45,6 +48,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         view_system_settings.initMine(R.drawable.ic_system_settings, "系统设置", true, true);
 
         //点击事件
+        iv_redact.setOnClickListener(this);
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
         ll_authentication.setOnClickListener(this);
@@ -54,6 +58,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_redact:
+                getLaunchHelper().startActivity(MineRedactDataActivity.class);
+                break;
             case R.id.ll_attention:
                 getLaunchHelper().startActivity(MineAttentionActivity.class);
                 break;

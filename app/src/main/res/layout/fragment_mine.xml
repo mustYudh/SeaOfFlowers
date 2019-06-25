@@ -50,6 +50,7 @@
 
 
                         <ImageView
+                            android:id="@+id/iv_redact"
                             android:layout_width="21dp"
                             android:layout_height="21dp"
                             android:layout_marginLeft="23dp"

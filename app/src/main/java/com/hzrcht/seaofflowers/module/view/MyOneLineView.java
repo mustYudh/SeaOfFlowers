@@ -313,6 +313,16 @@ public class MyOneLineView extends LinearLayout {
     }
 
     /**
+     * 设置中间的文字颜色
+     *
+     * @return
+     */
+    public MyOneLineView setTextRightColor(int colorRes) {
+        tvTextRight.setTextColor(getResources().getColor(colorRes));
+        return this;
+    }
+
+    /**
      * 设置右箭头的显示与不显示
      *
      * @param showArrow
@@ -327,7 +337,7 @@ public class MyOneLineView extends LinearLayout {
     }
 
     /**
-     * 获取右边icon
+     * 设置右边icon
      */
     public MyOneLineView setIvRightIcon(int iconRes) {
 
