@@ -23,7 +23,6 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingLeft="23dp"
         android:paddingRight="16dp"
         >
 
@@ -31,14 +30,15 @@
         <ImageView
             android:id="@+id/iv_left_icon"
             android:layout_width="22dp"
-            android:layout_height="22dp"/>
+            android:layout_height="22dp"
+            android:layout_marginLeft="23dp"/>
 
         <!--item中间部分的文字-->
         <TextView
             android:id="@+id/tv_text_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
             android:includeFontPadding="false"
