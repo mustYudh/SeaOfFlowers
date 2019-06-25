@@ -57,6 +57,7 @@
             <ImageView
                 android:layout_width="17dp"
                 android:layout_height="10dp"
+                android:layout_marginLeft="5dp"
                 android:src="@drawable/ic_home_video"/>
 
             <TextView
@@ -76,12 +77,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
             android:text="xiaoxiao"
             android:textColor="@color/color_333333"
             android:textSize="12sp"

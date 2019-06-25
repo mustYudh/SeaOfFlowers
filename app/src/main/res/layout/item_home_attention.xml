@@ -7,22 +7,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center_vertical">
-
+        android:layout_height="98dp">
 
         <com.yu.common.ui.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_woman_normal"/>
 
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="11dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
             android:orientation="vertical">
 
 
@@ -30,60 +29,57 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="水琳琳"
+                android:text="小甜心"
                 android:textColor="@color/color_333333"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 />
-
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="15dp"
                 android:includeFontPadding="false"
-                android:text="我喜欢幽默的男生"
+                android:text="聊天吧"
                 android:textColor="@color/color_999999"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 />
+
 
         </LinearLayout>
 
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="12dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_width="55dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="26dp"
+            android:layout_marginRight="17dp"
+            android:background="@drawable/shape_online"
+            android:gravity="center_vertical">
+
+
+            <TextView
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/shape_green_point"
+                android:visibility="visible"/>
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:includeFontPadding="false"
-                android:text="21:23"
+                android:text="在线"
                 android:textColor="@color/color_999999"
                 android:textSize="11sp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/shape_point_message"
-                android:paddingLeft="8dp"
-                android:paddingTop="6dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="6dp"
-                android:text="99+"
-                android:textColor="@color/white"
-                android:textSize="11dp"
-                />
-
         </LinearLayout>
-
     </LinearLayout>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/color_E5E5E5"/>

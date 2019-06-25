@@ -10,6 +10,7 @@ import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 
 public class MineFragment extends BaseFragment implements View.OnClickListener {
@@ -38,12 +39,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
         view_invitation_code.initMine(R.drawable.ic_invitation_code, "填写好友邀请码", true, true);
         view_accept_apprentice.initMine(R.drawable.ic_accept_apprentice, "收徒赚钱", true, true);
-        view_open_msg.initMine(R.drawable.ic_open_msg, "开启勿扰", true, true);
+        view_open_msg.initMine(R.drawable.ic_open_msg, "开启勿扰", false, true);
+        view_open_msg.showSwitchView(true);
+        view_open_msg.setSwichButton(true);
         view_system_settings.initMine(R.drawable.ic_system_settings, "系统设置", true, true);
 
+        //点击事件
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
         ll_authentication.setOnClickListener(this);
+        view_system_settings.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +63,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             case R.id.ll_authentication:
                 getLaunchHelper().startActivity(ApplyAuthenticationActivity.class);
 //                getLaunchHelper().startActivity(InAuthenticationActivity.class);
+                break;
+            case R.id.view_system_settings:
+                getLaunchHelper().startActivity(SystemSettingsActivity.class);
                 break;
         }
     }
