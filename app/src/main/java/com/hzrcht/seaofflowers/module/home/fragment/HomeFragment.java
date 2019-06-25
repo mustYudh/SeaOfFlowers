@@ -49,16 +49,22 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
 
     @Override
     protected void loadData() {
+        mDataList.add("粉丝");
         mDataList.add("关注");
         mDataList.add("推荐");
         mDataList.add("新人");
         mDataList.add("附近");
-        mDataList.add("视频");
         mViewPager = bindView(R.id.view_pager);
 
 
         for (int i = 0; i < mDataList.size(); i++) {
-            fragments.add(HomeLimitFragment.newInstance(i));
+            if (i == 0) {
+                fragments.add(HomeFansFragment.newInstance(i));
+            } else if (i == 1) {
+                fragments.add(HomeAttentionFragment.newInstance(i));
+            } else {
+                fragments.add(HomeLimitFragment.newInstance(i));
+            }
         }
         initMagicIndicator();
     }

@@ -8,17 +8,19 @@
     >
 
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_all_height"
         android:background="@drawable/shape_top_bar"
-        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingTop="@dimen/action_bar_height_top"
         >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="center">
 
             <net.lucode.hackware.magicindicator.MagicIndicator
@@ -36,11 +38,11 @@
         <ImageView
             android:layout_width="21dp"
             android:layout_height="21dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_search"/>
-    </FrameLayout>
+    </LinearLayout>
 
 
     <android.support.v4.view.ViewPager

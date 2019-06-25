@@ -22,7 +22,7 @@ public class HomeLimitRvAdapter extends BaseQuickAdapter<String, BaseViewHolder>
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         ImageView iv_headimg = helper.getView(R.id.iv_headimg);
-        ImageLoader.getInstance().displayImage(iv_headimg, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561044742584&di=c8c0aae75b4b6bce386c01ce6a19c93b&imgtype=0&src=http%3A%2F%2Fpic.eastlady.cn%2Fuploads%2Ftp%2F201708%2F9999%2F8aa8a85f3b.jpg", R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        ImageLoader.getInstance().displayImage(iv_headimg, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293040&di=679d8e36e08df420eeefa0c3eada0718&imgtype=0&src=http%3A%2F%2Fpic17.nipic.com%2F20111023%2F7495075_112834169348_2.jpg", R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
 
     }
 }

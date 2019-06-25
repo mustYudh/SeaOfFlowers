@@ -35,6 +35,8 @@ ext {
 
     MAGICINDICATORVersion = '1.6.0'
 
+    SWITCHBUTTONVersion = '1.0.1'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -52,6 +54,7 @@ ext {
                        constraint         : "com.android.support.constraint:constraint-layout:${constraintVersion}",
                        eventbus           : "org.greenrobot:eventbus:${eventbusVersion}",
                        BRVAHV             : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${BRVAHVersion}",
-                       MAGICINDICATOR     : "com.github.hackware1993:MagicIndicator:${MAGICINDICATORVersion}"
+                       MAGICINDICATOR     : "com.github.hackware1993:MagicIndicator:${MAGICINDICATORVersion}",
+                       SWITCHBUTTON       : "ch.ielse:switchbutton:${SWITCHBUTTONVersion}"
     ]
 }
