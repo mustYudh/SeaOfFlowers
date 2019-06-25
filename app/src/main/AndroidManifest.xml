@@ -13,6 +13,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.mine.activity.MineRedactDataActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.ChargeSettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.MineIntimacyActivity"
             android:screenOrientation="portrait"/>
         <activity
