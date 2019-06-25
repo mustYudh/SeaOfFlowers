@@ -7,6 +7,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.denghao.control.view.utils.DensityUtils;
 
 /**
  * @author yudneghao
@@ -32,6 +35,12 @@ public class BottomNavigationControl extends LinearLayout implements TabViewCont
     View.inflate(context, R.layout.bottom_navigation_control_view, this);
     tabControlView = (LinearLayout) findViewById(R.id.tab_control);
     frameLayout = (FrameLayout) findViewById(R.id.content_view);
+    TextView tv_msg = findViewById(R.id.tv_msg);
+    FrameLayout.LayoutParams linearParams =(FrameLayout.LayoutParams) tv_msg.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
+    linearParams.width = DensityUtils.dp2px(context,30);
+    linearParams.height = DensityUtils.dp2px(context,18);
+    tv_msg.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+    tv_msg.setText("99+");
   }
 
 

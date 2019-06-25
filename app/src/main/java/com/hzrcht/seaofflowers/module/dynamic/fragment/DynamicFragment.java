@@ -43,11 +43,11 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
 
     @Override
     protected void loadData() {
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561056265171&di=524ab0b1f12275928f2d2a8c9be7c62e&imgtype=0&src=http%3A%2F%2Fs9.sinaimg.cn%2Fbmiddle%2F005XWbeUgy6QwbUP4QE58%26690");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561651140&di=56f2028087f099f5de6e2c1c4dd24679&imgtype=jpg&er=1&src=http%3A%2F%2Fimg3.doubanio.com%2Fview%2Fnote%2Flarge%2Fpublic%2Fp10795580.jpg");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561056421309&di=de8807bbf04e86ae86f87f1f6412725d&imgtype=0&src=http%3A%2F%2Fimg1.ph.126.net%2FpumBecovKk8yQh_4fmTHXA%3D%3D%2F6608266093563198550.jpg");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561056421309&di=6d056f54e432d458f3b8a900cfc6cf9f&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F35ecc4cf414a5732b4821df0450c70af535d645e5e1e6-bgk6aj_fw658");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561056421306&di=7d7d3f041d0c268e6924deedc50fe6db&imgtype=0&src=http%3A%2F%2Fs9.sinaimg.cn%2Fmw690%2F001Zmh0Rgy6Okaj9Oycb8%26690");
+        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293040&di=8f9de00e1862ebe58e47f7e1a519517c&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201307%2F20%2F153912fo4kxx5kjo6zv52v.jpg");
+        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293038&di=83f23fd192c537f42afab17a732883c4&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201707%2F24%2F20170724102404_wAjaP.png");
+        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293040&di=ff3ae65767bd9954ef2e220abc2383e8&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F4%2F5696f5a8a6eb3.jpg%3Fdown");
+        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293039&di=03d1fc1a8105f7d1e4ec80f6685a964a&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F010c2658ea1351a8012049efead301.jpg%401280w_1l_2o_100sh.jpg");
+        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293039&di=410ac577370998d1813ee18a2a88b0f4&imgtype=0&src=http%3A%2F%2Fgss0.baidu.com%2F9vo3dSag_xI4khGko9WTAnF6hhy%2Fzhidao%2Fpic%2Fitem%2F0df3d7ca7bcb0a463350c11e6863f6246b60afa3.jpg");
         ll_recommend = bindView(R.id.ll_recommend);
         ll_attention = bindView(R.id.ll_attention);
         TextView tv_recommend = bindView(R.id.tv_recommend);
@@ -85,7 +85,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
             } else {
                 //video
                 MineLocationDynamicBean mineLocationDynamicVideoBean = new MineLocationDynamicBean();
-                mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561057487494&di=df15679a6d7ad807dc17201bb6c2bde2&imgtype=0&src=http%3A%2F%2Fimg1.ph.126.net%2FOJdD2mRk9IpwxZqk-4EK8Q%3D%3D%2F6608257297468902784.jpg";
+                mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426510803&di=2bf93542ebc2b9a183695626fbffb5de&imgtype=0&src=http%3A%2F%2Fwww.desktx.cc%2Fd%2Ffile%2Fphone%2Fkatong%2F20161203%2F61ad328e4d8c741437ed00209a6bae35.jpg";
                 mineLocationDynamicVideoBean.itemType = 2;
                 list.add(mineLocationDynamicVideoBean);
             }
