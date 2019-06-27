@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.home;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -16,6 +17,9 @@ import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
+import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
+import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
+import com.tbruyelle.rxpermissions2.Permission;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.PressHandle;
@@ -59,6 +63,35 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                 ToastUtils.show("弹出毛玻璃界面");
             }
         });
+
+        checkPermission();
+    }
+
+    /**
+     * 检查权限
+     */
+    private void checkPermission() {
+        //检测权限
+        PermissionManager.getInstance(this).checkMorePermission(new MorePermissionsCallBack() {
+                                                                    @Override
+                                                                    protected void permissionGranted(Permission permission) {
+                                                                        // 用户已经同意该权限
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void permissionShouldShowRequestPermissionRationale(Permission permission) {
+                                                                        // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void permissionRejected(Permission permission) {
+
+                                                                    }
+                                                                },
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE
+        );
     }
 
     @Override

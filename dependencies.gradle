@@ -37,6 +37,16 @@ ext {
 
     SWITCHBUTTONVersion = '1.0.1'
 
+    PICKERVIEWVersion = '4.1.8'
+
+    PICTURESELECTORVersion = '2.2.3'
+
+    RXPERMISSIONVersion = '0.9.5'
+
+    RXANDROIDVersion = '2.0.2'
+
+    RXJAVAVersion = '2.1.13'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -55,6 +65,11 @@ ext {
                        eventbus           : "org.greenrobot:eventbus:${eventbusVersion}",
                        BRVAHV             : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${BRVAHVersion}",
                        MAGICINDICATOR     : "com.github.hackware1993:MagicIndicator:${MAGICINDICATORVersion}",
-                       SWITCHBUTTON       : "ch.ielse:switchbutton:${SWITCHBUTTONVersion}"
+                       SWITCHBUTTON       : "ch.ielse:switchbutton:${SWITCHBUTTONVersion}",
+                       PICKERVIEW         : "com.contrarywind:Android-PickerView:${PICKERVIEWVersion}",
+                       PICTURESELECTOR    : "com.github.LuckSiege.PictureSelector:picture_library:${PICTURESELECTORVersion}"
+//                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
+//                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",
+//                       RXJAVA             : "io.reactivex.rxjava2:rxjava:${RXJAVAVersion}"
     ]
 }
