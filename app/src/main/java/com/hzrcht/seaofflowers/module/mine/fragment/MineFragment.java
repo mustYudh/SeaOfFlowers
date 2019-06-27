@@ -11,6 +11,8 @@ import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineMineWithdrawActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRedactDataActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
@@ -33,7 +35,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         ImageView iv_redact = bindView(R.id.iv_redact);
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_balance = bindView(R.id.ll_balance);
+        LinearLayout ll_withdraw = bindView(R.id.ll_withdraw);
         LinearLayout ll_authentication = bindView(R.id.ll_authentication);
+        LinearLayout ll_photo_album = bindView(R.id.ll_photo_album);
         MyOneLineView view_invitation_code = bindView(R.id.view_invitation_code);
         MyOneLineView view_accept_apprentice = bindView(R.id.view_accept_apprentice);
         MyOneLineView view_open_msg = bindView(R.id.view_open_msg);
@@ -53,6 +57,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         ll_balance.setOnClickListener(this);
         ll_authentication.setOnClickListener(this);
         view_system_settings.setOnClickListener(this);
+        ll_withdraw.setOnClickListener(this);
+        ll_photo_album.setOnClickListener(this);
     }
 
     @Override
@@ -73,6 +79,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.view_system_settings:
                 getLaunchHelper().startActivity(SystemSettingsActivity.class);
+                break;
+            case R.id.ll_withdraw:
+                getLaunchHelper().startActivity(MineMineWithdrawActivity.class);
+                break;
+            case R.id.ll_photo_album:
+                //相册
+                getLaunchHelper().startActivity(MinePhotoAlbumActivity.class);
                 break;
         }
     }

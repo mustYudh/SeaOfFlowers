@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_bar_all_height"
+                android:background="@drawable/shape_mine_headimg"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_height_top"
+    >
+
+    <LinearLayout
+        android:id="@+id/action_bar_left_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="2dp"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        >
+
+
+        <LinearLayout
+            android:id="@+id/action_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_arrow_black"
+                android:tint="@color/lb_cm_white"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_height"
+                android:gravity="center"
+                android:text="返回"
+                android:textColor="@color/lb_cm_white"
+                />
+
+
+        </LinearLayout>
+
+
+        <com.yu.common.ui.BarIconContainer
+            android:id="@+id/action_close"
+            android:layout_width="48dp"
+            android:layout_height="@dimen/action_bar_height"
+            android:visibility="gone"
+            app:bar_icon="@drawable/ic_select_city_close"
+            />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/action_bar_center_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/action_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxWidth="190dp"
+            android:maxLines="1"
+            android:textColor="@color/lb_cm_white"
+            android:textSize="16sp"
+            tools:text="我的相册"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_add"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="24dp"
+        android:gravity="center"
+        >
+
+        <com.yu.common.ui.DelayClickImageView
+            android:src="@drawable/ic_upload_pic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            />
+
+    </LinearLayout>
+</RelativeLayout>

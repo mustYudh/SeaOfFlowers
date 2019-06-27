@@ -3,9 +3,9 @@ package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 import com.yu.common.framework.BaseViewPresenter;
 
 
-public class WithdrawPresenter extends BaseViewPresenter<WithdrawViewer> {
+public class MineWithdrawPresenter extends BaseViewPresenter<MineWithdrawViewer> {
 
-    public WithdrawPresenter(WithdrawViewer viewer) {
+    public MineWithdrawPresenter(MineWithdrawViewer viewer) {
         super(viewer);
     }
 }
