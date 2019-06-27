@@ -31,7 +31,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".module.mine.activity.WithdrawActivity"
+            android:name=".module.mine.activity.MineSetUpAlbumActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.MinePhotoAlbumActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.MineMineWithdrawActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.mine.activity.MineRedactDataActivity"

@@ -12,9 +12,11 @@ import com.yu.common.utils.DensityUtil;
 public class ScreenSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
     private int space;
+    private int num;
 
-    public ScreenSpaceItemDecoration(Context context, int space) {
+    public ScreenSpaceItemDecoration(Context context, int space,int num) {
         this.space = DensityUtil.dip2px(context, space);
+        this.num = num;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class ScreenSpaceItemDecoration extends RecyclerView.ItemDecoration {
          * 根据params.getSpanIndex()来判断左右边确定分割线
          * 第一列设置左边距为space，右边距为space/2  （第二列反之）
          */
-        if (params.getSpanIndex() % 2 == 0) {
+        if (params.getSpanIndex() % num == 0) {
             outRect.left = 0;
         } else {
             outRect.left = space;

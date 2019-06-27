@@ -47,7 +47,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         }
         RecyclerView rv_home = bindView(R.id.rv_home);
         rv_home.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rv_home.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5));
+        rv_home.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5,2));
         HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, list, getActivity());
         rv_home.setAdapter(adapter);
     }
