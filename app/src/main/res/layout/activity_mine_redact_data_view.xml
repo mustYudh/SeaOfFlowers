@@ -1,129 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never"
-            android:scrollbars="none"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     >
 
-    <LinearLayout
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      >
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/gv_pic"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.yu.common.ui.NoSlidingGridView
-            android:id="@+id/gv_pic"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:numColumns="4"
-            android:horizontalSpacing="15dp"/>
+        android:layout_height="100dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:horizontalSpacing="15dp"
+        />
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/color_E5E5E5"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/color_E5E5E5"
+        />
 
-        <RelativeLayout
-            android:id="@+id/rl_headimg"
-            android:layout_width="match_parent"
-            android:layout_height="74dp">
+    <RelativeLayout
+        android:id="@+id/rl_headimg"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:includeFontPadding="false"
-                android:text="头像"
-                android:textColor="@color/color_333333"
-                android:textSize="17sp"
-                />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="15dp"
+          android:includeFontPadding="false"
+          android:text="头像"
+          android:textColor="@color/color_333333"
+          android:textSize="17sp"
+          />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical">
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="16dp"
+          android:gravity="center_vertical"
+          >
 
-                <com.yu.common.ui.CircleImageView
-                    android:id="@+id/iv_headimg"
-                    android:layout_width="53dp"
-                    android:layout_height="53dp"
-                    android:src="@drawable/ic_woman_normal"/>
+        <com.yu.common.ui.CircleImageView
+            android:id="@+id/iv_headimg"
+            android:layout_width="53dp"
+            android:layout_height="53dp"
+            android:src="@drawable/ic_woman_normal"
+            />
 
-                <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="13dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_arrow_gray"/>
-            </LinearLayout>
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_arrow_gray"
+            />
+      </LinearLayout>
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="15dp"
-            android:background="@color/color_E5E5E5"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="15dp"
+        android:background="@color/color_E5E5E5"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_nickname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_work"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_work"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_mobile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_height"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_constellation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_constellation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_signature"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_signature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-        <com.hzrcht.seaofflowers.module.view.MyOneLineView
-            android:id="@+id/view_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <com.hzrcht.seaofflowers.module.view.MyOneLineView
+        android:id="@+id/view_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
-    </LinearLayout>
+  </LinearLayout>
 
 
 </ScrollView>
