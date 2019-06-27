@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_bar_all_height"
         android:background="@drawable/shape_top_bar"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="@dimen/action_bar_height_top"
         >
@@ -39,7 +40,7 @@
             android:layout_width="21dp"
             android:layout_height="21dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
+
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_search"/>
     </LinearLayout>

@@ -206,6 +206,7 @@ dependencies {
     implementation appDependencies.SWITCHBUTTON
     implementation appDependencies.PICKERVIEW
     implementation appDependencies.PICTURESELECTOR
+    implementation appDependencies.MZBANNERVIEW
 //    implementation appDependencies.RXPERMISSIONVersion
 //    implementation appDependencies.RXANDROIDVersion
 //    implementation appDependencies.RXJAVAVersion

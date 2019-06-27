@@ -47,6 +47,8 @@ ext {
 
     RXJAVAVersion = '2.1.13'
 
+    MZBANNERVIEWVersion = 'v2.0.2'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -67,7 +69,8 @@ ext {
                        MAGICINDICATOR     : "com.github.hackware1993:MagicIndicator:${MAGICINDICATORVersion}",
                        SWITCHBUTTON       : "ch.ielse:switchbutton:${SWITCHBUTTONVersion}",
                        PICKERVIEW         : "com.contrarywind:Android-PickerView:${PICKERVIEWVersion}",
-                       PICTURESELECTOR    : "com.github.LuckSiege.PictureSelector:picture_library:${PICTURESELECTORVersion}"
+                       PICTURESELECTOR    : "com.github.LuckSiege.PictureSelector:picture_library:${PICTURESELECTORVersion}",
+                       MZBANNERVIEW       : "com.github.pinguo-zhouwei:MZBannerView:${MZBANNERVIEWVersion}"
 //                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
 //                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",
 //                       RXJAVA             : "io.reactivex.rxjava2:rxjava:${RXJAVAVersion}"
