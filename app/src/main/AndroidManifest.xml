@@ -30,6 +30,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".module.mine.activity.ViewBigImageActivity">
+        </activity>
         <activity
             android:name=".module.mine.activity.MineSetUpAlbumActivity"
             android:screenOrientation="portrait"/>
