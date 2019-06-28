@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.hzrcht.seaofflowers.module.dynamic.adapter.DynamicListRvAdapter;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicPresenter;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicViewer;
+import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.yu.common.mvp.PresenterLifeCycle;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
     private DynamicPresenter mPresenter = new DynamicPresenter(this);
     private LinearLayout ll_recommend;
     private LinearLayout ll_attention;
+    private DialogUtils reportDialog;
 
     @Override
     protected int getContentViewId() {
@@ -98,6 +101,41 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
 
         DynamicListRvAdapter adapter = new DynamicListRvAdapter(list, getActivity());
         rv_dynamic.setAdapter(adapter);
+
+        adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
+            @Override
+            public void onItemDetailsReportClick() {
+                showReportDialog();
+            }
+        });
+
+    }
+
+    /**
+     * 举报弹窗
+     */
+    private void showReportDialog() {
+        reportDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_normal)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .settext("请选择", R.id.tv_title)
+                .settext("举报", R.id.tv_bottom)
+                .addViewOnclick(R.id.tv_cancle, view -> {
+                    if (reportDialog.isShowing()) {
+                        reportDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.tv_bottom, view -> {
+                    if (reportDialog.isShowing()) {
+                        reportDialog.dismiss();
+                    }
+
+                })
+                .build();
+        reportDialog.show();
+        reportDialog.findViewById(R.id.tv_top).setVisibility(View.GONE);
+        reportDialog.findViewById(R.id.view_middle).setVisibility(View.GONE);
 
     }
 

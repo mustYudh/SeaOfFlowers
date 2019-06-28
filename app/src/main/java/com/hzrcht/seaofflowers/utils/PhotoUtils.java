@@ -27,7 +27,7 @@ public class PhotoUtils {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.tv_photo:
+                    case R.id.tv_bottom:
                         if (mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
@@ -58,7 +58,7 @@ public class PhotoUtils {
                                 Manifest.permission.CAMERA
                         );
                         break;
-                    case R.id.tv_picture:
+                    case R.id.tv_top:
                         if (mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
@@ -98,13 +98,13 @@ public class PhotoUtils {
             }
         };
         DialogUtils.Builder builder = new DialogUtils.Builder(activity);
-        mDialog = builder.view(R.layout.dialog_pickphoto_video)
+        mDialog = builder.view(R.layout.dialog_normal)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
                 .settext("上传您的头像,以供展示", R.id.tv_title)
-                .addViewOnclick(R.id.tv_picture, listener)
-                .addViewOnclick(R.id.tv_photo, listener)
+                .addViewOnclick(R.id.tv_top, listener)
+                .addViewOnclick(R.id.tv_bottom, listener)
                 .addViewOnclick(R.id.tv_cancle, listener)
                 .build();
         mDialog.show();
@@ -119,7 +119,7 @@ public class PhotoUtils {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.tv_photo:
+                    case R.id.tv_bottom:
                         if (mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
@@ -150,7 +150,7 @@ public class PhotoUtils {
                                 Manifest.permission.CAMERA
                         );
                         break;
-                    case R.id.tv_picture:
+                    case R.id.tv_top:
                         if (mDialog.isShowing()) {
                             mDialog.dismiss();
                         }
@@ -161,7 +161,7 @@ public class PhotoUtils {
                                                                                             // 用户已经同意该权限
                                                                                             if ("android.permission.WRITE_EXTERNAL_STORAGE".equals(permission.name)) {
                                                                                                 //从相册获取照片
-                                                                                                pictureSelector(activity, 4 - list.size());
+                                                                                                pictureSelector(activity, 5 - list.size());
                                                                                             }
                                                                                         }
 
@@ -190,13 +190,13 @@ public class PhotoUtils {
             }
         };
         DialogUtils.Builder builder = new DialogUtils.Builder(activity);
-        mDialog = builder.view(R.layout.dialog_pickphoto_video)
+        mDialog = builder.view(R.layout.dialog_normal)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
                 .settext("上传您的主播封面,以供主播页展示", R.id.tv_title)
-                .addViewOnclick(R.id.tv_picture, listener)
-                .addViewOnclick(R.id.tv_photo, listener)
+                .addViewOnclick(R.id.tv_top, listener)
+                .addViewOnclick(R.id.tv_bottom, listener)
                 .addViewOnclick(R.id.tv_cancle, listener)
                 .build();
         mDialog.show();

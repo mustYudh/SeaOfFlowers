@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarFragment;
@@ -14,6 +16,7 @@ import com.hzrcht.seaofflowers.module.message.activity.SystemMessageActivity;
 import com.hzrcht.seaofflowers.module.message.adapter.MessageRvAdapter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessagePresenter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessageViewer;
+import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.yu.common.mvp.PresenterLifeCycle;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
     private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
     private MessagePresenter mPresenter = new MessagePresenter(this);
+    private DialogUtils cleanDialog;
 
     @Override
     protected int getContentViewId() {
@@ -43,6 +47,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
     @Override
     protected void loadData() {
         setTitle("消息");
+        TextView tv_clean = bindView(R.id.tv_clean);
         LinearLayout ll_mine_call = bindView(R.id.ll_mine_call);
         LinearLayout ll_system_message = bindView(R.id.ll_system_message);
 
@@ -55,6 +60,35 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         rv_msg.setLayoutManager(new LinearLayoutManager(getActivity()));
         MessageRvAdapter adapter = new MessageRvAdapter(R.layout.item_mine_message, list, getActivity());
         rv_msg.setAdapter(adapter);
+
+        tv_clean.setOnClickListener(view -> {
+            showCleanDialog();
+        });
+    }
+
+    /**
+     * 清空
+     */
+    private void showCleanDialog() {
+        cleanDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_layout)
+                .gravity(Gravity.CENTER)
+                .cancelTouchout(true)
+                .style(R.style.Dialog_NoAnimation)
+                .addViewOnclick(R.id.cancle, view -> {
+                    if (cleanDialog.isShowing()) {
+                        cleanDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.down, view -> {
+                    if (cleanDialog.isShowing()) {
+                        cleanDialog.dismiss();
+                    }
+
+                })
+                .build();
+        cleanDialog.show();
+
+
     }
 
     @Override
@@ -68,4 +102,6 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
                 break;
         }
     }
+
+
 }

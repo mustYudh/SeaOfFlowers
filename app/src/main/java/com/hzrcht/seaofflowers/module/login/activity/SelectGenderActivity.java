@@ -2,12 +2,11 @@ package com.hzrcht.seaofflowers.module.login.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
+import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
-import com.yu.common.ui.DelayClickTextView;
 
 public class SelectGenderActivity extends BaseBarActivity {
 
@@ -24,13 +23,8 @@ public class SelectGenderActivity extends BaseBarActivity {
 
     @Override
     protected void loadData() {
-        DelayClickTextView tv_sure = bindView(R.id.tv_sure);
-        tv_sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getLaunchHelper().startActivity(HomePageActivity.class);
-            }
-        });
+        LinearLayout action_bar_center_actions = bindView(R.id.action_bar_center_actions);
+        action_bar_center_actions.setOnClickListener(view -> getLaunchHelper().startActivity(HomePageActivity.class));
 
     }
 }

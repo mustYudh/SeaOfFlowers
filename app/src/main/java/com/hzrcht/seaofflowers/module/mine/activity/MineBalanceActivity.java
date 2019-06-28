@@ -15,7 +15,9 @@ import com.yu.common.mvp.PresenterLifeCycle;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 账号余额
+ */
 public class MineBalanceActivity extends BaseBarActivity implements MineBalanceViewer {
     private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
