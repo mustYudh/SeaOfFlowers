@@ -239,11 +239,11 @@ public class MineRedactDataActivity extends BaseBarActivity
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
                     // 图片选择结果回调
-                    List<UserPhotoListBean> currentData = adapter.getData();
-                    currentData.remove(currentData.size() - 1);
-                    List<UserPhotoListBean> list = new ArrayList<>(currentData);
-                    List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                     if (picType == 0) {
+                        List<UserPhotoListBean> currentData = adapter.getData();
+                        currentData.remove(currentData.size() - 1);
+                        List<UserPhotoListBean> list = new ArrayList<>(currentData);
+                        List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                         selectList.stream()
                                 .filter(media -> !TextUtils.isEmpty(media.getCompressPath()))
                                 .forEach(media -> {
@@ -256,6 +256,7 @@ public class MineRedactDataActivity extends BaseBarActivity
                         }
                         getPhotoList(list);
                     } else {
+                        List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                         ImageLoader.getInstance().displayImage(iv_headimg, selectList.get(0).getCompressPath());
                     }
                     break;
@@ -353,8 +354,8 @@ public class MineRedactDataActivity extends BaseBarActivity
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         if (view.getId() == R.id.iv_picture_item) {
             picType = 0;
-//      PhotoUtils.changeAvatar(getActivity(),adapter.getData());
-            PhotoUtils.pictureSelector(getActivity(), 5 - adapter.getItemCount());
+            PhotoUtils.changeAvatar(getActivity(), adapter.getData());
+//            PhotoUtils.pictureSelector(getActivity(), 5 - adapter.getItemCount());
         }
     }
 }
