@@ -40,7 +40,6 @@
             android:layout_width="21dp"
             android:layout_height="21dp"
             android:layout_marginLeft="8dp"
-
             android:layout_marginRight="16dp"
             android:src="@drawable/ic_search"/>
     </LinearLayout>

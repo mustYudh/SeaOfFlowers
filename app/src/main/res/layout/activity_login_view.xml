@@ -11,15 +11,16 @@
         android:layout_width="108dp"
         android:layout_height="108dp"
         android:layout_marginTop="40dp"
-        android:src="@drawable/app_logo"/>
+        android:src="@drawable/ic_app_logo"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:includeFontPadding="false"
         android:text="验证码登录"
-        android:textColor="#ff000000"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         />
@@ -39,8 +40,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:includeFontPadding="false"
             android:text="手机号："
-            android:textColor="#ff333333"
+            android:textColor="@color/color_333333"
             android:textSize="17sp"
             />
 
@@ -73,8 +75,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:includeFontPadding="false"
             android:text="验证码："
-            android:textColor="#ff333333"
+            android:textColor="@color/color_333333"
             android:textSize="17sp"
             />
 
@@ -97,19 +100,20 @@
             android:layout_height="20dp"
             android:background="@color/color_9897E7"/>
 
-        <TextView
+        <com.yu.common.ui.DelayClickTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:gravity="center"
+            android:includeFontPadding="false"
             android:text="获取"
             android:textColor="@color/color_9897E7"
             android:textSize="17sp"
             />
     </LinearLayout>
 
-    <TextView
+    <com.yu.common.ui.DelayClickTextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="38dp"
@@ -117,6 +121,7 @@
         android:layout_marginRight="38dp"
         android:background="@drawable/shape_login"
         android:gravity="center"
+        android:includeFontPadding="false"
         android:text="登录"
         android:textColor="@color/white"
         android:textSize="17sp"

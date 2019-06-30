@@ -6,11 +6,13 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_root"
         android:layout_width="match_parent"
         android:layout_height="98dp"
         android:gravity="center_vertical">
 
         <com.yu.common.ui.CircleImageView
+            android:id="@+id/iv_headimg"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_woman_normal"/>

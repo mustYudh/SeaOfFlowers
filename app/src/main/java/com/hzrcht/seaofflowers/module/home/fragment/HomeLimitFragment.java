@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
@@ -48,7 +49,8 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
     @Override
     protected void loadData() {
-        for (int i = 0; i < 10; i++) {
+        list.clear();
+        for (int i = 0; i < 7; i++) {
             list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561634541402&di=dd1d43b504422b022c7e6c057786bfbc&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180611%2F88957964ee86464d8589b722e874f5ed.jpeg");
         }
         RecyclerView rv_home = bindView(R.id.rv_home);
@@ -58,6 +60,9 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, list, getActivity());
         rv_home.setAdapter(adapter);
         initBanner(list);
+        Log.e("aaaa", "走了吗");
+
+
     }
 
 
@@ -74,7 +79,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             mBanner.setDuration(500);
             mBanner.setDelayedTime(3000);
             mBanner.setCanLoop(true);
-            mBanner.setPages(list, new MZHolderCreator() {
+            mBanner.setPages(xbanner, new MZHolderCreator() {
                 @Override
                 public MZViewHolder createViewHolder() {
                     return new BannerViewHolder();

@@ -17,10 +17,15 @@ import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePresentActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRedactDataActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
+import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
+import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
+import com.yu.common.mvp.PresenterLifeCycle;
 
-public class MineFragment extends BaseFragment implements View.OnClickListener {
+public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener {
 
+    @PresenterLifeCycle
+    private MinePresenter mPresenter = new MinePresenter(this);
 
     @Override
     protected int getContentViewId() {
