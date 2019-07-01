@@ -19,6 +19,7 @@ import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
+import com.nhbs.fenxiao.module.center.HomeCenterPopUpWindow;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -60,12 +61,15 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         mBottomNavigationView.initControl(this).setPagerView(items, 0);
         mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
             if (position == 2) {
-                ToastUtils.show("弹出毛玻璃界面");
+                HomeCenterPopUpWindow homePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
+                homePopUpWindow.showPopupWindow();
             }
         });
 
         checkPermission();
     }
+
+
 
     /**
      * 检查权限

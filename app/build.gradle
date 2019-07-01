@@ -49,6 +49,8 @@ android {
         ndk {
             //            abiFilters "armeabi-v7a"
         }
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
 
     signingConfigs {
@@ -208,6 +210,7 @@ dependencies {
     implementation appDependencies.PICTURESELECTOR
     implementation appDependencies.MZBANNERVIEW
     implementation appDependencies.FLEXBOX
+    implementation appDependencies.EASYBLUR
 //    implementation appDependencies.RXPERMISSIONVersion
 //    implementation appDependencies.RXANDROIDVersion
 //    implementation appDependencies.RXJAVAVersion

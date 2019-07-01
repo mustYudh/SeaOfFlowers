@@ -51,6 +51,8 @@ ext {
 
     FLEXBOXVersion = '1.0.0'
 
+    EASYBLURVersion = 'v1.0.0'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -73,7 +75,8 @@ ext {
                        PICKERVIEW         : "com.contrarywind:Android-PickerView:${PICKERVIEWVersion}",
                        PICTURESELECTOR    : "com.github.LuckSiege.PictureSelector:picture_library:${PICTURESELECTORVersion}",
                        MZBANNERVIEW       : "com.github.pinguo-zhouwei:MZBannerView:${MZBANNERVIEWVersion}",
-                       FLEXBOX            : "com.google.android:flexbox:${FLEXBOXVersion}"
+                       FLEXBOX            : "com.google.android:flexbox:${FLEXBOXVersion}",
+                       EASYBLUR           : "com.github.pinguo-zhouwei:EasyBlur:${EASYBLURVersion}"
 //                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
 //                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",
 //                       RXJAVA             : "io.reactivex.rxjava2:rxjava:${RXJAVAVersion}"
