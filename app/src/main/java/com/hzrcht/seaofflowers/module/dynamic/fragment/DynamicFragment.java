@@ -32,7 +32,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
     private DynamicPresenter mPresenter = new DynamicPresenter(this);
     private LinearLayout ll_recommend;
     private LinearLayout ll_attention;
-    private DialogUtils reportDialog;
+    private DialogUtils reportDialog, commentDialog;
 
     @Override
     protected int getContentViewId() {
@@ -107,6 +107,11 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
             public void onItemDetailsReportClick() {
                 showReportDialog();
             }
+
+            @Override
+            public void onItemDetailsCommentClick() {
+                showCommentDialog();
+            }
         });
 
     }
@@ -136,6 +141,27 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
         reportDialog.show();
         reportDialog.findViewById(R.id.tv_top).setVisibility(View.GONE);
         reportDialog.findViewById(R.id.view_middle).setVisibility(View.GONE);
+
+    }
+
+
+    /**
+     * 评论弹窗
+     */
+    private void showCommentDialog() {
+        commentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_comment)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .addViewOnclick(R.id.ll_submit, view -> {
+                    if (commentDialog.isShowing()) {
+                        commentDialog.dismiss();
+                    }
+
+                })
+                .build();
+        commentDialog.show();
+
 
     }
 

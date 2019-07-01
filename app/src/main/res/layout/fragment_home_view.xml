@@ -35,13 +35,22 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_search"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center">
 
-        <ImageView
-            android:layout_width="21dp"
-            android:layout_height="21dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_search"/>
+            <ImageView
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="6dp"
+                android:src="@drawable/ic_search"/>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 

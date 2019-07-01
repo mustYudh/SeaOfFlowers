@@ -31,6 +31,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.home.activity.HomeSearchActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.MinePersonalInfoActivity"
             android:screenOrientation="portrait"/>
         <activity

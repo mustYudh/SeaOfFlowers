@@ -104,7 +104,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_center_tab"
+                android:src="@drawable/ic_center_tab"
                 />
 
 

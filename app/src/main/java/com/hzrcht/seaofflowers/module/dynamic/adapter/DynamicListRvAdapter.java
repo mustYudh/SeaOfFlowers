@@ -44,12 +44,21 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                     assert onItemDetailsDoCilckListener != null;
                     onItemDetailsDoCilckListener.onItemDetailsReportClick();
                 });
+
+                helper.getView(R.id.ll_comment).setOnClickListener(view -> {
+                    //评论
+                    assert onItemDetailsDoCilckListener != null;
+                    onItemDetailsDoCilckListener.onItemDetailsCommentClick();
+                });
+
                 break;
         }
     }
 
     public interface OnItemDetailsDoCilckListener {
         void onItemDetailsReportClick();
+
+        void onItemDetailsCommentClick();
     }
 
     OnItemDetailsDoCilckListener onItemDetailsDoCilckListener;

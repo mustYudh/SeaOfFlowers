@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.hzrcht.seaofflowers.module.home.activity.HomeSearchActivity;
 import com.hzrcht.seaofflowers.module.home.adapter.HomePageAdapter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeFragmentPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeFragmentViewer;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.utils.DensityUtils;
 
@@ -56,6 +59,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
 //        mDataList.add("附近");
         mViewPager = bindView(R.id.view_pager);
 
+        LinearLayout ll_search = bindView(R.id.ll_search);
 
         for (int i = 0; i < mDataList.size(); i++) {
             if (i == 0) {
@@ -67,6 +71,10 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
             }
         }
         initMagicIndicator();
+
+        ll_search.setOnClickListener(view -> {
+            LauncherHelper.from(getActivity()).startActivity(HomeSearchActivity.class);
+        });
     }
 
     /**
