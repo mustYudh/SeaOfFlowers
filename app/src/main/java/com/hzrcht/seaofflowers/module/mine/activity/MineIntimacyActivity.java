@@ -15,7 +15,9 @@ import com.yu.common.mvp.PresenterLifeCycle;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 亲密榜
+ */
 public class MineIntimacyActivity extends BaseBarActivity implements MineIntimacyViewer {
     private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
@@ -28,6 +30,7 @@ public class MineIntimacyActivity extends BaseBarActivity implements MineIntimac
 
     @Override
     protected void loadData() {
+        setTitle("亲密榜");
         for (int i = 0; i < 10; i++) {
             list.add("");
         }

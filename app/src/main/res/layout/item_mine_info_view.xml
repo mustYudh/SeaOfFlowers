@@ -3,6 +3,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/ll_root_frist"
               android:layout_width="match_parent"
+              android:paddingBottom="50dp"
               android:layout_height="match_parent"
               android:orientation="vertical"
     >
@@ -234,6 +235,7 @@
 
 
         <TextView
+            android:id="@+id/tv_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
@@ -244,6 +246,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_check_mobile"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="63dp"
@@ -259,6 +262,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_intimacy_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -282,14 +286,23 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/green">
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/ll_intimacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
 
-            </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
             <ImageView
                 android:layout_width="9dp"
@@ -301,6 +314,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_present_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -324,14 +338,23 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/green">
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/ll_present"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
 
-            </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
             <ImageView
                 android:layout_width="9dp"

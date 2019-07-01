@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
@@ -21,6 +23,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoPr
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -31,22 +34,20 @@ import java.util.List;
 
 
 public class MinePersonalInfoActivity extends BaseActivity implements MinePersonalInfoViewer, View.OnClickListener {
-
     private List<String> listData = new ArrayList<>();
     private List<String> picList = new ArrayList<>();
     private List<MineLocationDynamicBean> list = new ArrayList<>();
-    private DialogUtils reportDialog;
     private List<LinearLayout> llList = new ArrayList<>();
     private List<LinearLayout> llRootList = new ArrayList<>();
     private List<TextView> tvList = new ArrayList<>();
     private List<View> viewList = new ArrayList<>();
     private MZBannerView mBanner;
+    private LinearLayout ll_first, ll_second, ll_third, mIntimacy, mPresent;
+    private DialogUtils reportDialog, shareDialog, checkDialog;
 
     @PresenterLifeCycle
     private MinePersonalInfoPresenter presenter = new MinePersonalInfoPresenter(this);
-    private LinearLayout ll_first;
-    private LinearLayout ll_second;
-    private LinearLayout ll_third;
+    private TextView mMobile;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -58,7 +59,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         for (int i = 0; i < 7; i++) {
             listData.add("");
         }
-
 
         mBanner = bindView(R.id.banner);
         LinearLayout ll_root_frist = bindView(R.id.ll_root_frist);
@@ -73,10 +73,23 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         View view_first = bindView(R.id.view_first);
         View view_second = bindView(R.id.view_second);
         View view_third = bindView(R.id.view_third);
+        ImageView iv_share = bindView(R.id.iv_share);
+        mIntimacy = bindView(R.id.ll_intimacy);
+        mPresent = bindView(R.id.ll_present);
+        LinearLayout mIntimacyRoot = bindView(R.id.ll_intimacy_root);
+        LinearLayout mPresentRoot = bindView(R.id.ll_present_root);
+        FlexboxLayout mFlexboxSelf = bindView(R.id.flexbox);
+        mMobile = bindView(R.id.tv_mobile);
+        TextView tv_check_mobile = bindView(R.id.tv_check_mobile);
 
         ll_first.setOnClickListener(this);
         ll_second.setOnClickListener(this);
         ll_third.setOnClickListener(this);
+        iv_share.setOnClickListener(this);
+        mIntimacyRoot.setOnClickListener(this);
+        mPresentRoot.setOnClickListener(this);
+        tv_check_mobile.setOnClickListener(this);
+
         llRootList.add(ll_root_frist);
         llRootList.add(ll_root_second);
         llRootList.add(ll_root_third);
@@ -146,10 +159,26 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         });
 
 
-
-
         initBanner(picList);
 
+        mIntimacy.removeAllViews();
+        mPresent.removeAllViews();
+        for (int i = 0; i < 6; i++) {
+            View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
+            mIntimacy.addView(view);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
+            mPresent.addView(view);
+        }
+
+
+        for (int i = 0; i < 3; i++) {
+            View view = View.inflate(getActivity(), R.layout.item_info_self, null);
+            TextView tvLabel = view.findViewById(R.id.tv_label);
+            mFlexboxSelf.addView(view);
+        }
 
     }
 
@@ -214,6 +243,18 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             case R.id.ll_third:
                 setTypeCheck(ll_third);
                 break;
+            case R.id.iv_share:
+                showShareDialog();
+                break;
+            case R.id.ll_intimacy_root:
+                LauncherHelper.from(getActivity()).startActivity(MineIntimacyActivity.class);
+                break;
+            case R.id.ll_present_root:
+                LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class);
+                break;
+            case R.id.tv_check_mobile:
+                showCleckDialog();
+                break;
         }
     }
 
@@ -245,6 +286,77 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     }
 
+    /**
+     * 分享弹窗
+     */
+    private void showShareDialog() {
+        shareDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_share)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .addViewOnclick(R.id.tv_cancle, view -> {
+                    if (shareDialog.isShowing()) {
+                        shareDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.ll_qq, view -> {
+                    if (shareDialog.isShowing()) {
+                        shareDialog.dismiss();
+                    }
+
+                })
+                .addViewOnclick(R.id.ll_qzone, view -> {
+                    if (shareDialog.isShowing()) {
+                        shareDialog.dismiss();
+                    }
+
+                })
+                .addViewOnclick(R.id.ll_wx, view -> {
+                    if (shareDialog.isShowing()) {
+                        shareDialog.dismiss();
+                    }
+
+                })
+                .addViewOnclick(R.id.ll_wx_friend, view -> {
+                    if (shareDialog.isShowing()) {
+                        shareDialog.dismiss();
+                    }
+
+                })
+                .build();
+        shareDialog.show();
+
+    }
+
+    /**
+     * 查看手机号弹窗
+     */
+    private void showCleckDialog() {
+        checkDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_layout)
+                .gravity(Gravity.CENTER)
+                .cancelTouchout(true)
+                .style(R.style.Dialog_NoAnimation)
+                .settext("本次查看将消费您1000金币", R.id.dialog_content)
+                .settext("确定", R.id.cancle)
+                .settext("取消", R.id.down)
+                .addViewOnclick(R.id.cancle, view -> {
+                    if (checkDialog.isShowing()) {
+                        checkDialog.dismiss();
+                    }
+                    mMobile.setText("手机号：17799999999");
+                })
+                .addViewOnclick(R.id.down, view -> {
+                    if (checkDialog.isShowing()) {
+                        checkDialog.dismiss();
+                    }
+
+                })
+                .build();
+        checkDialog.show();
+        checkDialog.findViewById(R.id.dialog_title).setVisibility(View.VISIBLE);
+
+
+    }
 
     //点击不同对象不同的风格
     private void setTypeCheck(LinearLayout llType) {
