@@ -11,6 +11,8 @@ import com.yu.common.glide.ImageLoader;
 
 import java.util.List;
 
+import cc.shinichi.library.ImagePreview;
+
 public class DynamicPicGvAdapter extends BaseAdapter {
     private List<String> list;
     private Context context;
@@ -56,7 +58,17 @@ public class DynamicPicGvAdapter extends BaseAdapter {
 //        holder.thumb_iv.setLayoutParams(para);
 
         ImageLoader.getInstance().displayImage(holder.thumb_iv, list.get(i), R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
-
+        holder.thumb_iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePreview.getInstance()
+                        .setContext(context)
+                        .setIndex(i)
+                        .setImageList(list)
+                        .setShowDownButton(false)
+                        .start();
+            }
+        });
         return view;
     }
 

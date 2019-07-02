@@ -31,6 +31,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.mine.activity.BindAliPayActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.home.activity.HomeReportActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.home.activity.HomeSearchActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -103,7 +109,11 @@
             android:name="SENSORS_ANALYTICS_UTM_SOURCE"
             android:value="${UMENG_CHANNEL}"/>
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".module.login.activity.SplashActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

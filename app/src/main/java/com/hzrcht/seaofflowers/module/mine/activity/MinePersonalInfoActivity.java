@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
+import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
 import com.hzrcht.seaofflowers.module.home.adapter.BannerViewHolder;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDynamicRvAdapter;
@@ -277,7 +278,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     if (reportDialog.isShowing()) {
                         reportDialog.dismiss();
                     }
-
+                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class);
                 })
                 .build();
         reportDialog.show();

@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.login.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
@@ -26,5 +27,17 @@ public class SelectGenderActivity extends BaseBarActivity {
         LinearLayout action_bar_center_actions = bindView(R.id.action_bar_center_actions);
         action_bar_center_actions.setOnClickListener(view -> getLaunchHelper().startActivity(HomePageActivity.class));
 
+        ImageView iv_woman = bindView(R.id.iv_woman);
+        ImageView iv_man = bindView(R.id.iv_man);
+
+        iv_woman.setOnClickListener(view -> {
+            iv_woman.setImageResource(R.drawable.ic_login_woman_select);
+            iv_man.setImageResource(R.drawable.ic_login_man_normal);
+        });
+
+        iv_man.setOnClickListener(view -> {
+            iv_woman.setImageResource(R.drawable.ic_login_woman_normal);
+            iv_man.setImageResource(R.drawable.ic_login_man_select);
+        });
     }
 }

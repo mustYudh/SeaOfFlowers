@@ -15,7 +15,9 @@ import com.hzrcht.seaofflowers.module.dynamic.adapter.DynamicListRvAdapter;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicPresenter;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicViewer;
+import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 
 import java.util.ArrayList;
@@ -135,6 +137,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
                     if (reportDialog.isShowing()) {
                         reportDialog.dismiss();
                     }
+                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class);
 
                 })
                 .build();

@@ -114,7 +114,7 @@ public class PhotoUtils {
     /**
      * 更换图片
      */
-    public static void changeAvatar(Activity activity, List<LocalMedia> list) {
+    public static void changeAvatar(Activity activity, List<LocalMedia> list,int num,String title) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +161,7 @@ public class PhotoUtils {
                                                                                             // 用户已经同意该权限
                                                                                             if ("android.permission.WRITE_EXTERNAL_STORAGE".equals(permission.name)) {
                                                                                                 //从相册获取照片
-                                                                                                pictureSelector(activity, 5 - list.size());
+                                                                                                pictureSelector(activity, num - list.size());
                                                                                             }
                                                                                         }
 
@@ -194,7 +194,7 @@ public class PhotoUtils {
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-                .settext("上传您的主播封面,以供主播页展示", R.id.tv_title)
+                .settext(title, R.id.tv_title)
                 .addViewOnclick(R.id.tv_top, listener)
                 .addViewOnclick(R.id.tv_bottom, listener)
                 .addViewOnclick(R.id.tv_cancle, listener)

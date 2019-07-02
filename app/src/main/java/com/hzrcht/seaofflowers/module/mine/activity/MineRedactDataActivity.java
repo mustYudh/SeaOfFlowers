@@ -354,7 +354,7 @@ public class MineRedactDataActivity extends BaseBarActivity
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         if (view.getId() == R.id.iv_picture_item) {
             picType = 0;
-            PhotoUtils.changeAvatar(getActivity(), adapter.getData());
+            PhotoUtils.changeAvatar(getActivity(), adapter.getData(), 5, "上传您的主播封面,以供主播页展示");
 //            PhotoUtils.pictureSelector(getActivity(), 5 - adapter.getItemCount());
         }
     }
