@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/ll_root"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:id="@+id/ll_root"
               android:orientation="vertical">
 
 
@@ -95,15 +95,13 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:layout_marginLeft="8dp"
             android:background="@drawable/shape_home_age"
             android:gravity="center"
             android:includeFontPadding="false"
             android:paddingLeft="10dp"
-            android:paddingTop="4dp"
             android:paddingRight="10dp"
-            android:paddingBottom="4dp"
             android:text="18"
             android:textColor="@color/white"
             android:textSize="9sp"
@@ -112,15 +110,13 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="14dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/shape_home_job"
             android:gravity="center"
             android:includeFontPadding="false"
             android:paddingLeft="7dp"
-            android:paddingTop="4dp"
             android:paddingRight="7dp"
-            android:paddingBottom="4dp"
             android:text="模特"
             android:textColor="@color/white"
             android:textSize="9sp"
