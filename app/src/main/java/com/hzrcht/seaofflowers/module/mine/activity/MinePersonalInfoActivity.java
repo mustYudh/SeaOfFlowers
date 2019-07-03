@@ -44,7 +44,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private List<View> viewList = new ArrayList<>();
     private MZBannerView mBanner;
     private LinearLayout ll_first, ll_second, ll_third, mIntimacy, mPresent;
-    private DialogUtils reportDialog, shareDialog, checkDialog;
+    private DialogUtils reportDialog, shareDialog, checkDialog, rechargeDialog;
 
     @PresenterLifeCycle
     private MinePersonalInfoPresenter presenter = new MinePersonalInfoPresenter(this);
@@ -344,6 +344,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     if (checkDialog.isShowing()) {
                         checkDialog.dismiss();
                     }
+                    showRechargeDialog();
+                    
                     mMobile.setText("手机号：17799999999");
                 })
                 .addViewOnclick(R.id.down, view -> {
@@ -355,6 +357,28 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 .build();
         checkDialog.show();
         checkDialog.findViewById(R.id.dialog_title).setVisibility(View.VISIBLE);
+
+
+    }
+
+
+    /**
+     * 余额不足弹窗
+     */
+    private void showRechargeDialog() {
+        rechargeDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_recharge)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+
+                .addViewOnclick(R.id.down, view -> {
+                    if (rechargeDialog.isShowing()) {
+                        rechargeDialog.dismiss();
+                    }
+
+                })
+                .build();
+        rechargeDialog.show();
 
 
     }

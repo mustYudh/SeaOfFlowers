@@ -31,6 +31,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.mine.activity.MineRechargeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.BindAliPayActivity"
             android:screenOrientation="portrait"/>
         <activity
