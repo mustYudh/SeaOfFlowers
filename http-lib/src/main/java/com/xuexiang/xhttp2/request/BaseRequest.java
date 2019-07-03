@@ -95,7 +95,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
     //====请求校验=====//
     private boolean mSign = false;                                          //是否需要签名
     private boolean mTimeStamp = false;                                     //是否需要追加时间戳
-    private boolean mAccessToken = false;                                   //是否需要追加token
+    private boolean mAccessToken = true;                                   //是否需要追加token
     //====请求超时重试=====//
     protected long mReadTimeOut;                                            //读超时
     protected long mWriteTimeOut;                                           //写超时

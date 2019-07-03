@@ -14,54 +14,52 @@ import com.yu.share.ShareAuthSDK;
  * @date 2019-06-03
  */
 public class APP extends BaseApp {
-    public static final int NET_TYPE = BuildConfig.API_MODE;
-    public static final boolean DEBUG = APP.NET_TYPE == 0;
-    private static APP instance;
-    @Override
-    public void onCreate() {
-        APP.instance = this;
-        super.onCreate();
-        CommonInit.init(this);
-        ShareAuthSDK.init(this, DEBUG);
-        initHttp();
-    }
+  public static final int NET_TYPE = BuildConfig.API_MODE;
+  public static final boolean DEBUG = APP.NET_TYPE == 0;
+  private static APP instance;
 
-    private void initHttp() {
-        XHttpSDK.init(this);
-        if (DEBUG) {
-            XHttpSDK.debug();
-            XHttpSDK.debug(new CustomLoggingInterceptor());
-        }
-        XHttpSDK.setBaseUrl(getBaseUrl());
-        XHttpSDK.setSubUrl(getSubUrl());
-        XHttpSDK.addInterceptor(new CustomDynamicInterceptor());
-//        XHttpSDK.addInterceptor(new CustomExpiredInterceptor());
-        XHttp.getInstance().setTimeout(60000);
-        XHttp.getInstance().setRetryCount(3);
-        XHttp.getInstance().addCommonHeaders(getHttpHeaders());
-    }
+  @Override public void onCreate() {
+    APP.instance = this;
+    super.onCreate();
+    CommonInit.init(this);
+    ShareAuthSDK.init(this, DEBUG);
+    initHttp();
+  }
 
-
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        return headers;
+  private void initHttp() {
+    XHttpSDK.init(this);
+    if (DEBUG) {
+      XHttpSDK.debug();
+      XHttpSDK.debug(new CustomLoggingInterceptor());
     }
+    XHttpSDK.setBaseUrl(getBaseUrl());
+    XHttpSDK.setSubUrl(getSubUrl());
+    XHttpSDK.addInterceptor(new CustomDynamicInterceptor().accessToken(true));
+    XHttp.getInstance().setTimeout(60000);
+    XHttp.getInstance().setRetryCount(3);
+    XHttp.getInstance().addCommonHeaders(getHttpHeaders());
+  }
 
-    private String getBaseUrl() {
-        if (APP.NET_TYPE == 1) {
-            return "";
-        } else if (APP.NET_TYPE == 2) {
-            return "";
-        } else {
-            return "";
-        }
-    }
+  private HttpHeaders getHttpHeaders() {
+    HttpHeaders headers = new HttpHeaders();
+    return headers;
+  }
 
-    public String getSubUrl() {
-        return "";
+  private String getBaseUrl() {
+    if (APP.NET_TYPE == 1) {
+      return "http://huahai.hzrcht.com";
+    } else if (APP.NET_TYPE == 2) {
+      return "http://huahai.hzrcht.com";
+    } else {
+      return "http://huahai.hzrcht.com";
     }
+  }
 
-    public synchronized static APP getInstance() {
-        return instance;
-    }
+  public String getSubUrl() {
+    return "";
+  }
+
+  public synchronized static APP getInstance() {
+    return instance;
+  }
 }
