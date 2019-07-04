@@ -11,14 +11,19 @@ public class CustomDynamicInterceptor extends BaseDynamicInterceptor<CustomDynam
 
   @Override
   protected TreeMap<String, Object> updateDynamicParams(TreeMap<String, Object> dynamicMap) {
-    String token = UserProfile.getInstance().getAppToken();
-    if (isAccessToken() && !TextUtils.isEmpty(token)) {
-      dynamicMap.put("token", token);
-    }
     return dynamicMap;
   }
 
   @Override public Response intercept(Chain chain) throws IOException {
-    return super.intercept(chain);
+    String token = UserProfile.getInstance().getAppToken();
+    if (isAccessToken() && !TextUtils.isEmpty(token)) {
+      return chain
+          .proceed(chain.request()
+              .newBuilder()
+              .addHeader("token", token)
+              .build());
+    } else {
+      return super.intercept(chain);
+    }
   }
 }
