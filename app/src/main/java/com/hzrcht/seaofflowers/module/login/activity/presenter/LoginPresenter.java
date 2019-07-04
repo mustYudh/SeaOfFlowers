@@ -2,12 +2,16 @@ package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.action.BaseActionHelper;
+import com.hzrcht.seaofflowers.bean.InviteIdBean;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
@@ -17,6 +21,8 @@ import com.yu.common.countdown.RxCountDown;
 import com.yu.common.framework.BaseViewPresenter;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.toast.ToastUtils;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 /**
  * @author yudenghao
@@ -53,24 +59,84 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
 
     @SuppressLint("CheckResult")
     public void phoneLogin(String number, String code) {
-        XHttp.post("http://huahai.hzrcht.com/api/login/login")
-                .params("code", code)
-                .params("phone", number)
-                .accessToken(false)
-                .execute(LoginBean.class)
-                .subscribeWith(new TipRequestSubscriber<LoginBean>() {
-                    @Override
-                    protected void onSuccess(LoginBean loginBean) {
-                        assert getViewer() != null;
-                        getViewer().loginSuccess(loginBean);
-                    }
+        // 获取剪贴板数据
+        String content = null;
+        ClipboardManager cm = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+        try {
+            ClipData data = cm.getPrimaryClip();
+            ClipData.Item item = data.getItemAt(0);
+            content = item.getText().toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
+        if (content != null) {
+            if (content.contains("huahai_invite_id")) {
+                Gson gson = new Gson();
+                InviteIdBean inviteIdBean = gson.fromJson(content, InviteIdBean.class);
+                if (inviteIdBean.huahai_invite_id != null) {
+                    XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                            .params("code", code)
+                            .params("phone", number)
+                            .params("superior_id", inviteIdBean.huahai_invite_id + "")
+                            .accessToken(false)
+                            .execute(LoginBean.class)
+                            .subscribeWith(new TipRequestSubscriber<LoginBean>() {
+                                @Override
+                                protected void onSuccess(LoginBean loginBean) {
+                                    assert getViewer() != null;
+                                    getViewer().loginSuccess(loginBean);
+                                }
 
-                    }
-                });
+                                @Override
+                                protected void onError(ApiException apiException) {
+                                    super.onError(apiException);
+
+                                }
+                            });
+                } else {
+                    XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                            .params("code", code)
+                            .params("phone", number)
+                            .accessToken(false)
+                            .execute(LoginBean.class)
+                            .subscribeWith(new TipRequestSubscriber<LoginBean>() {
+                                @Override
+                                protected void onSuccess(LoginBean loginBean) {
+                                    assert getViewer() != null;
+                                    getViewer().loginSuccess(loginBean);
+                                }
+
+                                @Override
+                                protected void onError(ApiException apiException) {
+                                    super.onError(apiException);
+
+                                }
+                            });
+                }
+            } else {
+                XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                        .params("code", code)
+                        .params("phone", number)
+                        .accessToken(false)
+                        .execute(LoginBean.class)
+                        .subscribeWith(new TipRequestSubscriber<LoginBean>() {
+                            @Override
+                            protected void onSuccess(LoginBean loginBean) {
+                                assert getViewer() != null;
+                                getViewer().loginSuccess(loginBean);
+                            }
+
+                            @Override
+                            protected void onError(ApiException apiException) {
+                                super.onError(apiException);
+
+                            }
+                        });
+            }
+
+        }
+
     }
 
 
