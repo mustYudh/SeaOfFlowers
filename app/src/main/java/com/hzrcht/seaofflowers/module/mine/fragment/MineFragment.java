@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.mine.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePresentActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRedactDataActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
+import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
@@ -26,6 +28,9 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
 
     @PresenterLifeCycle
     private MinePresenter mPresenter = new MinePresenter(this);
+    private ImageView mVip;
+    private LinearLayout mLAge;
+    private ImageView mIAge, mType;
 
     @Override
     protected int getContentViewId() {
@@ -39,7 +44,14 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
 
     @Override
     protected void loadData() {
+        mPresenter.userInfo();
         ImageView iv_redact = bindView(R.id.iv_redact);
+        mVip = bindView(R.id.iv_vip);
+        mLAge = bindView(R.id.ll_age);
+        mIAge = bindView(R.id.iv_age);
+        mType = bindView(R.id.iv_type);
+
+
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_dynamic = bindView(R.id.ll_dynamic);
         LinearLayout ll_master = bindView(R.id.ll_master);
@@ -112,6 +124,29 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 //师徒
                 getLaunchHelper().startActivity(MinePresentActivity.class);
                 break;
+        }
+    }
+
+    @Override
+    public void userInfoSuccess(MineUserInfoBean mineUserInfoBean) {
+        if (mineUserInfoBean != null) {
+            if (mineUserInfoBean.userInfo != null) {
+                bindText(R.id.tv_balance, mineUserInfoBean.userInfo.amount + "");
+                bindText(R.id.tv_withdrawal, mineUserInfoBean.userInfo.withdrawal + "");
+                bindText(R.id.tv_nickname, mineUserInfoBean.userInfo.nick_name);
+                bindText(R.id.tv_age, mineUserInfoBean.userInfo.age + "");
+                bindText(R.id.tv_id, mineUserInfoBean.userInfo.id + "");
+                bindText(R.id.tv_sign, TextUtils.isEmpty(mineUserInfoBean.userInfo.sign) ? "这个人很懒，什么都没留下~" : mineUserInfoBean.userInfo.sign);
+                bindText(R.id.tv_type, mineUserInfoBean.userInfo.type == 0 ? "申请主播" : "收费设置");
+                mVip.setImageResource(mineUserInfoBean.is_vip ? R.drawable.ic_vip : R.drawable.ic_vip_no);
+                mIAge.setImageResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_logo : R.drawable.ic_woman_logo);
+                mType.setImageResource(mineUserInfoBean.userInfo.type == 0 ? R.drawable.ic_apply : R.drawable.ic_charge);
+                mLAge.setBackgroundResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
+            }
+            bindText(R.id.tv_img, mineUserInfoBean.img + "");
+            bindText(R.id.tv_state, mineUserInfoBean.state + "");
+            bindText(R.id.tv_attent, mineUserInfoBean.attent + "");
+            bindText(R.id.tv_friend, mineUserInfoBean.friend + "");
         }
     }
 }

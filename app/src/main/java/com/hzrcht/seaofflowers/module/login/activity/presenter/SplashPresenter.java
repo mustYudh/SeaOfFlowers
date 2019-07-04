@@ -1,5 +1,7 @@
 package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
+import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.yu.common.countdown.RxCountDown;
 import com.yu.common.countdown.RxCountDownAdapter;
@@ -40,7 +42,13 @@ public class SplashPresenter extends BaseViewPresenter<SplashViewer> {
     }
 
     private void getHome() {
-        getLauncherHelper().startActivity(SelectLoginActivity.class);
+        if (UserProfile.getInstance().isAppLogin()) {
+            //登录了
+            getLauncherHelper().startActivity(HomePageActivity.class);
+        } else {
+            //未登录
+            getLauncherHelper().startActivity(SelectLoginActivity.class);
+        }
         getActivity().finish();
     }
 

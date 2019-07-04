@@ -89,6 +89,7 @@
 
 
                                 <TextView
+                                    android:id="@+id/tv_nickname"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:includeFontPadding="false"
@@ -98,22 +99,25 @@
                                     />
 
                                 <LinearLayout
+                                    android:id="@+id/ll_age"
                                     android:layout_width="wrap_content"
                                     android:layout_height="14dp"
                                     android:layout_centerVertical="true"
                                     android:layout_marginLeft="29dp"
-                                    android:background="@drawable/shape_home_age"
+                                    android:background="@drawable/shape_mine_woman"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="5dp"
                                     android:paddingRight="7dp"
                                     >
 
                                     <ImageView
+                                        android:id="@+id/iv_age"
                                         android:layout_width="9dp"
                                         android:layout_height="9dp"
-                                        android:src="@drawable/ic_man_logo"/>
+                                        android:src="@drawable/ic_woman_logo"/>
 
                                     <TextView
+                                        android:id="@+id/tv_age"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="4dp"
@@ -125,6 +129,7 @@
                                 </LinearLayout>
 
                                 <ImageView
+                                    android:id="@+id/iv_vip"
                                     android:layout_width="19dp"
                                     android:layout_height="16dp"
                                     android:layout_marginLeft="13dp"
@@ -133,6 +138,7 @@
 
 
                             <TextView
+                                android:id="@+id/tv_id"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
@@ -143,6 +149,7 @@
                                 />
 
                             <TextView
+                                android:id="@+id/tv_sign"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
@@ -171,6 +178,7 @@
 
 
                             <TextView
+                                android:id="@+id/tv_img"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
@@ -200,6 +208,7 @@
 
 
                             <TextView
+                                android:id="@+id/tv_state"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
@@ -229,10 +238,11 @@
 
 
                             <TextView
+                                android:id="@+id/tv_attent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
-                                android:text="3"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="15sp"
                                 />
@@ -258,6 +268,7 @@
 
 
                             <TextView
+                                android:id="@+id/tv_friend"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:includeFontPadding="false"
@@ -380,12 +391,14 @@
                         android:orientation="vertical">
 
                         <ImageView
+                            android:id="@+id/iv_type"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_apply"/>
 
                         <TextView
+                            android:id="@+id/tv_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -469,10 +482,11 @@
 
 
                 <TextView
+                    android:id="@+id/tv_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="10,980.00"
+                    android:text="0"
                     android:textColor="@color/color_9897E7"
                     android:textSize="22sp"
                     />
@@ -505,10 +519,11 @@
 
 
                 <TextView
+                    android:id="@+id/tv_withdrawal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="0.00"
+                    android:text="0"
                     android:textColor="@color/color_9897E7"
                     android:textSize="22sp"
                     />

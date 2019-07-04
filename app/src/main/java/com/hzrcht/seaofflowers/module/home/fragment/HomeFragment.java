@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.home.activity.HomeSearchActivity;
 import com.hzrcht.seaofflowers.module.home.adapter.HomePageAdapter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeFragmentPresenter;
@@ -52,26 +53,28 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
 
     @Override
     protected void loadData() {
-        mDataList.add("粉丝");
-        mDataList.add("关注");
-        mDataList.add("推荐");
-        mDataList.add("新人");
-        mDataList.add("附近");
-        mViewPager = bindView(R.id.view_pager);
+        if (UserProfile.getInstance().getAnchorType() == 1) {
+            //主播
+            mDataList.add("粉丝");
+            mDataList.add("推荐");
+            mDataList.add("新人");
+            fragments.add(HomeFansFragment.newInstance(1));
+            fragments.add(HomeLimitFragment.newInstance(1));
+            fragments.add(HomeLimitFragment.newInstance(2));
+        } else {
+            //非主播
+            mDataList.add("关注");
+            mDataList.add("推荐");
+            mDataList.add("新人");
+            fragments.add(HomeAttentionFragment.newInstance(1));
+            fragments.add(HomeLimitFragment.newInstance(1));
+            fragments.add(HomeLimitFragment.newInstance(2));
+        }
 
+        mViewPager = bindView(R.id.view_pager);
         LinearLayout ll_search = bindView(R.id.ll_search);
 
-        for (int i = 0; i < mDataList.size(); i++) {
-            if (i == 0) {
-                fragments.add(HomeFansFragment.newInstance(i));
-            } else if (i == 1) {
-                fragments.add(HomeAttentionFragment.newInstance(i));
-            } else if (i == 4) {
-                fragments.add(HomeNearbyFragment.newInstance(i));
-            } else {
-                fragments.add(HomeLimitFragment.newInstance(i));
-            }
-        }
+      
         initMagicIndicator();
 
         ll_search.setOnClickListener(view -> {

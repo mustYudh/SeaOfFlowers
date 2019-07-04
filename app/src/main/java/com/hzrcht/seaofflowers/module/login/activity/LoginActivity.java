@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginPresenter;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginViewer;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
@@ -132,23 +134,24 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
 
     @Override
     public void loginSuccess(LoginBean loginBean) {
-        //if (loginBean != null) {
-        //    if (loginBean.data != null && loginBean.data.info != null) {
-        //        if (loginBean.data.info.sex == 0) {
-        //            //设置性别
-        //            Intent intent = new Intent();
-        //            intent.putExtra("type", 0);
-        //            setResult(1, intent);
-        //            finish();
-        //        } else {
-        //            //已经设置过了
-        //            UserProfile.getInstance().setToken(loginBean.data.token);
-        //            Intent intent = new Intent();
-        //            intent.putExtra("type", 1);
-        //            setResult(1, intent);
-        //            finish();
-        //        }
-        //    }
-        //}
+        if (loginBean != null) {
+            if (loginBean.info != null) {
+                UserProfile.getInstance().setToken(loginBean.token);
+                UserProfile.getInstance().setAnchorType(loginBean.info.type);
+                if (loginBean.info.sex == 0) {
+                    //设置性别
+                    Intent intent = new Intent();
+                    intent.putExtra("type", 0);
+                    setResult(1, intent);
+                    finish();
+                } else {
+                    //已经设置过了
+                    Intent intent = new Intent();
+                    intent.putExtra("type", 1);
+                    setResult(1, intent);
+                    finish();
+                }
+            }
+        }
     }
 }

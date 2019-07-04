@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:background="@drawable/shape_home_age"
+                    android:background="@drawable/shape_age_red"
                     android:gravity="center"
                     android:includeFontPadding="false"
                     android:paddingLeft="10dp"

@@ -20,5 +20,6 @@ public class LoginBean implements Serializable {
 
     public int id;
     public int sex;
+    public int type;
   }
 }

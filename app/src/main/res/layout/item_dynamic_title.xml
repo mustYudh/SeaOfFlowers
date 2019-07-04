@@ -44,7 +44,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/tv_username"
-                android:background="@drawable/shape_home_age"
+                android:background="@drawable/shape_age_red"
                 android:gravity="center_vertical"
                 android:paddingLeft="5dp"
                 android:paddingTop="3dp"

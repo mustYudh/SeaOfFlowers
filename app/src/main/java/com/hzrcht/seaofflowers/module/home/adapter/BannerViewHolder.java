@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.hzrcht.seaofflowers.R;
+import com.hzrcht.seaofflowers.module.home.bean.HomeBannerBean;
 import com.yu.common.glide.ImageLoader;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
@@ -13,7 +14,7 @@ import com.zhouwei.mzbanner.holder.MZViewHolder;
  * Created by mks on 2019/4/1.
  */
 
-public class BannerViewHolder implements MZViewHolder<String> {
+public class BannerViewHolder implements MZViewHolder<HomeBannerBean.RowsBean> {
     private ImageView mImageView;
 
     @Override
@@ -25,9 +26,9 @@ public class BannerViewHolder implements MZViewHolder<String> {
     }
 
     @Override
-    public void onBind(Context context, int position, String data) {
+    public void onBind(Context context, int position, HomeBannerBean.RowsBean data) {
         // 数据绑定
-        ImageLoader.getInstance().displayImage(mImageView, data, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        ImageLoader.getInstance().displayImage(mImageView, data.imageUrl, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
 
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override

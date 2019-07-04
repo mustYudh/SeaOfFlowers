@@ -83,6 +83,7 @@
 
 
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
@@ -94,10 +95,11 @@
 
 
         <TextView
+            android:id="@+id/tv_age"
             android:layout_width="wrap_content"
             android:layout_height="14dp"
             android:layout_marginLeft="8dp"
-            android:background="@drawable/shape_home_age"
+            android:background="@drawable/shape_age_red"
             android:gravity="center"
             android:includeFontPadding="false"
             android:paddingLeft="10dp"

@@ -1,7 +1,11 @@
 package com.hzrcht.seaofflowers;
 
+import android.os.Build;
+import android.util.Log;
+
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
+import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xhttp2.model.HttpHeaders;
@@ -43,7 +47,8 @@ public class APP extends BaseApp {
 
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.put("ua", "");
+        headers.put("ua", CheckVersionCodeUtils.getVersionCode(this) + ";API1;android;" + Build.VERSION.RELEASE);
+        Log.e("aaa",CheckVersionCodeUtils.getVersionCode(this) + ";API1;android;" + Build.VERSION.RELEASE);
         return headers;
     }
 

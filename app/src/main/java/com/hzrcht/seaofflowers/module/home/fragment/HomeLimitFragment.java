@@ -11,6 +11,8 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.home.adapter.BannerViewHolder;
 import com.hzrcht.seaofflowers.module.home.adapter.HomeLimitRvAdapter;
+import com.hzrcht.seaofflowers.module.home.bean.AnchorListBean;
+import com.hzrcht.seaofflowers.module.home.bean.HomeBannerBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
@@ -19,15 +21,15 @@ import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
-    private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
     private HomeLimitPresenter mPresenter = new HomeLimitPresenter(this);
     private MZBannerView mBanner;
+    private int home_type;
+    private RecyclerView mAnchor;
 
     @Override
     protected int getContentViewId() {
@@ -49,20 +51,21 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
     @Override
     protected void loadData() {
-        list.clear();
-        for (int i = 0; i < 7; i++) {
-            list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561634541402&di=dd1d43b504422b022c7e6c057786bfbc&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180611%2F88957964ee86464d8589b722e874f5ed.jpeg");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            home_type = bundle.getInt("HOME_TYPE");
         }
-        RecyclerView rv_home = bindView(R.id.rv_home);
+
+        mAnchor = bindView(R.id.rv_home);
         mBanner = bindView(R.id.banner);
-        rv_home.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        rv_home.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
-        HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, list, getActivity());
-        rv_home.setAdapter(adapter);
-        initBanner(list);
+        mAnchor.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
+
         Log.e("aaaa", "走了吗");
 
 
+        mPresenter.getAnchorList(home_type + "");
+        mPresenter.getBannerList();
     }
 
 
@@ -71,7 +74,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
      *
      * @param xbanner
      */
-    private void initBanner(List<String> xbanner) {
+    private void initBanner(List<HomeBannerBean.RowsBean> xbanner) {
         String json = new Gson().toJson(xbanner);
         Gson gson = new Gson();
 
@@ -113,4 +116,27 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             mBanner.pause();//暂停轮播
         }
     }
+
+    @Override
+    public void getAnchorListSuccess(AnchorListBean anchorListBean) {
+        if (anchorListBean != null) {
+            if (anchorListBean.rows != null && anchorListBean.rows.size() != 0) {
+
+                HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, anchorListBean.rows, getActivity());
+                mAnchor.setAdapter(adapter);
+            }
+        }
+    }
+
+    @Override
+    public void getBannerListSuccess(HomeBannerBean homeBannerBean) {
+        if (homeBannerBean != null) {
+            if (homeBannerBean.rows != null && homeBannerBean.rows.size() != 0) {
+                initBanner(homeBannerBean.rows);
+
+            }
+        }
+    }
+
+
 }
