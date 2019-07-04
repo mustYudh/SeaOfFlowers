@@ -15,9 +15,9 @@ public class SelectGenderPresenter extends BaseViewPresenter<SelectGenderViewer>
 
     @SuppressLint("CheckResult")
     public void selectSex(String sex) {
-        XHttp.post("httuahai.hzrcht.com/api/user/sex")
+        XHttp.post("http://huahai.hzrcht.com/api/user/sex")
                 .params("sex", sex)
-                .accessToken(false)
+                .accessToken(true)
                 .execute(LoginBean.class)
                 .subscribeWith(new TipRequestSubscriber<Object>() {
                     @Override

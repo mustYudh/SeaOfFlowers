@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginPresenter;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginViewer;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
@@ -143,6 +144,7 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
                     finish();
                 } else {
                     //已经设置过了
+                    UserProfile.getInstance().setToken(loginBean.data.token);
                     Intent intent = new Intent();
                     intent.putExtra("type", 1);
                     setResult(1, intent);
