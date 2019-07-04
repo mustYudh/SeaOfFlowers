@@ -10,28 +10,17 @@
     >
 
 
-    <LinearLayout
-        android:id="@+id/action_bar_center_actions"
-        android:layout_width="wrap_content"
+    <com.yu.common.ui.DelayClickTextView
+        android:id="@+id/tv_sure"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-        <com.yu.common.ui.DelayClickTextView
-            android:id="@+id/tv_sure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="18dp"
-            android:gravity="center"
-            android:text="确定"
-            android:textColor="@color/color_9897E7"
-            android:textSize="17sp"
-            />
-
-    </LinearLayout>
+        android:text="确定"
+        android:textColor="@color/color_9897E7"
+        android:textSize="17sp"
+        />
 
 
 </RelativeLayout>

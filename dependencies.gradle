@@ -53,6 +53,8 @@ ext {
 
     EASYBLURVersion = 'v1.0.0'
 
+    GSONVersion = '2.8.2'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -76,7 +78,8 @@ ext {
                        PICTURESELECTOR    : "com.github.LuckSiege.PictureSelector:picture_library:${PICTURESELECTORVersion}",
                        MZBANNERVIEW       : "com.github.pinguo-zhouwei:MZBannerView:${MZBANNERVIEWVersion}",
                        FLEXBOX            : "com.google.android:flexbox:${FLEXBOXVersion}",
-                       EASYBLUR           : "com.github.pinguo-zhouwei:EasyBlur:${EASYBLURVersion}"
+                       EASYBLUR           : "com.github.pinguo-zhouwei:EasyBlur:${EASYBLURVersion}",
+                       GSON               : "com.google.code.gson:gson:${GSONVersion}"
 //                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
 //                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",
 //                       RXJAVA             : "io.reactivex.rxjava2:rxjava:${RXJAVAVersion}"
