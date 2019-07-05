@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,15 +18,17 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
-import com.hzrcht.seaofflowers.module.home.adapter.BannerViewHolder;
+import com.hzrcht.seaofflowers.module.mine.activity.adapter.BannerInfoViewHolder;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDynamicRvAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -47,8 +50,13 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private DialogUtils reportDialog, shareDialog, checkDialog, rechargeDialog;
 
     @PresenterLifeCycle
-    private MinePersonalInfoPresenter presenter = new MinePersonalInfoPresenter(this);
-    private TextView mMobile;
+    private MinePersonalInfoPresenter mPresenter = new MinePersonalInfoPresenter(this);
+    private TextView mMobile, mAge;
+    private String user_id;
+    private FlexboxLayout mFlexboxSelf;
+    private LinearLayout mLabel;
+    private ImageView mCollect;
+    private LinearLayout mLCollect, mLOnline;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -57,6 +65,9 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     @Override
     protected void loadData() {
+        Bundle bundle = getIntent().getExtras();
+        user_id = bundle.getString("USER_ID");
+
         for (int i = 0; i < 7; i++) {
             listData.add("");
         }
@@ -79,9 +90,16 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mPresent = bindView(R.id.ll_present);
         LinearLayout mIntimacyRoot = bindView(R.id.ll_intimacy_root);
         LinearLayout mPresentRoot = bindView(R.id.ll_present_root);
-        FlexboxLayout mFlexboxSelf = bindView(R.id.flexbox);
+        mFlexboxSelf = bindView(R.id.flexbox);
         mMobile = bindView(R.id.tv_mobile);
         TextView tv_check_mobile = bindView(R.id.tv_check_mobile);
+        mLCollect = bindView(R.id.ll_collect);
+        mLOnline = bindView(R.id.ll_online);
+        mLabel = bindView(R.id.ll_label);
+        mAge = bindView(R.id.tv_age);
+
+
+        mCollect = bindView(R.id.iv_collect);
 
         ll_first.setOnClickListener(this);
         ll_second.setOnClickListener(this);
@@ -90,6 +108,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mIntimacyRoot.setOnClickListener(this);
         mPresentRoot.setOnClickListener(this);
         tv_check_mobile.setOnClickListener(this);
+
 
         llRootList.add(ll_root_frist);
         llRootList.add(ll_root_second);
@@ -160,8 +179,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         });
 
 
-//        initBanner(picList);
-
         mIntimacy.removeAllViews();
         mPresent.removeAllViews();
         for (int i = 0; i < 6; i++) {
@@ -175,12 +192,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         }
 
 
-        for (int i = 0; i < 3; i++) {
-            View view = View.inflate(getActivity(), R.layout.item_info_self, null);
-            TextView tvLabel = view.findViewById(R.id.tv_label);
-            mFlexboxSelf.addView(view);
-        }
-
+        mPresenter.getUserInfo(user_id);
     }
 
     /**
@@ -199,7 +211,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             mBanner.setPages(xbanner, new MZHolderCreator() {
                 @Override
                 public MZViewHolder createViewHolder() {
-                    return new BannerViewHolder();
+                    return new BannerInfoViewHolder();
                 }
             });
             mBanner.start();
@@ -345,7 +357,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                         checkDialog.dismiss();
                     }
                     showRechargeDialog();
-                    
+
                     mMobile.setText("手机号：17799999999");
                 })
                 .addViewOnclick(R.id.down, view -> {
@@ -397,6 +409,84 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 tvList.get(i).getPaint().setFakeBoldText(false);
                 viewList.get(i).setVisibility(View.INVISIBLE);
                 llRootList.get(i).setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * 关注成功
+     */
+    @Override
+    public void attentSuccess(int type, AnchorUserInfoBean anchorUserInfoBean) {
+        if (type == 0) {
+            ToastUtils.show("关注成功");
+            anchorUserInfoBean.is_attent = 1;
+        } else {
+            ToastUtils.show("取消关注成功");
+            anchorUserInfoBean.is_attent = 0;
+        }
+        mCollect.setImageResource(type == 0 ? R.drawable.ic_info_collect : R.drawable.ic_info_collect_normal);
+
+    }
+
+    @Override
+    public void getUserInfoSuccess(AnchorUserInfoBean anchorUserInfoBean) {
+        if (anchorUserInfoBean != null) {
+            bindText(R.id.tv_nickname, anchorUserInfoBean.nick_name);
+            bindText(R.id.tv_sign, TextUtils.isEmpty(anchorUserInfoBean.sign) ? "我就是不一样的烟火" : anchorUserInfoBean.sign);
+            bindText(R.id.tv_fans_count, anchorUserInfoBean.fans + "");
+            bindText(R.id.tv_video_amout, anchorUserInfoBean.video_amout + "");
+            bindText(R.id.tv_city, anchorUserInfoBean.city);
+            bindText(R.id.tv_star, anchorUserInfoBean.star);
+            bindText(R.id.tv_work, anchorUserInfoBean.work);
+            bindText(R.id.tv_time, "最后登录:" + anchorUserInfoBean.last_login);
+            bindText(R.id.tv_id, "ID:" + anchorUserInfoBean.id);
+            bindText(R.id.tv_weight, anchorUserInfoBean.kg + "kg");
+            bindText(R.id.tv_height, anchorUserInfoBean.hight + "cm");
+            bindText(R.id.tv_listen, anchorUserInfoBean.listen + "%");
+            mAge.setBackgroundResource(anchorUserInfoBean.sex == 1 ? R.drawable.shape_age_blue : R.drawable.shape_age_red);
+            bindText(R.id.tv_age, anchorUserInfoBean.age + "");
+
+            if (anchorUserInfoBean.lable != null && anchorUserInfoBean.lable.size() != 0) {
+                mLabel.setVisibility(View.VISIBLE);
+                for (int i = 0; i < anchorUserInfoBean.lable.size(); i++) {
+                    View view = View.inflate(getActivity(), R.layout.item_info_self, null);
+                    TextView tvLabel = view.findViewById(R.id.tv_label);
+                    tvLabel.setText(anchorUserInfoBean.lable.get(i));
+                    mFlexboxSelf.addView(view);
+                }
+            } else {
+                mLabel.setVisibility(View.GONE);
+            }
+
+            //banner
+            if (anchorUserInfoBean.cover != null) {
+                initBanner(anchorUserInfoBean.cover);
+            }
+
+            //是否关注
+            mCollect.setImageResource(anchorUserInfoBean.is_attent == 0 ? R.drawable.ic_info_collect_normal : R.drawable.ic_info_collect);
+            mLCollect.setOnClickListener(view -> {
+                mPresenter.attent(user_id, anchorUserInfoBean.is_attent, anchorUserInfoBean);
+            });
+
+            //在线状态
+            switch (anchorUserInfoBean.is_online) {
+                case 0:
+                    //离线
+                    bindText(R.id.tv_online, "离线");
+                    mLOnline.setBackgroundResource(R.drawable.shape_info_online_off);
+                    break;
+                case 1:
+                    //在线
+                    bindText(R.id.tv_online, "在线");
+                    mLOnline.setBackgroundResource(R.drawable.shape_info_online_on);
+                    break;
+                case 2:
+                    //通话中
+                    bindText(R.id.tv_online, "通话中");
+                    mLOnline.setBackgroundResource(R.drawable.shape_info_online_ing);
+                    break;
             }
         }
     }

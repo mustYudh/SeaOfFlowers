@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
 import android.annotation.SuppressLint;
 
+import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
 import com.xuexiang.xhttp2.XHttp;
@@ -15,7 +16,7 @@ public class SelectGenderPresenter extends BaseViewPresenter<SelectGenderViewer>
 
     @SuppressLint("CheckResult")
     public void selectSex(String sex) {
-        XHttp.post("http://huahai.hzrcht.com/api/user/sex")
+        XHttp.post(ApiServices.SELECTSEX)
                 .params("sex", sex)
                 .accessToken(true)
                 .execute(LoginBean.class)

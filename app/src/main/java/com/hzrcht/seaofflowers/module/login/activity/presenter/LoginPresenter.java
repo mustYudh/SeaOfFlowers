@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.action.BaseActionHelper;
 import com.hzrcht.seaofflowers.bean.InviteIdBean;
+import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
@@ -35,7 +36,7 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
 
     @SuppressLint("CheckResult")
     public void sendVerCode(String number, RxCountDown countDown) {
-        XHttp.post("http://huahai.hzrcht.com/api/code/index")
+        XHttp.post(ApiServices.SENDVERCODE)
                 .params("type", "Login")
                 .params("phone", number)
                 .accessToken(false)
@@ -74,7 +75,7 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
                 Gson gson = new Gson();
                 InviteIdBean inviteIdBean = gson.fromJson(content, InviteIdBean.class);
                 if (inviteIdBean.huahai_invite_id != null) {
-                    XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                    XHttp.post(ApiServices.CODELOGIN)
                             .params("code", code)
                             .params("phone", number)
                             .params("superior_id", inviteIdBean.huahai_invite_id + "")
@@ -94,7 +95,7 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
                                 }
                             });
                 } else {
-                    XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                    XHttp.post(ApiServices.CODELOGIN)
                             .params("code", code)
                             .params("phone", number)
                             .accessToken(false)
@@ -114,7 +115,7 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
                             });
                 }
             } else {
-                XHttp.post("http://huahai.hzrcht.com/api/login/login")
+                XHttp.post(ApiServices.CODELOGIN)
                         .params("code", code)
                         .params("phone", number)
                         .accessToken(false)

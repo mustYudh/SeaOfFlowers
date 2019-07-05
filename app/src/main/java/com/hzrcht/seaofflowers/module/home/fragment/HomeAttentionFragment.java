@@ -8,18 +8,19 @@ import android.support.v7.widget.RecyclerView;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.home.adapter.HomeAttentionRvAdapter;
+import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionViewer;
 import com.yu.common.mvp.PresenterLifeCycle;
 
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class HomeAttentionFragment extends BaseFragment implements HomeAttentionViewer {
-    private List<String> list = new ArrayList<>();
+    private int page = 1;
+    private int pageSize = 10;
     @PresenterLifeCycle
     private HomeAttentionPresenter mPresenter = new HomeAttentionPresenter(this);
+    private RecyclerView mAttention;
 
     @Override
     protected int getContentViewId() {
@@ -42,12 +43,22 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
 
     @Override
     protected void loadData() {
-        for (int i = 0; i < 10; i++) {
-            list.add("");
+
+        mAttention = bindView(R.id.rv_home_attention);
+        mAttention.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        mPresenter.getAttentionList(page, pageSize);
+    }
+
+
+    @Override
+    public void getAttentionListSuccess(HomeAttentionBean homeAttentionBean) {
+        if (homeAttentionBean != null) {
+            if (homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
+                HomeAttentionRvAdapter adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, homeAttentionBean.rows, getActivity());
+                mAttention.setAdapter(adapter);
+            }
         }
-        RecyclerView rv_home_attention = bindView(R.id.rv_home_attention);
-        rv_home_attention.setLayoutManager(new LinearLayoutManager(getActivity()));
-        HomeAttentionRvAdapter adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, list, getActivity());
-        rv_home_attention.setAdapter(adapter);
     }
 }

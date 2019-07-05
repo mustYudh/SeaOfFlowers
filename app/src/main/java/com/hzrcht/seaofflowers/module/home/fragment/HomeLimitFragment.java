@@ -5,13 +5,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.home.adapter.BannerViewHolder;
 import com.hzrcht.seaofflowers.module.home.adapter.HomeLimitRvAdapter;
-import com.hzrcht.seaofflowers.module.home.bean.AnchorListBean;
+import com.hzrcht.seaofflowers.module.home.bean.HomeAnchorListBean;
 import com.hzrcht.seaofflowers.module.home.bean.HomeBannerBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
@@ -29,6 +30,8 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private HomeLimitPresenter mPresenter = new HomeLimitPresenter(this);
     private MZBannerView mBanner;
     private int home_type;
+    private int page = 1;
+    private int pageSize = 10;
     private RecyclerView mAnchor;
 
     @Override
@@ -62,10 +65,14 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
 
         Log.e("aaaa", "走了吗");
+        if (home_type == 2) {
+            mBanner.setVisibility(View.GONE);
+        } else {
+            mBanner.setVisibility(View.VISIBLE);
+            mPresenter.getBannerList();
+        }
 
-
-        mPresenter.getAnchorList(home_type + "");
-        mPresenter.getBannerList();
+        mPresenter.getAnchorList(home_type + "", page, pageSize);
     }
 
 
@@ -118,11 +125,11 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     }
 
     @Override
-    public void getAnchorListSuccess(AnchorListBean anchorListBean) {
-        if (anchorListBean != null) {
-            if (anchorListBean.rows != null && anchorListBean.rows.size() != 0) {
+    public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
+        if (homeAnchorListBean != null) {
+            if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
 
-                HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, anchorListBean.rows, getActivity());
+                HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, homeAnchorListBean.rows, getActivity());
                 mAnchor.setAdapter(adapter);
             }
         }

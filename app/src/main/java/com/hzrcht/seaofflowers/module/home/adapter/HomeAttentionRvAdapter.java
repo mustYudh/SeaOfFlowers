@@ -1,11 +1,14 @@
 package com.hzrcht.seaofflowers.module.home.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
+import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
@@ -13,20 +16,37 @@ import com.yu.common.ui.CircleImageView;
 
 import java.util.List;
 
-public class HomeAttentionRvAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class HomeAttentionRvAdapter extends BaseQuickAdapter<HomeAttentionBean.RowsBean, BaseViewHolder> {
     private Context context;
 
-    public HomeAttentionRvAdapter(int layoutResId, @Nullable List<String> data, Context context) {
+    public HomeAttentionRvAdapter(int layoutResId, @Nullable List<HomeAttentionBean.RowsBean> data, Context context) {
         super(layoutResId, data);
         this.context = context;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, HomeAttentionBean.RowsBean item) {
         CircleImageView iv_headimg = helper.getView(R.id.iv_headimg);
-        ImageLoader.getInstance().displayImage(iv_headimg,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561900992258&di=710ea71c3a39f5965ee3e6eb14c1f12a&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171123%2Fb988fb2283a54564ae91ec837907a384.jpeg",R.drawable.ic_placeholder,R.drawable.ic_placeholder_error);
+        helper.setText(R.id.tv_nickname, item.userInfo.nick_name);
+        helper.setText(R.id.tv_sign, TextUtils.isEmpty(item.userInfo.sign) ? "这个人太忙，忘记签名了" : item.userInfo.sign);
+
+        switch (item.online_type) {
+            case 1:
+                //在线
+                helper.setText(R.id.tv_type, "在线");
+                helper.getView(R.id.tv_point).setBackgroundResource(R.drawable.shape_green_point);
+                break;
+            case 2:
+                //离线
+                helper.setText(R.id.tv_type, "离线");
+                helper.getView(R.id.tv_point).setBackgroundResource(R.drawable.shape_gray_point);
+                break;
+        }
+        ImageLoader.getInstance().displayImage(iv_headimg, item.userInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         helper.getView(R.id.ll_root).setOnClickListener(view -> {
-            LauncherHelper.from(context).startActivity(MinePersonalInfoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("USER_ID", item.userInfo.id + "");
+            LauncherHelper.from(context).startActivity(MinePersonalInfoActivity.class, bundle);
         });
     }
 }

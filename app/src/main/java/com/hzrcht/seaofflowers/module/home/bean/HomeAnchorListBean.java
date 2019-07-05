@@ -2,7 +2,7 @@ package com.hzrcht.seaofflowers.module.home.bean;
 
 import java.util.List;
 
-public class AnchorListBean {
+public class HomeAnchorListBean {
 
 
     public List<RowsBean> rows;
@@ -15,7 +15,8 @@ public class AnchorListBean {
          * sex : 1
          * age : 0
          * sign :
-         * video_amout : 2
+         * work :
+         * video_amout : 20
          * online_type : 2
          */
 
@@ -25,6 +26,7 @@ public class AnchorListBean {
         public int sex;
         public int age;
         public String sign;
+        public String work;
         public int video_amout;
         public int online_type;
     }

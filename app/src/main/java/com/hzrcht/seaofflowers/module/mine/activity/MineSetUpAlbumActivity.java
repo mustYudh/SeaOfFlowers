@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineSetUpAlbumPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineSetUpAlbumViewer;
 import com.hzrcht.seaofflowers.utils.PhotoUtils;
@@ -16,9 +17,11 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
 import com.yu.common.ui.DelayClickTextView;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -47,7 +50,8 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
 
         DelayClickTextView tv_commit = bindView(R.id.tv_commit);
         tv_commit.setOnClickListener(view -> {
-            
+            File file = new File(imgUrl);
+            mPresenter.uploadImg(file);
         });
     }
 
@@ -68,8 +72,18 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
         }
     }
 
+
     @Override
-    public void uploadImgSuccess() {
-        mPresenter.addImg("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561636421460&di=43f61c1c126bdbb1206b4dfd6eb3a3d3&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201310%2F19%2F20131019230954_4XXWU.jpeg");
+    public void uploadImgSuccess(UploadImgBean uploadImgBean) {
+        if (uploadImgBean != null) {
+            mPresenter.addAlbum(uploadImgBean.url);
+        }
+    }
+
+    @Override
+    public void addAlbumSuccess() {
+        ToastUtils.show("上传成功");
+        setResult(1);
+        finish();
     }
 }

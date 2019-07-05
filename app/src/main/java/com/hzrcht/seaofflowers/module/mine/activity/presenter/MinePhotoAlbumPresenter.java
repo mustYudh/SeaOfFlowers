@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import android.annotation.SuppressLint;
 
+import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.xuexiang.xhttp2.XHttp;
@@ -17,7 +18,7 @@ public class MinePhotoAlbumPresenter extends BaseViewPresenter<MinePhotoAlbumVie
 
     @SuppressLint("CheckResult")
     public void getPhotoAlbum(int page, int pageSize) {
-        XHttp.post("http://huahai.hzrcht.com/api/img/index")
+        XHttp.post(ApiServices.GETPHOTOALBUM)
                 .params("page", page + "")
                 .params("pageSize", pageSize + "")
                 .accessToken(true)

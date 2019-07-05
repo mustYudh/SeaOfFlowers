@@ -3,9 +3,9 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/ll_root_frist"
               android:layout_width="match_parent"
-              android:paddingBottom="50dp"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:paddingBottom="50dp"
     >
 
 
@@ -37,10 +37,11 @@
             >
 
             <TextView
+                android:id="@+id/tv_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="北京市"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
@@ -70,10 +71,11 @@
             >
 
             <TextView
+                android:id="@+id/tv_listen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="54.34%"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
@@ -103,10 +105,11 @@
             >
 
             <TextView
+                android:id="@+id/tv_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="白羊座"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
@@ -131,16 +134,16 @@
         <LinearLayout
             android:layout_width="68dp"
             android:layout_height="wrap_content"
-
             android:gravity="center"
             android:orientation="vertical"
             >
 
             <TextView
+                android:id="@+id/tv_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="49kg"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
@@ -170,10 +173,11 @@
             >
 
             <TextView
+                android:id="@+id/tv_height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="168cm"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
@@ -197,6 +201,7 @@
         android:gravity="center_vertical">
 
         <TextView
+            android:id="@+id/tv_id"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:background="@drawable/shape_info_label"
@@ -204,13 +209,14 @@
             android:includeFontPadding="false"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="ID:11232"
+            android:text="@string/text_null"
             android:textColor="@color/color_333333"
             android:textSize="15sp"
             />
 
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
@@ -219,7 +225,7 @@
             android:includeFontPadding="false"
             android:paddingLeft="13dp"
             android:paddingRight="13dp"
-            android:text="最后登录:2019-06-2111:59:39"
+            android:text="@string/text_null"
             android:textColor="@color/color_333333"
             android:textSize="15sp"
             />
@@ -366,6 +372,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

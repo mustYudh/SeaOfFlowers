@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.mine.fragment.presenter;
 
 import android.annotation.SuppressLint;
 
+import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
 import com.xuexiang.xhttp2.XHttp;
@@ -17,7 +18,7 @@ public class MinePresenter extends BaseViewPresenter<MineViewer> {
 
     @SuppressLint("CheckResult")
     public void userInfo() {
-        XHttp.post("http://huahai.hzrcht.com/api/user/info")
+        XHttp.post(ApiServices.MINEUSERINFO)
                 .accessToken(true)
                 .execute(MineUserInfoBean.class)
                 .subscribeWith(new TipRequestSubscriber<MineUserInfoBean>() {
