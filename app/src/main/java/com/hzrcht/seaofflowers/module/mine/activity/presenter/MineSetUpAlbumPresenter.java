@@ -39,4 +39,25 @@ public class MineSetUpAlbumPresenter extends BaseViewPresenter<MineSetUpAlbumVie
                     }
                 });
     }
+
+    @SuppressLint("CheckResult")
+    public void addImg(String url) {
+        XHttp.post("http://huahai.hzrcht.com/api/img/add")
+                .params("url", url)
+                .accessToken(true)
+                .execute(UploadImgBean.class)
+                .subscribeWith(new TipRequestSubscriber<UploadImgBean>() {
+                    @Override
+                    protected void onSuccess(UploadImgBean uploadImgBean) {
+                        assert getViewer() != null;
+                        ToastUtils.show("上传成功");
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        super.onError(apiException);
+
+                    }
+                });
+    }
 }

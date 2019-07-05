@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePhotoAlbumPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePhotoAlbumViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MinePhotoAlbumRvAdapter;
@@ -21,8 +22,10 @@ import java.util.List;
 
 public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhotoAlbumViewer {
     private List<String> list = new ArrayList<>();
+    private int page = 1;
+    private int pageSize = 10;
     @PresenterLifeCycle
-    private MinePhotoAlbumPresenter presenter = new MinePhotoAlbumPresenter(this);
+    private MinePhotoAlbumPresenter mPresenter = new MinePhotoAlbumPresenter(this);
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -54,6 +57,8 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
         ll_add.setOnClickListener(view -> {
             getLaunchHelper().startActivityForResult(MineSetUpAlbumActivity.class, 0);
         });
+
+        mPresenter.getPhotoAlbum(page,pageSize);
     }
 
 
@@ -68,5 +73,10 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
             case 3:
                 break;
         }
+    }
+
+    @Override
+    public void getPhotoAlbumSuccess(PhotoAlbumBean photoAlbumBean) {
+
     }
 }

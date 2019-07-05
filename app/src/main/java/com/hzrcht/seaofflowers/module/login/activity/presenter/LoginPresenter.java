@@ -35,7 +35,6 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
 
     @SuppressLint("CheckResult")
     public void sendVerCode(String number, RxCountDown countDown) {
-
         XHttp.post("http://huahai.hzrcht.com/api/code/index")
                 .params("type", "Login")
                 .params("phone", number)

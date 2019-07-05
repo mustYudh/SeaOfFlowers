@@ -47,8 +47,7 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
 
         DelayClickTextView tv_commit = bindView(R.id.tv_commit);
         tv_commit.setOnClickListener(view -> {
-
-
+            
         });
     }
 
@@ -71,6 +70,6 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
 
     @Override
     public void uploadImgSuccess() {
-
+        mPresenter.addImg("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561636421460&di=43f61c1c126bdbb1206b4dfd6eb3a3d3&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201310%2F19%2F20131019230954_4XXWU.jpeg");
     }
 }
