@@ -194,7 +194,7 @@ public class MineRedactDataActivity extends BaseBarActivity
                 break;
             case R.id.rl_headimg:
                 picType = 1;
-                PhotoUtils.changeAvatar(getActivity());
+                PhotoUtils.changeAvatar(getActivity(), "上传您的头像,以供展示");
                 break;
             case R.id.view_height:
                 initWordData();

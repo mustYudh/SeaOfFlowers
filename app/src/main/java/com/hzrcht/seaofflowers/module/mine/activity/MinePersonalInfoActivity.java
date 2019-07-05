@@ -160,7 +160,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         });
 
 
-        initBanner(picList);
+//        initBanner(picList);
 
         mIntimacy.removeAllViews();
         mPresent.removeAllViews();

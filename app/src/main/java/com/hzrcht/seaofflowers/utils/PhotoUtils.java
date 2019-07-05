@@ -22,7 +22,7 @@ public class PhotoUtils {
     /**
      * 更换图片
      */
-    public static void changeAvatar(Activity activity) {
+    public static void changeAvatar(Activity activity, String title) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +102,7 @@ public class PhotoUtils {
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-                .settext("上传您的头像,以供展示", R.id.tv_title)
+                .settext(title, R.id.tv_title)
                 .addViewOnclick(R.id.tv_top, listener)
                 .addViewOnclick(R.id.tv_bottom, listener)
                 .addViewOnclick(R.id.tv_cancle, listener)
@@ -114,7 +114,7 @@ public class PhotoUtils {
     /**
      * 更换图片
      */
-    public static void changeAvatar(Activity activity, List<LocalMedia> list,int num,String title) {
+    public static void changeAvatar(Activity activity, List<LocalMedia> list, int num, String title) {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
