@@ -152,7 +152,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             if (i != 0) {
                 //pic
                 MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
-                mineLocationDynamicPicBean.pictures = picList;
+                mineLocationDynamicPicBean.imgs = picList;
                 mineLocationDynamicPicBean.itemType = 1;
                 list.add(mineLocationDynamicPicBean);
             } else {

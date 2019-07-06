@@ -30,6 +30,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".module.mine.activity.MineSuggestionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".module.mine.activity.MineHelpCenterActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".module.test.TestActivity">
         </activity>
         <activity
@@ -124,7 +130,6 @@
 
         <activity
             android:name=".module.login.activity.SplashActivity"
-
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>

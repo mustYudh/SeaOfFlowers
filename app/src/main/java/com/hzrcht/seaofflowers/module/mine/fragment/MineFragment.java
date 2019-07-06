@@ -13,6 +13,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineDynamicActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineHelpCenterActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineMineWithdrawActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePresentActivity;
@@ -23,6 +24,7 @@ import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.ui.DelayClickImageView;
 
 public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener {
 
@@ -52,6 +54,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         mType = bindView(R.id.iv_type);
 
 
+        DelayClickImageView iv_help = bindView(R.id.iv_help);
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_dynamic = bindView(R.id.ll_dynamic);
         LinearLayout ll_master = bindView(R.id.ll_master);
@@ -82,6 +85,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         ll_photo_album.setOnClickListener(this);
         ll_dynamic.setOnClickListener(this);
         ll_master.setOnClickListener(this);
+        iv_help.setOnClickListener(this);
     }
 
     @Override
@@ -123,6 +127,10 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             case R.id.ll_master:
                 //师徒
                 getLaunchHelper().startActivity(MinePresentActivity.class);
+                break;
+            case R.id.iv_help:
+                //帮助中心
+                getLaunchHelper().startActivity(MineHelpCenterActivity.class);
                 break;
         }
     }

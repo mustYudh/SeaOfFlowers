@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.SelectGenderPresenter;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.SelectGenderViewer;
 import com.yu.common.mvp.PresenterLifeCycle;
@@ -63,6 +64,7 @@ public class SelectGenderActivity extends BaseBarActivity implements SelectGende
 
     @Override
     public void selectSexSuccess() {
+        UserProfile.getInstance().setUserSex(sexType);
         Intent intent = new Intent();
         setResult(2, intent);
         finish();

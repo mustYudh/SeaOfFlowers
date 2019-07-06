@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.APP;
+import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
 
 import java.io.Serializable;
 
@@ -12,8 +13,10 @@ public class UserProfile implements Serializable {
     private static UserProfile instance;
 
     private static final String SHARE_PREFERENCES_NAME = ".public_profile";
-    private static final String TOKEN = "token";
-    private static final String ANCHORTYPE = "anchorType";
+    private static final String APPTOKEN = "token";
+    private static final String APP_USER_ID = "account";
+    private static final String USERSEX = "user_sex";
+    private static final String ANCHORTYPE = "anchor_type";
 
     private SharedPreferencesHelper spHelper;
 
@@ -33,12 +36,36 @@ public class UserProfile implements Serializable {
         return instance;
     }
 
+    public void appLogin(LoginBean userInfo) {
+        setAppAccount(userInfo.info.id);
+        setUserSex(userInfo.info.sex);
+        setToken(userInfo.token);
+    }
+
+
     public void setToken(String token) {
-        spHelper.putString(TOKEN, token);
+        spHelper.putString(APPTOKEN, token);
     }
 
     public String getAppToken() {
-        return spHelper.getString(TOKEN, "");
+        return spHelper.getString(APPTOKEN, "");
+    }
+
+    public int getUserId() {
+        return spHelper.getInt(APP_USER_ID, -1);
+    }
+
+    private void setAppAccount(int account) {
+        spHelper.putInt(APP_USER_ID, account);
+    }
+
+
+    public void setUserSex(int user_sex) {
+        spHelper.putInt(USERSEX, user_sex);
+    }
+
+    public int getUserSex() {
+        return spHelper.getInt(USERSEX, 0);
     }
 
     public void setAnchorType(int type) {
@@ -51,7 +78,7 @@ public class UserProfile implements Serializable {
 
 
     public boolean isAppLogin() {
-        return !TextUtils.isEmpty(getAppToken());
+        return !TextUtils.isEmpty(getAppToken()) && getUserSex() != 0;
     }
 
     /**

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+    >
+
+
+    <com.hzrcht.seaofflowers.module.view.ClearEditText
+        android:id="@+id/et_suggestion"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/shape_suggestion"
+        android:cursorVisible="true"
+        android:gravity="top"
+        android:hint="请留下您的宝贵意见和建议，我们将努力改进！"
+        android:paddingLeft="11dp"
+        android:paddingTop="11dp"
+        android:textColor="@color/color_333333"
+        android:textColorHint="@color/color_CCCCCC"
+        android:textSize="14sp"/>
+
+
+    <TextView
+        android:id="@+id/tv_commit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_authentication"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        />
+</LinearLayout>

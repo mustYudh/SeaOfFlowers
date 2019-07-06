@@ -34,7 +34,7 @@ public class MineInfoDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLoca
                 break;
             case 1:
                 NoSlidingGridView gv_pic = helper.getView(R.id.gv_pic);
-                DynamicPicGvAdapter adapter = new DynamicPicGvAdapter(item.pictures, context);
+                DynamicPicGvAdapter adapter = new DynamicPicGvAdapter(item.imgs, context);
                 gv_pic.setAdapter(adapter);
                 break;
             case 2:

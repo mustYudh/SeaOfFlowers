@@ -21,7 +21,7 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
     private List<MineLocationDynamicBean> list = new ArrayList<>();
     private List<String> picList = new ArrayList<>();
     @PresenterLifeCycle
-    private MineDynamicPresenter presenter = new MineDynamicPresenter(this);
+    private MineDynamicPresenter mPresenter = new MineDynamicPresenter(this);
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
             if (i != 0) {
                 //pic
                 MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
-                mineLocationDynamicPicBean.pictures = picList;
+                mineLocationDynamicPicBean.imgs = picList;
                 mineLocationDynamicPicBean.itemType = 1;
                 list.add(mineLocationDynamicPicBean);
             } else {

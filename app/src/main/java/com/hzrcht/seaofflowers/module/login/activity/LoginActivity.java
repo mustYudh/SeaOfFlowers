@@ -137,6 +137,7 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
         if (loginBean != null) {
             if (loginBean.info != null) {
                 UserProfile.getInstance().setToken(loginBean.token);
+                UserProfile.getInstance().appLogin(loginBean);
                 UserProfile.getInstance().setAnchorType(loginBean.info.type);
                 if (loginBean.info.sex == 0) {
                     //设置性别

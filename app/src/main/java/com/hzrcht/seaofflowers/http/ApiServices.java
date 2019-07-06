@@ -39,4 +39,10 @@ public class ApiServices {
     //主播和用户详情
     public static final String USERINFO = BASEURL + "/api/user/userInfo";
 
+    //动态列表
+    public static final String STATELIST = BASEURL + "/api/state/index";
+
+    //动态点赞
+    public static final String STATELIKE = BASEURL + "/api/state/like";
+
 }

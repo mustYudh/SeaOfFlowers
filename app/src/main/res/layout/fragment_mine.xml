@@ -420,14 +420,15 @@
                     android:layout_marginRight="15dp">
 
 
-                    <ImageView
+                    <com.yu.common.ui.DelayClickImageView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:scaleType="fitXY"
                         android:src="@drawable/ic_mine_left"/>
 
-                    <ImageView
+                    <com.yu.common.ui.DelayClickImageView
+                        android:id="@+id/iv_help"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
