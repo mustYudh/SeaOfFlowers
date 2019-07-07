@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.module.dynamic.activity.ReleaseDynamicActivity;
 import com.hzrcht.seaofflowers.module.dynamic.adapter.DynamicListRvAdapter;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
@@ -54,6 +56,10 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
 
     @Override
     protected void loadData() {
+        bindView(R.id.ll_add, UserProfile.getInstance().getAnchorType() == 1);
+        bindView(R.id.ll_add, view -> {
+            getLaunchHelper().startActivity(ReleaseDynamicActivity.class);
+        });
         ll_recommend = bindView(R.id.ll_recommend);
         ll_attention = bindView(R.id.ll_attention);
         TextView tv_recommend = bindView(R.id.tv_recommend);
@@ -72,6 +78,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
         ll_recommend.setOnClickListener(this);
         ll_attention.setOnClickListener(this);
 
+
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
@@ -83,7 +90,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
     /**
      * 举报弹窗
      */
-    private void showReportDialog() {
+    private void showReportDialog(String anchor_id, String state_id) {
         reportDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_normal)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
@@ -99,7 +106,10 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
                     if (reportDialog.isShowing()) {
                         reportDialog.dismiss();
                     }
-                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ANCHOR_ID", anchor_id);
+                    bundle.putString("STATE_ID", state_id);
+                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class, bundle);
 
                 })
                 .build();
@@ -202,6 +212,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
                     mineLocationDynamicBottomBean.review_count = rowsBean.review_count;
                     mineLocationDynamicBottomBean.is_attent = rowsBean.is_attent;
                     mineLocationDynamicBottomBean.id = rowsBean.id;
+                    mineLocationDynamicBottomBean.userInfo = rowsBean.userInfo;
 
                     mineLocationDynamicBottomBean.itemType = 3;
                     list.add(mineLocationDynamicBottomBean);
@@ -212,8 +223,8 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
 
                 adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override
-                    public void onItemDetailsReportClick() {
-                        showReportDialog();
+                    public void onItemDetailsReportClick(String anchor_id, String state_id) {
+                        showReportDialog(anchor_id, state_id);
                     }
 
                     @Override

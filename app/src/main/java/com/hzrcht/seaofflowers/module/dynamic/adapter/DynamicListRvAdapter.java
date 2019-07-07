@@ -58,7 +58,7 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 helper.getView(R.id.ll_report).setOnClickListener(view -> {
                     //举报
                     assert onItemDetailsDoCilckListener != null;
-                    onItemDetailsDoCilckListener.onItemDetailsReportClick();
+                    onItemDetailsDoCilckListener.onItemDetailsReportClick(item.userInfo.id + "", item.id + "");
                 });
 
                 helper.getView(R.id.ll_comment).setOnClickListener(view -> {
@@ -70,18 +70,18 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 helper.getView(R.id.ll_like).setOnClickListener(view -> {
                     //点赞
                     assert onItemDetailsDoCilckListener != null;
-                    onItemDetailsDoCilckListener.onItemDetailsLikeClick(item.id,item);
+                    onItemDetailsDoCilckListener.onItemDetailsLikeClick(item.id, item);
                 });
                 break;
         }
     }
 
     public interface OnItemDetailsDoCilckListener {
-        void onItemDetailsReportClick();
+        void onItemDetailsReportClick(String anchor_id, String state_id);
 
         void onItemDetailsCommentClick();
 
-        void onItemDetailsLikeClick(int state_id,MineLocationDynamicBean item);
+        void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item);
     }
 
     OnItemDetailsDoCilckListener onItemDetailsDoCilckListener;

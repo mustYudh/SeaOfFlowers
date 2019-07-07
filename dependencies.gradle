@@ -55,6 +55,8 @@ ext {
 
     GSONVersion = '2.8.2'
 
+    COMPRESSORVersion = '2.1.0'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -79,7 +81,9 @@ ext {
                        MZBANNERVIEW       : "com.github.pinguo-zhouwei:MZBannerView:${MZBANNERVIEWVersion}",
                        FLEXBOX            : "com.google.android:flexbox:${FLEXBOXVersion}",
                        EASYBLUR           : "com.github.pinguo-zhouwei:EasyBlur:${EASYBLURVersion}",
-                       GSON               : "com.google.code.gson:gson:${GSONVersion}"
+                       GSON               : "com.google.code.gson:gson:${GSONVersion}",
+                       COMPRESSOR         : "id.zelory:compressor:${COMPRESSORVersion}"
+//                       COMPRESSOR         : "id.zelory:compressor:${COMPRESSORVersion}"
 //                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
 //                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",
 //                       RXJAVA             : "io.reactivex.rxjava2:rxjava:${RXJAVAVersion}"

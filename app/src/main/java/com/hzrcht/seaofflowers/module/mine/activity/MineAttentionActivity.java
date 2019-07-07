@@ -7,13 +7,18 @@ import android.support.v7.widget.RecyclerView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineAttentionPresenter;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineAttentionViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineAttentionRvAdapter;
+import com.yu.common.mvp.PresenterLifeCycle;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MineAttentionActivity extends BaseBarActivity {
-    private List<String> list = new ArrayList<>();
+public class MineAttentionActivity extends BaseBarActivity implements MineAttentionViewer {
+    private int page = 1;
+    private int pageSize = 10;
+    @PresenterLifeCycle
+    private MineAttentionPresenter mPresenter = new MineAttentionPresenter(this);
+    private RecyclerView mAttention;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -23,12 +28,20 @@ public class MineAttentionActivity extends BaseBarActivity {
     @Override
     protected void loadData() {
         setTitle("我的关注");
-        for (int i = 0; i < 10; i++) {
-            list.add("");
+
+        mAttention = bindView(R.id.rv_attention);
+        mAttention.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mPresenter.getAttentionList(page, pageSize);
+    }
+
+    @Override
+    public void getAttentionListSuccess(HomeAttentionBean homeAttentionBean) {
+        if (homeAttentionBean != null) {
+            if (homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
+                MineAttentionRvAdapter adapter = new MineAttentionRvAdapter(R.layout.item_home_attention, homeAttentionBean.rows, getActivity());
+                mAttention.setAdapter(adapter);
+            }
         }
-        RecyclerView rv_attention = bindView(R.id.rv_attention);
-        rv_attention.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MineAttentionRvAdapter adapter = new MineAttentionRvAdapter(R.layout.item_mine_attention, list, getActivity());
-        rv_attention.setAdapter(adapter);
     }
 }

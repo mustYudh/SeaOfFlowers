@@ -31,6 +31,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.dynamic.activity.ReleaseDynamicActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.MineSuggestionActivity"
             android:screenOrientation="portrait"/>
         <activity

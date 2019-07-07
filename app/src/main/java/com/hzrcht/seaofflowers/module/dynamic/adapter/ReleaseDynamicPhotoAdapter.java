@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.home.adapter;
+package com.hzrcht.seaofflowers.module.dynamic.adapter;
 
 import android.widget.ImageView;
 
@@ -9,10 +9,10 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.UserPhotoListBean;
 import com.yu.common.glide.ImageLoader;
 
 
-public class ReportSelectPhotoAdapter extends BaseQuickAdapter<UserPhotoListBean, BaseViewHolder> {
+public class ReleaseDynamicPhotoAdapter extends BaseQuickAdapter<UserPhotoListBean, BaseViewHolder> {
 
-  public ReportSelectPhotoAdapter() {
-    super(R.layout.gv_item_report, null);
+  public ReleaseDynamicPhotoAdapter() {
+    super(R.layout.gv_item_release, null);
   }
 
   @Override protected void convert(BaseViewHolder helper, UserPhotoListBean item) {

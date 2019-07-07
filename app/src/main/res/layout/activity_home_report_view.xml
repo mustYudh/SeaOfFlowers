@@ -221,7 +221,8 @@
     </RelativeLayout>
 
 
-    <TextView
+    <com.yu.common.ui.DelayClickTextView
+        android:id="@+id/tv_report"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="15dp"

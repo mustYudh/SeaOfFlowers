@@ -45,4 +45,16 @@ public class ApiServices {
     //动态点赞
     public static final String STATELIKE = BASEURL + "/api/state/like";
 
+    //动态举报
+    public static final String STATEREPORT = BASEURL + "/api/report/add";
+
+    //动态删除
+    public static final String STATEDEL = BASEURL + "/api/state/del";
+
+    //动态发布
+    public static final String STATEADD = BASEURL + "/api/state/add";
+
+    //提现列表
+    public static final String USERWITHDRAW = BASEURL + "/api/user/withdraw";
+
 }

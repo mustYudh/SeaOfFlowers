@@ -9,6 +9,7 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.dynamic.adapter.DynamicPicGvAdapter;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.yu.common.glide.ImageLoader;
+import com.yu.common.ui.CircleImageView;
 import com.yu.common.ui.NoSlidingGridView;
 
 import java.util.List;
@@ -30,6 +31,14 @@ public class MineDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
         switch (item.itemType) {
             case 0:
                 helper.setGone(R.id.tv_talk, false);
+                CircleImageView iv_headimg = helper.getView(R.id.iv_headimg);
+                ImageLoader.getInstance().displayImage(iv_headimg, item.userInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+                helper.setText(R.id.tv_nickname, item.userInfo.nick_name);
+                helper.setText(R.id.tv_title, item.title);
+                helper.setText(R.id.tv_time, item.create_at);
+                ImageView iv_sex = helper.getView(R.id.iv_sex);
+                iv_sex.setImageResource(item.userInfo.sex == 1 ? R.drawable.ic_man_logo : R.drawable.ic_woman_logo);
+                helper.getView(R.id.ll_age).setBackgroundResource(item.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
                 break;
             case 1:
                 NoSlidingGridView gv_pic = helper.getView(R.id.gv_pic);
@@ -41,7 +50,43 @@ public class MineDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 ImageLoader.getInstance().displayImage(iv_video, item.video_pict_url, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
                 break;
             case 3:
+                helper.setText(R.id.tv_like, item.like_count + "");
+                helper.setText(R.id.tv_review, item.review_count + "");
+                ImageView iv_like = helper.getView(R.id.iv_like);
+                iv_like.setImageResource(item.is_like == 0 ? R.drawable.ic_is_like_normal : R.drawable.ic_is_like_select);
+
+                helper.getView(R.id.ll_del).setOnClickListener(view -> {
+                    //删除
+                    assert onItemDetailsDoCilckListener != null;
+                    onItemDetailsDoCilckListener.onItemDetailsDelClick(item.id, helper.getLayoutPosition());
+                });
+
+                helper.getView(R.id.ll_comment).setOnClickListener(view -> {
+                    //评论
+                    assert onItemDetailsDoCilckListener != null;
+                    onItemDetailsDoCilckListener.onItemDetailsCommentClick();
+                });
+
+                helper.getView(R.id.ll_like).setOnClickListener(view -> {
+                    //点赞
+                    assert onItemDetailsDoCilckListener != null;
+                    onItemDetailsDoCilckListener.onItemDetailsLikeClick(item.id, item);
+                });
                 break;
         }
+    }
+
+    public interface OnItemDetailsDoCilckListener {
+        void onItemDetailsDelClick(int state_id, int position);
+
+        void onItemDetailsCommentClick();
+
+        void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item);
+    }
+
+    OnItemDetailsDoCilckListener onItemDetailsDoCilckListener;
+
+    public void setOnItemDetailsDoCilckListener(OnItemDetailsDoCilckListener onItemDetailsDoCilckListener) {
+        this.onItemDetailsDoCilckListener = onItemDetailsDoCilckListener;
     }
 }

@@ -16,6 +16,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
+import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.BannerInfoViewHolder;
@@ -47,7 +48,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private List<View> viewList = new ArrayList<>();
     private MZBannerView mBanner;
     private LinearLayout ll_first, ll_second, ll_third, mIntimacy, mPresent;
-    private DialogUtils reportDialog, shareDialog, checkDialog, rechargeDialog;
+    private DialogUtils reportDialog, shareDialog, checkDialog, rechargeDialog, commentDialog;
 
     @PresenterLifeCycle
     private MinePersonalInfoPresenter mPresenter = new MinePersonalInfoPresenter(this);
@@ -57,6 +58,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private LinearLayout mLabel;
     private ImageView mCollect;
     private LinearLayout mLCollect, mLOnline;
+    private RecyclerView mDynamic;
+    private int page = 0;
+    private int pageSize = 10;
+    private MineInfoDynamicRvAdapter adapterDynamic;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -124,8 +129,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         viewList.add(view_third);
 
 
-        RecyclerView rv_dynamic = bindView(R.id.rv_dynamic);
-        rv_dynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mDynamic = bindView(R.id.rv_dynamic);
+        mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
         RecyclerView rv_video_photo = bindView(R.id.rv_video_photo);
         rv_video_photo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rv_video_photo.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 4, 2));
@@ -143,42 +148,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293039&di=410ac577370998d1813ee18a2a88b0f4&imgtype=0&src=http%3A%2F%2Fgss0.baidu.com%2F9vo3dSag_xI4khGko9WTAnF6hhy%2Fzhidao%2Fpic%2Fitem%2F0df3d7ca7bcb0a463350c11e6863f6246b60afa3.jpg");
 
 
-        for (int i = 0; i < 10; i++) {
-            //title
-            MineLocationDynamicBean mineLocationDynamicTitleBean = new MineLocationDynamicBean();
-            mineLocationDynamicTitleBean.itemType = 0;
-            list.add(mineLocationDynamicTitleBean);
-
-            if (i != 0) {
-                //pic
-                MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
-                mineLocationDynamicPicBean.imgs = picList;
-                mineLocationDynamicPicBean.itemType = 1;
-                list.add(mineLocationDynamicPicBean);
-            } else {
-                //video
-                MineLocationDynamicBean mineLocationDynamicVideoBean = new MineLocationDynamicBean();
-                mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426510803&di=2bf93542ebc2b9a183695626fbffb5de&imgtype=0&src=http%3A%2F%2Fwww.desktx.cc%2Fd%2Ffile%2Fphone%2Fkatong%2F20161203%2F61ad328e4d8c741437ed00209a6bae35.jpg";
-                mineLocationDynamicVideoBean.itemType = 2;
-                list.add(mineLocationDynamicVideoBean);
-            }
-
-            //bottom
-            MineLocationDynamicBean mineLocationDynamicBottomBean = new MineLocationDynamicBean();
-            mineLocationDynamicBottomBean.itemType = 3;
-            list.add(mineLocationDynamicBottomBean);
-        }
-
-        MineInfoDynamicRvAdapter adapterDynamic = new MineInfoDynamicRvAdapter(list, getActivity());
-        rv_dynamic.setAdapter(adapterDynamic);
-        adapterDynamic.setOnItemDetailsDoCilckListener(new MineInfoDynamicRvAdapter.OnItemDetailsDoCilckListener() {
-            @Override
-            public void onItemDetailsReportClick() {
-                showReportDialog();
-            }
-        });
-
-
         mIntimacy.removeAllViews();
         mPresent.removeAllViews();
         for (int i = 0; i < 6; i++) {
@@ -193,6 +162,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
 
         mPresenter.getUserInfo(user_id);
+        mPresenter.getStateList(user_id, page, pageSize);
     }
 
     /**
@@ -215,31 +185,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 }
             });
             mBanner.start();
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mBanner != null) {
-            mBanner.start();//开始轮播
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mBanner != null) {
-            mBanner.pause();//暂停轮播
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mBanner != null) {
-            mBanner.pause();//暂停轮播
         }
     }
 
@@ -274,7 +219,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     /**
      * 举报弹窗
      */
-    private void showReportDialog() {
+    private void showReportDialog(String anchor_id, String state_id) {
         reportDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_normal)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
@@ -290,7 +235,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     if (reportDialog.isShowing()) {
                         reportDialog.dismiss();
                     }
-                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ANCHOR_ID", anchor_id);
+                    bundle.putString("STATE_ID", state_id);
+                    LauncherHelper.from(getActivity()).startActivity(HomeReportActivity.class, bundle);
                 })
                 .build();
         reportDialog.show();
@@ -395,6 +343,26 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     }
 
+    /**
+     * 评论弹窗
+     */
+    private void showCommentDialog() {
+        commentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_comment)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .addViewOnclick(R.id.ll_submit, view -> {
+                    if (commentDialog.isShowing()) {
+                        commentDialog.dismiss();
+                    }
+
+                })
+                .build();
+        commentDialog.show();
+
+
+    }
+
     //点击不同对象不同的风格
     private void setTypeCheck(LinearLayout llType) {
         for (int i = 0; i < llList.size(); i++) {
@@ -488,6 +456,125 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_ing);
                     break;
             }
+        }
+    }
+
+    /**
+     * 动态列表
+     *
+     * @param mineDynamicBean
+     */
+    @Override
+    public void getStateListSuccess(MineDynamicBean mineDynamicBean) {
+        if (mineDynamicBean != null) {
+            if (mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
+                if (page > 1) {
+
+                } else {
+                    list.clear();
+                }
+
+                for (int i = 0; i < mineDynamicBean.rows.size(); i++) {
+                    MineDynamicBean.RowsBean rowsBean = mineDynamicBean.rows.get(i);
+                    //title
+                    MineLocationDynamicBean mineLocationDynamicTitleBean = new MineLocationDynamicBean();
+                    mineLocationDynamicTitleBean.userInfo = rowsBean.userInfo;
+                    mineLocationDynamicTitleBean.title = rowsBean.title;
+                    mineLocationDynamicTitleBean.create_at = rowsBean.create_at;
+                    mineLocationDynamicTitleBean.itemType = 0;
+                    list.add(mineLocationDynamicTitleBean);
+
+                    if (rowsBean.is_video == 0) {
+                        //pic
+                        MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
+                        mineLocationDynamicPicBean.imgs = rowsBean.imgs;
+                        mineLocationDynamicPicBean.itemType = 1;
+                        list.add(mineLocationDynamicPicBean);
+                    } else {
+                        //video
+                        MineLocationDynamicBean mineLocationDynamicVideoBean = new MineLocationDynamicBean();
+                        mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426510803&di=2bf93542ebc2b9a183695626fbffb5de&imgtype=0&src=http%3A%2F%2Fwww.desktx.cc%2Fd%2Ffile%2Fphone%2Fkatong%2F20161203%2F61ad328e4d8c741437ed00209a6bae35.jpg";
+                        mineLocationDynamicVideoBean.itemType = 2;
+                        list.add(mineLocationDynamicVideoBean);
+                    }
+
+                    //bottom
+                    MineLocationDynamicBean mineLocationDynamicBottomBean = new MineLocationDynamicBean();
+                    mineLocationDynamicBottomBean.like_count = rowsBean.like_count;
+                    mineLocationDynamicBottomBean.is_like = rowsBean.is_like;
+                    mineLocationDynamicBottomBean.review_count = rowsBean.review_count;
+                    mineLocationDynamicBottomBean.is_attent = rowsBean.is_attent;
+                    mineLocationDynamicBottomBean.id = rowsBean.id;
+                    mineLocationDynamicBottomBean.userInfo = rowsBean.userInfo;
+
+                    mineLocationDynamicBottomBean.itemType = 3;
+                    list.add(mineLocationDynamicBottomBean);
+                }
+
+                adapterDynamic = new MineInfoDynamicRvAdapter(list, getActivity());
+                mDynamic.setAdapter(adapterDynamic);
+                adapterDynamic.setOnItemDetailsDoCilckListener(new MineInfoDynamicRvAdapter.OnItemDetailsDoCilckListener() {
+                    @Override
+                    public void onItemDetailsReportClick(String anchor_id, String state_id) {
+                        showReportDialog(anchor_id, state_id);
+                    }
+
+                    @Override
+                    public void onItemDetailsCommentClick() {
+                        showCommentDialog();
+                    }
+
+                    @Override
+                    public void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item) {
+                        mPresenter.stateLike(state_id + "", item);
+                    }
+                });
+            }
+        }
+
+    }
+
+    /**
+     * 动态点赞
+     *
+     * @param item
+     */
+    @Override
+    public void stateLikeSuccess(MineLocationDynamicBean item) {
+        if (item.is_like == 0) {
+            ToastUtils.show("点赞成功");
+            item.is_like = 1;
+            item.like_count = item.like_count + 1;
+        } else {
+            ToastUtils.show("取消点赞成功");
+            item.is_like = 0;
+            item.like_count = item.like_count - 1;
+        }
+        adapterDynamic.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mBanner != null) {
+            mBanner.start();//开始轮播
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mBanner != null) {
+            mBanner.pause();//暂停轮播
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mBanner != null) {
+            mBanner.pause();//暂停轮播
         }
     }
 }

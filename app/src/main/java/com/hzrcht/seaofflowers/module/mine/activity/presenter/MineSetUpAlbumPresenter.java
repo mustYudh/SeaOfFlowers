@@ -1,7 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
@@ -32,7 +31,6 @@ public class MineSetUpAlbumPresenter extends BaseViewPresenter<MineSetUpAlbumVie
                 .subscribeWith(new ProgressLoadingSubscriber<UploadImgBean>() {
                     @Override
                     public void onSuccess(UploadImgBean uploadImgBean) {
-                        Log.e("======>", "上传成功");
                         assert getViewer() != null;
                         getViewer().uploadImgSuccess(uploadImgBean);
                     }
