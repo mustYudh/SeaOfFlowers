@@ -176,6 +176,7 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
     public void getStateListSuccess(MineDynamicBean mineDynamicBean) {
         if (mineDynamicBean != null) {
             if (mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
+                mDynamic.setVisibility(View.VISIBLE);
                 if (page > 1) {
 
                 } else {
@@ -237,6 +238,10 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
                         mPresenter.stateLike(state_id + "", item);
                     }
                 });
+            } else {
+                if (page == 1) {
+                    mDynamic.setVisibility(View.GONE);
+                }
             }
         }
 

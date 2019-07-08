@@ -4,5 +4,7 @@ import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
 import com.yu.common.login.LoginRedirectInterface;
 
 public interface LoginViewer extends LoginRedirectInterface {
+    void sendVerCodeSuccess();
+
     void loginSuccess(LoginBean loginBean);
 }

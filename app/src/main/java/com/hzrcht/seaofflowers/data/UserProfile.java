@@ -16,6 +16,7 @@ public class UserProfile implements Serializable {
     private static final String APPTOKEN = "token";
     private static final String APP_USER_ID = "account";
     private static final String USERSEX = "user_sex";
+    private static final String USERNAME = "user_name";
     private static final String ANCHORTYPE = "anchor_type";
 
     private SharedPreferencesHelper spHelper;
@@ -39,6 +40,7 @@ public class UserProfile implements Serializable {
     public void appLogin(LoginBean userInfo) {
         setAppAccount(userInfo.info.id);
         setUserSex(userInfo.info.sex);
+        setUserName(userInfo.info.nick_name);
         setToken(userInfo.token);
     }
 
@@ -66,6 +68,14 @@ public class UserProfile implements Serializable {
 
     public int getUserSex() {
         return spHelper.getInt(USERSEX, 0);
+    }
+
+    public void setUserName(String user_name) {
+        spHelper.putString(USERNAME, user_name);
+    }
+
+    public String getUserName() {
+        return spHelper.getString(USERNAME, "");
     }
 
     public void setAnchorType(int type) {

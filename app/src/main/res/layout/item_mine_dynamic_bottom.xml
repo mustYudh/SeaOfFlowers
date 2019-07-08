@@ -92,6 +92,7 @@
         android:background="@color/color_E5E5E5"/>
 
     <LinearLayout
+        android:id="@+id/ll_like_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="47dp"
@@ -105,31 +106,23 @@
             android:src="@drawable/ic_is_like_select"/>
 
         <TextView
+            android:id="@+id/tv_like_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:singleLine="true"
-            android:text="么么哒，往事如风"
+            android:text="@string/text_null"
             android:textColor="@color/color_333333"
             android:textSize="14sp"
             />
     </LinearLayout>
 
-    <RelativeLayout
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="47dp"
-        android:descendantFocusability="blocksDescendants">
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="20dp"
-            android:nestedScrollingEnabled="false"/>
-    </RelativeLayout>
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/color_E5E5E5"/>
 </LinearLayout>

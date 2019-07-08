@@ -4,10 +4,11 @@
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="468dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:orientation="vertical">
 
 
         <TextView
@@ -22,10 +23,19 @@
             />
 
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_alignParentBottom="true">
+            >
 
             <EditText
                 android:layout_width="0dp"
@@ -56,6 +66,6 @@
 
             </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,16 +1,15 @@
 package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
-import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
-import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.hzrcht.seaofflowers.module.mine.bean.MineLocationUserDynamicBean;
+import com.hzrcht.seaofflowers.module.mine.bean.MineUserDynamicBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
-import com.xuexiang.xhttp2.request.PostRequest;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -20,22 +19,17 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
         super(viewer);
     }
 
-    public void getStateList(String user_id, int page, int pageSize) {
-        PostRequest post = XHttp.post(ApiServices.STATELIST);
-
-        if (!TextUtils.isEmpty(user_id)) {
-            post.params("user_id", user_id);
-        }
-
-        post.accessToken(true)
+    public void getStateList(int page, int pageSize) {
+        XHttp.post(ApiServices.MINESTATELIST)
+                .accessToken(true)
                 .params("page", page + "")
                 .params("pageSize", pageSize + "")
-                .execute(MineDynamicBean.class)
-                .subscribeWith(new TipRequestSubscriber<MineDynamicBean>() {
+                .execute(MineUserDynamicBean.class)
+                .subscribeWith(new TipRequestSubscriber<MineUserDynamicBean>() {
                     @Override
-                    protected void onSuccess(MineDynamicBean mineDynamicBean) {
+                    protected void onSuccess(MineUserDynamicBean mineUserDynamicBean) {
                         assert getViewer() != null;
-                        getViewer().getStateListSuccess(mineDynamicBean);
+                        getViewer().getStateListSuccess(mineUserDynamicBean);
                     }
 
                     @Override
@@ -46,7 +40,7 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                 });
     }
 
-    public void stateLike(String state_id, MineLocationDynamicBean item) {
+    public void stateLike(String state_id, MineLocationUserDynamicBean item) {
         XHttp.post(ApiServices.STATELIKE)
                 .accessToken(true)
                 .params("state_id", state_id)
@@ -76,6 +70,28 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().stateDelSuccess(position);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        super.onError(apiException);
+
+                    }
+                });
+    }
+
+    public void getReviewList(String state_id, int page, int pageSize) {
+        XHttp.post(ApiServices.REVIEWLIST)
+                .accessToken(true)
+                .params("state_id", state_id + "")
+                .params("page", page + "")
+                .params("pageSize", pageSize + "")
+                .execute(ReviewListBean.class)
+                .subscribeWith(new TipRequestSubscriber<ReviewListBean>() {
+                    @Override
+                    protected void onSuccess(ReviewListBean reviewListBean) {
+                        assert getViewer() != null;
+                        getViewer().getReviewListSuccess(reviewListBean);
                     }
 
                     @Override

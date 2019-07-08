@@ -21,7 +21,7 @@ import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.countdown.RxCountDown;
 import com.yu.common.framework.BaseViewPresenter;
 import com.yu.common.launche.LauncherHelper;
-import com.yu.common.toast.ToastUtils;
+import com.yu.common.ui.DelayClickTextView;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -35,7 +35,7 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
     }
 
     @SuppressLint("CheckResult")
-    public void sendVerCode(String number, RxCountDown countDown) {
+    public void sendVerCode(String number, RxCountDown countDown, DelayClickTextView textView) {
         XHttp.post(ApiServices.SENDVERCODE)
                 .params("type", "Login")
                 .params("phone", number)
@@ -45,13 +45,14 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
                     @Override
                     protected void onSuccess(LoginBean loginBean) {
                         assert getViewer() != null;
-                        ToastUtils.show("发送成功");
+                        getViewer().sendVerCodeSuccess();
                     }
 
                     @Override
                     protected void onError(ApiException apiException) {
                         super.onError(apiException);
                         countDown.stop();
+                        textView.setClickable(true);
                     }
                 });
     }

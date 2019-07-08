@@ -42,6 +42,12 @@ public class ApiServices {
     //动态列表
     public static final String STATELIST = BASEURL + "/api/state/index";
 
+    //我的动态
+    public static final String MINESTATELIST = BASEURL + "/api/user/state";
+
+    //评论列表
+    public static final String REVIEWLIST = BASEURL + "/api/state/reviewList";
+
     //动态点赞
     public static final String STATELIKE = BASEURL + "/api/state/like";
 
