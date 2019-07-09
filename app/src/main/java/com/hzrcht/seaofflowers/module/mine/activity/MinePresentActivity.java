@@ -8,19 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MinePresentRvAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.GiftListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePresentPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePresentViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.yu.common.mvp.PresenterLifeCycle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class MinePresentActivity extends BaseBarActivity implements MinePresentViewer {
-    private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
-    private MinePresentPresenter presenter = new MinePresentPresenter(this);
+    private MinePresentPresenter mPresenter = new MinePresentPresenter(this);
+    private RecyclerView mPresent;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -30,13 +28,25 @@ public class MinePresentActivity extends BaseBarActivity implements MinePresentV
     @Override
     protected void loadData() {
         setTitle("礼物柜");
-        for (int i = 0; i < 10; i++) {
-            list.add("");
+        Bundle bundle = getIntent().getExtras();
+        String user_id = bundle.getString("USER_ID");
+        mPresent = bindView(R.id.rv_present);
+        mPresent.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        mPresent.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 10, 4));
+
+        mPresenter.getGiftIndex(user_id);
+    }
+
+    @Override
+    public void getGiftIndexSuccess(GiftListBean giftListBean) {
+        if (giftListBean != null) {
+            if (giftListBean.rows != null && giftListBean.rows.size() != 0) {
+                MinePresentRvAdapter adapter = new MinePresentRvAdapter(R.layout.item_mine_present, giftListBean.rows, getActivity());
+                mPresent.setAdapter(adapter);
+                bindText(R.id.tv_count, giftListBean.rows.size() + "");
+            } else {
+                bindText(R.id.tv_count, "0");
+            }
         }
-        RecyclerView rv_present = bindView(R.id.rv_present);
-        rv_present.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        rv_present.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 10, 4));
-        MinePresentRvAdapter adapter = new MinePresentRvAdapter(R.layout.item_mine_present, list, getActivity());
-        rv_present.setAdapter(adapter);
     }
 }

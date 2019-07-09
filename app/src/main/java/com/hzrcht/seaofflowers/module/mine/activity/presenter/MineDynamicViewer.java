@@ -13,5 +13,7 @@ public interface MineDynamicViewer extends Viewer {
 
     void stateDelSuccess(int position);
 
-    void getReviewListSuccess(ReviewListBean reviewListBean);
+    void getReviewListSuccess(ReviewListBean reviewListBean,MineLocationUserDynamicBean item,String state_id);
+
+    void stateReviewSuccess(MineLocationUserDynamicBean item);
 }

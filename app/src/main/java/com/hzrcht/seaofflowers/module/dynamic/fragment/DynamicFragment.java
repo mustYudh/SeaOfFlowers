@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +21,8 @@ import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicPresenter;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.presenter.DynamicViewer;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
@@ -123,20 +127,35 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
     /**
      * 评论弹窗
      */
-    private void showCommentDialog() {
+    private void showCommentDialog(ReviewListBean reviewListBean, MineLocationDynamicBean item, String state_id) {
         commentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_comment)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-                .addViewOnclick(R.id.ll_submit, view -> {
-                    if (commentDialog.isShowing()) {
-                        commentDialog.dismiss();
-                    }
-
-                })
                 .build();
         commentDialog.show();
 
+        TextView tv_count = commentDialog.findViewById(R.id.tv_count);
+        RecyclerView rv_content = commentDialog.findViewById(R.id.rv_content);
+        rv_content.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (reviewListBean != null) {
+            if (reviewListBean.rows != null && reviewListBean.rows.size() != 0) {
+                MineContentRvAdapter contentRvAdapter = new MineContentRvAdapter(R.layout.item_mine_dynamic_content, reviewListBean.rows, getActivity());
+                rv_content.setAdapter(contentRvAdapter);
+                tv_count.setText("评论" + reviewListBean.rows.size());
+            } else {
+                tv_count.setText("评论0");
+            }
+        }
+        EditText et_content = commentDialog.findViewById(R.id.et_content);
+        LinearLayout ll_submit = commentDialog.findViewById(R.id.ll_submit);
+        ll_submit.setOnClickListener(view -> {
+            if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                ToastUtils.show("请输入评论内容");
+                return;
+            }
+            mPresenter.stateReview(state_id, et_content.getText().toString().trim(), item);
+        });
 
     }
 
@@ -229,8 +248,8 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
                     }
 
                     @Override
-                    public void onItemDetailsCommentClick() {
-                        showCommentDialog();
+                    public void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item) {
+                        mPresenter.getReviewList(state_id + "", item, 1, 1000);
                     }
 
                     @Override
@@ -258,6 +277,22 @@ public class DynamicFragment extends BaseFragment implements DynamicViewer, View
             item.is_like = 0;
             item.like_count = item.like_count - 1;
         }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getReviewListSuccess(ReviewListBean reviewListBean, MineLocationDynamicBean item, String state_id) {
+        showCommentDialog(reviewListBean, item, state_id);
+    }
+
+    @Override
+    public void stateReviewSuccess(MineLocationDynamicBean item) {
+        if (commentDialog.isShowing()) {
+            commentDialog.dismiss();
+        }
+
+        item.review_count = item.review_count + 1;
+        ToastUtils.show("评论成功，等待审核");
         adapter.notifyDataSetChanged();
     }
 }

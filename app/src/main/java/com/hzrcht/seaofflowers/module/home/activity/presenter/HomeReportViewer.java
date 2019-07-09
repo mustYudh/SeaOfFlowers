@@ -8,4 +8,6 @@ public interface HomeReportViewer extends Viewer {
     void uploadImgSuccess(UploadImgBean uploadImgBean);
 
     void reportSuccess();
+
+    void reportFail();
 }

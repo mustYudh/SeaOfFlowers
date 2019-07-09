@@ -56,8 +56,8 @@ public class HomeReportPresenter extends BaseViewPresenter<HomeReportViewer> {
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().reportFail();
                     }
                 });
     }

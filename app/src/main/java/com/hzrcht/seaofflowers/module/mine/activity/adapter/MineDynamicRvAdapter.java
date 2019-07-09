@@ -1,8 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -76,7 +74,7 @@ public class MineDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 helper.getView(R.id.ll_comment).setOnClickListener(view -> {
                     //评论
                     assert onItemDetailsDoCilckListener != null;
-                    onItemDetailsDoCilckListener.onItemDetailsCommentClick(item.id);
+                    onItemDetailsDoCilckListener.onItemDetailsCommentClick(item.id,item);
                 });
 
                 helper.getView(R.id.ll_like).setOnClickListener(view -> {
@@ -91,7 +89,7 @@ public class MineDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
     public interface OnItemDetailsDoCilckListener {
         void onItemDetailsDelClick(int state_id, int position);
 
-        void onItemDetailsCommentClick(int state_id);
+        void onItemDetailsCommentClick(int state_id,MineLocationUserDynamicBean item);
 
         void onItemDetailsLikeClick(int state_id, MineLocationUserDynamicBean item);
     }

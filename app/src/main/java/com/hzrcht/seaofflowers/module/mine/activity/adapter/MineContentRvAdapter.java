@@ -16,6 +16,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.yu.common.glide.ImageLoader;
+import com.yu.common.ui.CircleImageView;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class MineContentRvAdapter extends BaseQuickAdapter<ReviewListBean.RowsBe
     protected void convert(BaseViewHolder helper, ReviewListBean.RowsBean item) {
         TextView tv_name = helper.getView(R.id.tv_name);
         TextView tv_content = helper.getView(R.id.tv_content);
+        CircleImageView iv_headimg = helper.getView(R.id.iv_headimg);
+        helper.setText(R.id.tv_time, item.create_at);
         if (item.reviewInfo != null) {
             tv_name.setText(item.reviewInfo.nick_name + "回复" + item.userInfo.nick_name);
             SpannableString mStyledText = new SpannableString(tv_name.getText().toString().trim());
@@ -41,10 +45,12 @@ public class MineContentRvAdapter extends BaseQuickAdapter<ReviewListBean.RowsBe
             MovementMethod instance = LinkMovementMethod.getInstance();
             tv_name.setText(mStyledText);
             tv_name.setMovementMethod(instance);
+            ImageLoader.getInstance().displayImage(iv_headimg, item.reviewInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         } else {
             tv_name.setText(item.userInfo.nick_name);
+            ImageLoader.getInstance().displayImage(iv_headimg, item.userInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         }
-        tv_content.setText("：" + item.title);
+        tv_content.setText(item.title);
     }
 
 

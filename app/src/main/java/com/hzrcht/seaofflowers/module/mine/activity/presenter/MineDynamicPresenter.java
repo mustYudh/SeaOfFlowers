@@ -80,7 +80,7 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                 });
     }
 
-    public void getReviewList(String state_id, int page, int pageSize) {
+    public void getReviewList(String state_id, MineLocationUserDynamicBean item, int page, int pageSize) {
         XHttp.post(ApiServices.REVIEWLIST)
                 .accessToken(true)
                 .params("state_id", state_id + "")
@@ -91,7 +91,28 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                     @Override
                     protected void onSuccess(ReviewListBean reviewListBean) {
                         assert getViewer() != null;
-                        getViewer().getReviewListSuccess(reviewListBean);
+                        getViewer().getReviewListSuccess(reviewListBean, item, state_id);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        super.onError(apiException);
+
+                    }
+                });
+    }
+
+    public void stateReview(String state_id, String title, MineLocationUserDynamicBean item) {
+        XHttp.post(ApiServices.STATEREVIEW)
+                .accessToken(true)
+                .params("state_id", state_id)
+                .params("title", title)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().stateReviewSuccess(item);
                     }
 
                     @Override

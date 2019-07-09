@@ -64,7 +64,7 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 helper.getView(R.id.ll_comment).setOnClickListener(view -> {
                     //评论
                     assert onItemDetailsDoCilckListener != null;
-                    onItemDetailsDoCilckListener.onItemDetailsCommentClick();
+                    onItemDetailsDoCilckListener.onItemDetailsCommentClick(item.id, item);
                 });
 
                 helper.getView(R.id.ll_like).setOnClickListener(view -> {
@@ -79,7 +79,7 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
     public interface OnItemDetailsDoCilckListener {
         void onItemDetailsReportClick(String anchor_id, String state_id);
 
-        void onItemDetailsCommentClick();
+        void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item);
 
         void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item);
     }

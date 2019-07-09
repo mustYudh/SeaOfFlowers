@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,16 +21,20 @@ import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.BannerInfoViewHolder;
+import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDynamicRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
+import com.yu.common.ui.CircleImageView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -40,7 +45,6 @@ import java.util.List;
 
 public class MinePersonalInfoActivity extends BaseActivity implements MinePersonalInfoViewer, View.OnClickListener {
     private List<String> listData = new ArrayList<>();
-    private List<String> picList = new ArrayList<>();
     private List<MineLocationDynamicBean> list = new ArrayList<>();
     private List<LinearLayout> llList = new ArrayList<>();
     private List<LinearLayout> llRootList = new ArrayList<>();
@@ -61,7 +65,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private RecyclerView mDynamic;
     private int page = 0;
     private int pageSize = 10;
-    private MineInfoDynamicRvAdapter adapterDynamic;
+    private MineInfoDynamicRvAdapter adapter;
+    private LinearLayout mPresentRoot;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -94,7 +99,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mIntimacy = bindView(R.id.ll_intimacy);
         mPresent = bindView(R.id.ll_present);
         LinearLayout mIntimacyRoot = bindView(R.id.ll_intimacy_root);
-        LinearLayout mPresentRoot = bindView(R.id.ll_present_root);
+        mPresentRoot = bindView(R.id.ll_present_root);
         mFlexboxSelf = bindView(R.id.flexbox);
         mMobile = bindView(R.id.tv_mobile);
         TextView tv_check_mobile = bindView(R.id.tv_check_mobile);
@@ -140,29 +145,16 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
         rv_video_photo.setAdapter(adapter);
 
-        //动态
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293040&di=8f9de00e1862ebe58e47f7e1a519517c&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201307%2F20%2F153912fo4kxx5kjo6zv52v.jpg");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293038&di=83f23fd192c537f42afab17a732883c4&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201707%2F24%2F20170724102404_wAjaP.png");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293040&di=ff3ae65767bd9954ef2e220abc2383e8&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F4%2F5696f5a8a6eb3.jpg%3Fdown");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293039&di=03d1fc1a8105f7d1e4ec80f6685a964a&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F010c2658ea1351a8012049efead301.jpg%401280w_1l_2o_100sh.jpg");
-        picList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426293039&di=410ac577370998d1813ee18a2a88b0f4&imgtype=0&src=http%3A%2F%2Fgss0.baidu.com%2F9vo3dSag_xI4khGko9WTAnF6hhy%2Fzhidao%2Fpic%2Fitem%2F0df3d7ca7bcb0a463350c11e6863f6246b60afa3.jpg");
-
 
         mIntimacy.removeAllViews();
-        mPresent.removeAllViews();
         for (int i = 0; i < 6; i++) {
             View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
             mIntimacy.addView(view);
         }
 
-        for (int i = 0; i < 6; i++) {
-            View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
-            mPresent.addView(view);
-        }
-
 
         mPresenter.getUserInfo(user_id);
-        mPresenter.getStateList(user_id, page, pageSize);
+        mPresenter.getStateList(user_id);
     }
 
     /**
@@ -205,10 +197,14 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 showShareDialog();
                 break;
             case R.id.ll_intimacy_root:
-                LauncherHelper.from(getActivity()).startActivity(MineIntimacyActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("USER_ID", user_id + "");
+                LauncherHelper.from(getActivity()).startActivity(MineIntimacyActivity.class, bundle);
                 break;
             case R.id.ll_present_root:
-                LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class);
+                Bundle bundlePresent = new Bundle();
+                bundlePresent.putString("USER_ID", user_id + "");
+                LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class, bundlePresent);
                 break;
             case R.id.tv_check_mobile:
                 showCleckDialog();
@@ -346,20 +342,35 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     /**
      * 评论弹窗
      */
-    private void showCommentDialog() {
+    private void showCommentDialog(ReviewListBean reviewListBean, MineLocationDynamicBean item, String state_id) {
         commentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_comment)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-                .addViewOnclick(R.id.ll_submit, view -> {
-                    if (commentDialog.isShowing()) {
-                        commentDialog.dismiss();
-                    }
-
-                })
                 .build();
         commentDialog.show();
 
+        TextView tv_count = commentDialog.findViewById(R.id.tv_count);
+        RecyclerView rv_content = commentDialog.findViewById(R.id.rv_content);
+        rv_content.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (reviewListBean != null) {
+            if (reviewListBean.rows != null && reviewListBean.rows.size() != 0) {
+                MineContentRvAdapter contentRvAdapter = new MineContentRvAdapter(R.layout.item_mine_dynamic_content, reviewListBean.rows, getActivity());
+                rv_content.setAdapter(contentRvAdapter);
+                tv_count.setText("评论" + reviewListBean.rows.size());
+            } else {
+                tv_count.setText("评论0");
+            }
+        }
+        EditText et_content = commentDialog.findViewById(R.id.et_content);
+        LinearLayout ll_submit = commentDialog.findViewById(R.id.ll_submit);
+        ll_submit.setOnClickListener(view -> {
+            if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                ToastUtils.show("请输入评论内容");
+                return;
+            }
+            mPresenter.stateReview(state_id, et_content.getText().toString().trim(), item);
+        });
 
     }
 
@@ -439,7 +450,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             });
 
             //在线状态
-            switch (anchorUserInfoBean.is_online) {
+            switch (anchorUserInfoBean.online_type) {
                 case 0:
                     //离线
                     bindText(R.id.tv_online, "离线");
@@ -455,6 +466,20 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     bindText(R.id.tv_online, "通话中");
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_ing);
                     break;
+            }
+
+            //我的礼物
+            mPresent.removeAllViews();
+            if (anchorUserInfoBean.gift != null && anchorUserInfoBean.gift.size() != 0) {
+                for (int i = 0; i < anchorUserInfoBean.gift.size(); i++) {
+                    View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
+                    CircleImageView iv_gift = view.findViewById(R.id.iv_gift);
+                    ImageLoader.getInstance().displayImage(iv_gift, anchorUserInfoBean.gift.get(i).img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+                    mPresent.addView(view);
+                }
+                mPresentRoot.setVisibility(View.VISIBLE);
+            } else {
+                mPresentRoot.setVisibility(View.GONE);
             }
         }
     }
@@ -511,17 +536,17 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     list.add(mineLocationDynamicBottomBean);
                 }
 
-                adapterDynamic = new MineInfoDynamicRvAdapter(list, getActivity());
-                mDynamic.setAdapter(adapterDynamic);
-                adapterDynamic.setOnItemDetailsDoCilckListener(new MineInfoDynamicRvAdapter.OnItemDetailsDoCilckListener() {
+                adapter = new MineInfoDynamicRvAdapter(list, getActivity());
+                mDynamic.setAdapter(adapter);
+                adapter.setOnItemDetailsDoCilckListener(new MineInfoDynamicRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override
                     public void onItemDetailsReportClick(String anchor_id, String state_id) {
                         showReportDialog(anchor_id, state_id);
                     }
 
                     @Override
-                    public void onItemDetailsCommentClick() {
-                        showCommentDialog();
+                    public void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item) {
+                        mPresenter.getReviewList(state_id + "", item, 1, 10);
                     }
 
                     @Override
@@ -550,7 +575,31 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             item.is_like = 0;
             item.like_count = item.like_count - 1;
         }
-        adapterDynamic.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void stateDelSuccess(int position) {
+        adapter.getData().remove(position);
+        adapter.getData().remove(position - 1);
+        adapter.getData().remove(position - 2);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getReviewListSuccess(ReviewListBean reviewListBean, MineLocationDynamicBean item, String state_id) {
+        showCommentDialog(reviewListBean, item, state_id);
+    }
+
+    @Override
+    public void stateReviewSuccess(MineLocationDynamicBean item) {
+        if (commentDialog.isShowing()) {
+            commentDialog.dismiss();
+        }
+
+        item.review_count = item.review_count + 1;
+        ToastUtils.show("评论成功，等待审核");
+        adapter.notifyDataSetChanged();
     }
 
 

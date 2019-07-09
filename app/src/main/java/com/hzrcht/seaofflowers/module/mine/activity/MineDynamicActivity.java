@@ -6,6 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
@@ -127,8 +130,8 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
                     }
 
                     @Override
-                    public void onItemDetailsCommentClick(int state_id) {
-                        mPresenter.getReviewList(state_id + "", 1, 10);
+                    public void onItemDetailsCommentClick(int state_id, MineLocationUserDynamicBean item) {
+                        mPresenter.getReviewList(state_id + "", item, 1, 1000);
                     }
 
                     @Override
@@ -171,29 +174,35 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
     /**
      * 评论弹窗
      */
-    private void showCommentDialog(ReviewListBean reviewListBean) {
+    private void showCommentDialog(ReviewListBean reviewListBean, MineLocationUserDynamicBean item, String state_id) {
         commentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_comment)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-                .addViewOnclick(R.id.ll_submit, view -> {
-                    if (commentDialog.isShowing()) {
-                        commentDialog.dismiss();
-                    }
-
-                })
                 .build();
         commentDialog.show();
 
+        TextView tv_count = commentDialog.findViewById(R.id.tv_count);
         RecyclerView rv_content = commentDialog.findViewById(R.id.rv_content);
         rv_content.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (reviewListBean != null) {
             if (reviewListBean.rows != null && reviewListBean.rows.size() != 0) {
                 MineContentRvAdapter contentRvAdapter = new MineContentRvAdapter(R.layout.item_mine_dynamic_content, reviewListBean.rows, getActivity());
                 rv_content.setAdapter(contentRvAdapter);
+                tv_count.setText("评论" + reviewListBean.rows.size());
+            } else {
+                tv_count.setText("评论0");
             }
         }
-
+        EditText et_content = commentDialog.findViewById(R.id.et_content);
+        LinearLayout ll_submit = commentDialog.findViewById(R.id.ll_submit);
+        ll_submit.setOnClickListener(view -> {
+            if (TextUtils.isEmpty(et_content.getText().toString().trim())) {
+                ToastUtils.show("请输入评论内容");
+                return;
+            }
+            mPresenter.stateReview(state_id, et_content.getText().toString().trim(), item);
+        });
 
     }
 
@@ -231,7 +240,18 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
     }
 
     @Override
-    public void getReviewListSuccess(ReviewListBean reviewListBean) {
-        showCommentDialog(reviewListBean);
+    public void getReviewListSuccess(ReviewListBean reviewListBean, MineLocationUserDynamicBean item, String state_id) {
+        showCommentDialog(reviewListBean, item, state_id);
+    }
+
+    @Override
+    public void stateReviewSuccess(MineLocationUserDynamicBean item) {
+        if (commentDialog.isShowing()) {
+            commentDialog.dismiss();
+        }
+
+        item.review_count = item.review_count + 1;
+        ToastUtils.show("评论成功，等待审核");
+        adapter.notifyDataSetChanged();
     }
 }

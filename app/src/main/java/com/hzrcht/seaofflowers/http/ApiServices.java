@@ -51,6 +51,9 @@ public class ApiServices {
     //动态点赞
     public static final String STATELIKE = BASEURL + "/api/state/like";
 
+    //动态评论
+    public static final String STATEREVIEW = BASEURL + "/api/state/review";
+
     //动态举报
     public static final String STATEREPORT = BASEURL + "/api/report/add";
 
@@ -62,5 +65,8 @@ public class ApiServices {
 
     //提现列表
     public static final String USERWITHDRAW = BASEURL + "/api/user/withdraw";
+
+    //礼物柜
+    public static final String GIFTINDEX = BASEURL + "/api/gift/index";
 
 }

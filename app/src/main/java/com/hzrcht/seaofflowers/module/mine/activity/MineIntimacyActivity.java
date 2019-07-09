@@ -31,6 +31,8 @@ public class MineIntimacyActivity extends BaseBarActivity implements MineIntimac
     @Override
     protected void loadData() {
         setTitle("亲密榜");
+        Bundle bundle = getIntent().getExtras();
+        String user_id = bundle.getString("USER_ID");
         for (int i = 0; i < 10; i++) {
             list.add("");
         }

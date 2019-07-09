@@ -7,7 +7,8 @@
     >
 
 
-    <com.hzrcht.seaofflowers.module.view.ClearEditText
+    <EditText
+        android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:background="@null"
@@ -22,13 +23,16 @@
         android:textSize="17sp"/>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_dynamic"
+    <com.yu.common.ui.NoSlidingGridView
+        android:id="@+id/gv_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="32dp"
+        android:horizontalSpacing="5dp"
+        android:numColumns="3"
         android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:scrollbars="none"
+        android:verticalSpacing="5dp"/>
 </LinearLayout>

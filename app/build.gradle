@@ -212,7 +212,8 @@ dependencies {
     implementation appDependencies.FLEXBOX
     implementation appDependencies.EASYBLUR
     implementation appDependencies.GSON
-        implementation appDependencies.COMPRESSOR
+    implementation appDependencies.COMPRESSOR
+    implementation appDependencies.LOADING
     //    implementation appDependencies.RXPERMISSIONVersion
     //    implementation appDependencies.RXANDROIDVersion
     //    implementation appDependencies.RXJAVAVersion
