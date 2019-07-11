@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/action_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/action_bar_all_height"
+                android:background="@color/lb_cm_white"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_height_top"
+    >
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="2dp"
+        android:gravity="center_vertical|left"
+        android:orientation="horizontal"
+        >
+
+
+        <LinearLayout
+            android:id="@+id/action_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_arrow_black"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_height"
+                android:gravity="center"
+                android:text="返回"
+                android:textColor="@color/color_333333"
+                />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:background="@color/color_transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+
+        <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/magic_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:paddingBottom="5dp"
+            android:scrollbars="none"
+            />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_online_service"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingRight="18dp"
+            android:text="客服"
+            android:textColor="@color/color_333333"
+            android:textSize="17sp"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

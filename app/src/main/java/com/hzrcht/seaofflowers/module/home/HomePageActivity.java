@@ -15,12 +15,16 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.fragment.HomeFragment;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
+import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
 import com.nhbs.fenxiao.module.center.HomeCenterPopUpWindow;
 import com.tbruyelle.rxpermissions2.Permission;
+import com.tencent.qcloud.tim.uikit.TUIKit;
+import com.tencent.qcloud.tim.uikit.base.IMEventListener;
+import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.PressHandle;
@@ -50,6 +54,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
     @Override
     protected void loadData() {
+        setCustomConfig();
         EventBus.getDefault().register(this);
         mBottomNavigationView = bindView(R.id.bottom_navigation_view);
         List<TabItem> items = new ArrayList<>();
@@ -68,8 +73,6 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
         checkPermission();
     }
-
-
 
     /**
      * 检查权限
@@ -111,6 +114,28 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         ToastUtils.show(event.showCenterTab.toString());
         bindView(R.id.center_tab, event.showCenterTab);
     }
+
+    public void login(boolean autoLogin) {
+        getLaunchHelper().startActivity(SelectLoginActivity.class);
+    }
+
+
+    private void setCustomConfig() {
+        //注册IM事件回调，这里示例为用户被踢的回调，更多事件注册参考文档
+        TUIKit.setIMEventListener(new IMEventListener() {
+            @Override
+            public void onForceOffline() {
+                ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
+                login(false);
+                finish();
+            }
+
+            @Override
+            public void onDisconnected(int code, String desc) {
+            }
+        });
+    }
+
 
     @Override
     protected void onDestroy() {

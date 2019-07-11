@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
             mDataList.add("新人");
             fragments.add(HomeFansFragment.newInstance(1));
             fragments.add(HomeLimitFragment.newInstance(1));
-            fragments.add(HomeLimitFragment.newInstance(2));
+            fragments.add(new HomeNewerFragment());
         } else {
             //非主播
             mDataList.add("关注");
@@ -68,13 +68,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentViewer {
             mDataList.add("新人");
             fragments.add(HomeAttentionFragment.newInstance(1));
             fragments.add(HomeLimitFragment.newInstance(1));
-            fragments.add(HomeLimitFragment.newInstance(2));
+            fragments.add(new HomeNewerFragment());
         }
 
         mViewPager = bindView(R.id.view_pager);
         LinearLayout ll_search = bindView(R.id.ll_search);
 
-      
+
         initMagicIndicator();
 
         ll_search.setOnClickListener(view -> {

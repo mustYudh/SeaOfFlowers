@@ -90,7 +90,6 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
         }
         request.params("code", code)
                 .params("phone", number)
-                .accessToken(false)
                 .execute(LoginBean.class)
                 .subscribeWith(new TipRequestSubscriber<LoginBean>() {
                     @Override

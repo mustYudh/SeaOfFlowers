@@ -59,6 +59,8 @@ ext {
 
     LOADINGVersion = '2.1.3'
 
+    OSSVersion = '2.9.2'
+
     appDependencies = [versionCode        : versionCode,
                        versionName        : versionName,
                        uMengKey           : uMengKey,
@@ -85,7 +87,8 @@ ext {
                        EASYBLUR           : "com.github.pinguo-zhouwei:EasyBlur:${EASYBLURVersion}",
                        GSON               : "com.google.code.gson:gson:${GSONVersion}",
                        COMPRESSOR         : "id.zelory:compressor:${COMPRESSORVersion}",
-                       LOADING            : "com.wang.avi:library:${LOADINGVersion}"
+                       LOADING            : "com.wang.avi:library:${LOADINGVersion}",
+                       OSS                : "com.aliyun.dpa:oss-android-sdk:${OSSVersion}"
 //                       COMPRESSOR         : "id.zelory:compressor:${COMPRESSORVersion}"
 //                       RXPERMISSION       : "com.tbruyelle.rxpermissions2:rxpermissions:${RXPERMISSIONVersion}",
 //                       RXANDROID          : "io.reactivex.rxjava2:rxandroid:${RXANDROIDVersion}",

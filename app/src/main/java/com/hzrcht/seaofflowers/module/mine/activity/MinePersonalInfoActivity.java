@@ -155,6 +155,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
         mPresenter.getUserInfo(user_id);
         mPresenter.getStateList(user_id);
+
+
     }
 
     /**
@@ -425,6 +427,14 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             bindText(R.id.tv_listen, anchorUserInfoBean.listen + "%");
             mAge.setBackgroundResource(anchorUserInfoBean.sex == 1 ? R.drawable.shape_age_blue : R.drawable.shape_age_red);
             bindText(R.id.tv_age, anchorUserInfoBean.age + "");
+
+            //聊天
+            bindView(R.id.ll_chat, view -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("IM_ID",anchorUserInfoBean.user_id);
+                bundle.putString("IM_NAME",anchorUserInfoBean.nick_name);
+                getLaunchHelper().startActivity(MineChatActivity.class,bundle);
+            });
 
             if (anchorUserInfoBean.lable != null && anchorUserInfoBean.lable.size() != 0) {
                 mLabel.setVisibility(View.VISIBLE);

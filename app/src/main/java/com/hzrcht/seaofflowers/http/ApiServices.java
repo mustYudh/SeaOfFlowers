@@ -1,6 +1,8 @@
 package com.hzrcht.seaofflowers.http;
 
 public class ApiServices {
+    public static final int SDKAPPID = 1400224024;
+
     public static final String BASEURL = "http://huahai.hzrcht.com";
 
     //验证码登录
@@ -68,5 +70,17 @@ public class ApiServices {
 
     //礼物柜
     public static final String GIFTINDEX = BASEURL + "/api/gift/index";
+
+    //金额目录
+    public static final String SYSLANMU = BASEURL + "/api/sys/lanmu";
+
+    //订单支付
+    public static final String ORDERADD = BASEURL + "/api/order/add";
+
+    //用户提现账号
+    public static final String USERACCOUNTS = BASEURL + "/api/user/accounts";
+
+    //用户余额
+    public static final String USERAMOUNT = BASEURL + "/api/user/amount";
 
 }

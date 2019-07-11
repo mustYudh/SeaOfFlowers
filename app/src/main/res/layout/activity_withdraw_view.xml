@@ -125,6 +125,7 @@
             android:background="@color/color_FBFBFB">
 
             <TextView
+                android:id="@+id/tv_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -141,7 +142,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="19dp"
+                android:paddingRight="19dp"
                 android:gravity="center"
                 android:includeFontPadding="false"
                 android:text="立即绑定"
@@ -184,13 +185,14 @@
                 />
 
             <TextView
+                android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="17dp"
                 android:includeFontPadding="false"
-                android:text="200"
+                android:text="@string/text_null"
                 android:textColor="@color/color_9897E7"
                 android:textSize="15sp"
                 />

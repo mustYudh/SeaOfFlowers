@@ -2,8 +2,6 @@ package com.hzrcht.seaofflowers.module.message.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -13,10 +11,10 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarFragment;
 import com.hzrcht.seaofflowers.module.message.activity.MineCallActivity;
 import com.hzrcht.seaofflowers.module.message.activity.SystemMessageActivity;
-import com.hzrcht.seaofflowers.module.message.adapter.MessageRvAdapter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessagePresenter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessageViewer;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.yu.common.mvp.PresenterLifeCycle;
 
 import java.util.ArrayList;
@@ -56,10 +54,18 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         for (int i = 0; i < 10; i++) {
             list.add("");
         }
-        RecyclerView rv_msg = bindView(R.id.rv_msg);
-        rv_msg.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MessageRvAdapter adapter = new MessageRvAdapter(R.layout.item_mine_message, list, getActivity());
-        rv_msg.setAdapter(adapter);
+//        RecyclerView rv_msg = bindView(R.id.rv_msg);
+//        rv_msg.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        MessageRvAdapter adapter = new MessageRvAdapter(R.layout.item_mine_message, list, getActivity());
+//        rv_msg.setAdapter(adapter);
+
+        // 从布局文件中获取会话列表面板
+        ConversationLayout conversationLayout = (ConversationLayout) findViewById(R.id.conversation_layout);
+        // 会话列表面板的默认UI和交互初始化
+        conversationLayout.initDefault();
+
+        conversationLayout.getTitleBar().setVisibility(View.GONE);
+
 
         tv_clean.setOnClickListener(view -> {
             showCleanDialog();

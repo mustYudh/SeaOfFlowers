@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -14,6 +13,7 @@ import com.hzrcht.seaofflowers.module.home.adapter.BannerViewHolder;
 import com.hzrcht.seaofflowers.module.home.adapter.HomeLimitRvAdapter;
 import com.hzrcht.seaofflowers.module.home.bean.HomeAnchorListBean;
 import com.hzrcht.seaofflowers.module.home.bean.HomeBannerBean;
+import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
@@ -22,6 +22,7 @@ import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,6 +34,8 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private int page = 1;
     private int pageSize = 10;
     private RecyclerView mAnchor;
+    private List<MineLocationAnchorBean> list = new ArrayList<>();
+    private HomeLimitRvAdapter adapter;
 
     @Override
     protected int getContentViewId() {
@@ -64,7 +67,6 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         mAnchor.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
 
-        Log.e("aaaa", "走了吗");
         if (home_type == 2) {
             mBanner.setVisibility(View.GONE);
         } else {
@@ -128,8 +130,34 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
         if (homeAnchorListBean != null) {
             if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
+                if (page > 1) {
 
-                HomeLimitRvAdapter adapter = new HomeLimitRvAdapter(R.layout.item_home_limit, homeAnchorListBean.rows, getActivity());
+                } else {
+                    list.clear();
+                    MineLocationAnchorBean mineLocationAnchorTopBean = new MineLocationAnchorBean();
+                    mineLocationAnchorTopBean.itemType = 0;
+                    list.add(mineLocationAnchorTopBean);
+
+                }
+
+
+                for (int i = 0; i < homeAnchorListBean.rows.size(); i++) {
+                    MineLocationAnchorBean mineLocationAnchorBean = new MineLocationAnchorBean();
+                    HomeAnchorListBean.RowsBean rowsBean = homeAnchorListBean.rows.get(i);
+                    mineLocationAnchorBean.id = rowsBean.id;
+                    mineLocationAnchorBean.nick_name = rowsBean.nick_name;
+                    mineLocationAnchorBean.cover = rowsBean.cover;
+                    mineLocationAnchorBean.sex = rowsBean.sex;
+                    mineLocationAnchorBean.age = rowsBean.age;
+                    mineLocationAnchorBean.sign = rowsBean.sign;
+                    mineLocationAnchorBean.work = rowsBean.work;
+                    mineLocationAnchorBean.video_amout = rowsBean.video_amout;
+                    mineLocationAnchorBean.online_type = rowsBean.online_type;
+                    mineLocationAnchorBean.itemType = 1;
+                    list.add(mineLocationAnchorBean);
+                }
+
+                adapter = new HomeLimitRvAdapter(list, getActivity());
                 mAnchor.setAdapter(adapter);
             }
         }

@@ -1,5 +1,7 @@
 package com.hzrcht.seaofflowers.module.mine.bean;
 
+import java.math.BigDecimal;
+
 public class MineUserInfoBean {
 
 
@@ -37,8 +39,8 @@ public class MineUserInfoBean {
         public int id;
         public String head_img;
         public int type;
-        public int amount;
-        public int withdrawal;
+        public BigDecimal amount;
+        public BigDecimal withdrawal;
         public String nick_name;
         public int sex;
         public String sign;

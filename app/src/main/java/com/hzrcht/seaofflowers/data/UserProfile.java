@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
+import com.tencent.imsdk.TIMManager;
 
 import java.io.Serializable;
 
@@ -18,6 +19,7 @@ public class UserProfile implements Serializable {
     private static final String USERSEX = "user_sex";
     private static final String USERNAME = "user_name";
     private static final String ANCHORTYPE = "anchor_type";
+    private static final String USERSIG = "user_sig";
 
     private SharedPreferencesHelper spHelper;
 
@@ -42,6 +44,7 @@ public class UserProfile implements Serializable {
         setUserSex(userInfo.info.sex);
         setUserName(userInfo.info.nick_name);
         setToken(userInfo.token);
+        setUserSig(userInfo.userSig);
     }
 
 
@@ -51,6 +54,14 @@ public class UserProfile implements Serializable {
 
     public String getAppToken() {
         return spHelper.getString(APPTOKEN, "");
+    }
+
+    public void setUserSig(String userSig) {
+        spHelper.putString(USERSIG, userSig);
+    }
+
+    public String getUserSig() {
+        return spHelper.getString(USERSIG, "");
     }
 
     public int getUserId() {
@@ -88,7 +99,7 @@ public class UserProfile implements Serializable {
 
 
     public boolean isAppLogin() {
-        return !TextUtils.isEmpty(getAppToken()) && getUserSex() != 0;
+        return !TextUtils.isEmpty(getAppToken()) && getUserSex() != 0 && !TextUtils.isEmpty(TIMManager.getInstance().getLoginUser());
     }
 
     /**

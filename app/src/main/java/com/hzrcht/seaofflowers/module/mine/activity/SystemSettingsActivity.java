@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.SystemSettingsPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.SystemSettingsViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
@@ -42,5 +43,10 @@ public class SystemSettingsActivity extends BaseBarActivity implements SystemSet
         cache.showRightText(true);
         cache.setTextRight("110.1MB");
         opinion.init("意见反馈");
+
+        bindView(R.id.tv_exit, view -> {
+            UserProfile.getInstance().clean();
+            finish();
+        });
     }
 }

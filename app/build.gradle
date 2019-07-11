@@ -47,7 +47,7 @@ android {
                                 BAIDU_LOCATION: rootProject.ext.baidu]
 
         ndk {
-            //            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a"
         }
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -214,6 +214,7 @@ dependencies {
     implementation appDependencies.GSON
     implementation appDependencies.COMPRESSOR
     implementation appDependencies.LOADING
+    implementation appDependencies.OSS
     //    implementation appDependencies.RXPERMISSIONVersion
     //    implementation appDependencies.RXANDROIDVersion
     //    implementation appDependencies.RXJAVAVersion
@@ -221,4 +222,7 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
+    implementation files('libs/alipaySdk-15.6.2-20190416165036.aar')
+    implementation 'com.tencent.imsdk:imsdk:4.4.631'
+    implementation 'com.tencent.imsdk:tuikit:4.4.627'
 }

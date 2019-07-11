@@ -10,13 +10,14 @@ import android.widget.LinearLayout;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.ChargeSettingActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineDynamicActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineHelpCenterActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineMineWithdrawActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
-import com.hzrcht.seaofflowers.module.mine.activity.MinePresentActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRedactDataActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.SystemSettingsActivity;
 import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
@@ -24,6 +25,7 @@ import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
 
 public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener {
@@ -33,6 +35,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
     private ImageView mVip;
     private LinearLayout mLAge;
     private ImageView mIAge, mType;
+    private LinearLayout mAuthentication;
 
     @Override
     protected int getContentViewId() {
@@ -60,7 +63,8 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         LinearLayout ll_master = bindView(R.id.ll_master);
         LinearLayout ll_balance = bindView(R.id.ll_balance);
         LinearLayout ll_withdraw = bindView(R.id.ll_withdraw);
-        LinearLayout ll_authentication = bindView(R.id.ll_authentication);
+        LinearLayout ll_recharge = bindView(R.id.ll_recharge);
+        mAuthentication = bindView(R.id.ll_authentication);
         LinearLayout ll_photo_album = bindView(R.id.ll_photo_album);
         MyOneLineView view_invitation_code = bindView(R.id.view_invitation_code);
         MyOneLineView view_accept_apprentice = bindView(R.id.view_accept_apprentice);
@@ -79,13 +83,13 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         iv_redact.setOnClickListener(this);
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
-        ll_authentication.setOnClickListener(this);
         view_system_settings.setOnClickListener(this);
         ll_withdraw.setOnClickListener(this);
         ll_photo_album.setOnClickListener(this);
         ll_dynamic.setOnClickListener(this);
         ll_master.setOnClickListener(this);
         iv_help.setOnClickListener(this);
+        ll_recharge.setOnClickListener(this);
     }
 
     @Override
@@ -102,11 +106,6 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             case R.id.ll_balance:
                 //账号余额
                 getLaunchHelper().startActivity(MineBalanceActivity.class);
-                break;
-            case R.id.ll_authentication:
-                //认证主播
-                getLaunchHelper().startActivity(ApplyAuthenticationActivity.class);
-//                getLaunchHelper().startActivity(InAuthenticationActivity.class);
                 break;
             case R.id.view_system_settings:
                 //系统设置
@@ -126,11 +125,17 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 break;
             case R.id.ll_master:
                 //师徒
-                getLaunchHelper().startActivity(MinePresentActivity.class);
+                ToastUtils.show("功能开发中!");
                 break;
             case R.id.iv_help:
                 //帮助中心
                 getLaunchHelper().startActivity(MineHelpCenterActivity.class);
+                break;
+            case R.id.ll_recharge:
+                //充值
+                Bundle bundle = new Bundle();
+                bundle.putInt("TYPE", 0);
+                getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
                 break;
         }
     }
@@ -150,6 +155,16 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 mIAge.setImageResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_logo : R.drawable.ic_woman_logo);
                 mType.setImageResource(mineUserInfoBean.userInfo.type == 0 ? R.drawable.ic_apply : R.drawable.ic_charge);
                 mLAge.setBackgroundResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
+
+                mAuthentication.setOnClickListener(view -> {
+                    if (mineUserInfoBean.userInfo.type == 0) {
+                        //认证主播
+                        getLaunchHelper().startActivity(ApplyAuthenticationActivity.class);
+                    } else {
+                        //收费设置
+                        getLaunchHelper().startActivity(ChargeSettingActivity.class);
+                    }
+                });
             }
             bindText(R.id.tv_img, mineUserInfoBean.img + "");
             bindText(R.id.tv_state, mineUserInfoBean.state + "");
