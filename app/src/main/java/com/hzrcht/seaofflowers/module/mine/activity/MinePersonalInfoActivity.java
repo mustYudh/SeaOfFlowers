@@ -416,7 +416,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             bindText(R.id.tv_nickname, anchorUserInfoBean.nick_name);
             bindText(R.id.tv_sign, TextUtils.isEmpty(anchorUserInfoBean.sign) ? "我就是不一样的烟火" : anchorUserInfoBean.sign);
             bindText(R.id.tv_fans_count, anchorUserInfoBean.fans + "");
-            bindText(R.id.tv_video_amout, anchorUserInfoBean.video_amout + "");
+            bindText(R.id.tv_video_amout, anchorUserInfoBean.video_amount + "");
             bindText(R.id.tv_city, anchorUserInfoBean.city);
             bindText(R.id.tv_star, anchorUserInfoBean.star);
             bindText(R.id.tv_work, anchorUserInfoBean.work);
@@ -427,13 +427,13 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             bindText(R.id.tv_listen, anchorUserInfoBean.listen + "%");
             mAge.setBackgroundResource(anchorUserInfoBean.sex == 1 ? R.drawable.shape_age_blue : R.drawable.shape_age_red);
             bindText(R.id.tv_age, anchorUserInfoBean.age + "");
-
+            bindView(R.id.tv_age, !TextUtils.isEmpty(anchorUserInfoBean.age));
             //聊天
             bindView(R.id.ll_chat, view -> {
                 Bundle bundle = new Bundle();
-                bundle.putString("IM_ID",anchorUserInfoBean.user_id);
-                bundle.putString("IM_NAME",anchorUserInfoBean.nick_name);
-                getLaunchHelper().startActivity(MineChatActivity.class,bundle);
+                bundle.putString("IM_ID", anchorUserInfoBean.user_id);
+                bundle.putString("IM_NAME", anchorUserInfoBean.nick_name);
+                getLaunchHelper().startActivity(MineChatActivity.class, bundle);
             });
 
             if (anchorUserInfoBean.lable != null && anchorUserInfoBean.lable.size() != 0) {

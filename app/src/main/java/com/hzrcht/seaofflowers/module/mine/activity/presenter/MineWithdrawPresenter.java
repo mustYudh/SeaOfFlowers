@@ -2,12 +2,13 @@ package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import android.annotation.SuppressLint;
 
+import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserAccountsBean;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
+import com.hzrcht.seaofflowers.module.mine.bean.UserAmountBean;
 import com.xuexiang.xhttp2.XHttp;
-import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -27,11 +28,6 @@ public class MineWithdrawPresenter extends BaseViewPresenter<MineWithdrawViewer>
                         assert getViewer() != null;
                         getViewer().getUserAccountsSuccess(userAccountsBean);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
-                    }
                 });
     }
 
@@ -46,10 +42,34 @@ public class MineWithdrawPresenter extends BaseViewPresenter<MineWithdrawViewer>
                         assert getViewer() != null;
                         getViewer().getSysMoneySuccess(sysMoneyBean);
                     }
+                });
+    }
 
+
+    public void userWithdraw(int type, String pay_id) {
+        XHttp.post(ApiServices.USERWITHDRAW)
+                .params("type", type)
+                .params("pay_id", pay_id)
+                .accessToken(true)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
                     @Override
-                    protected void onError(ApiException apiException) {
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().userWithdrawSuccess();
+                    }
+                });
+    }
 
+    public void getUserAmount() {
+        XHttp.post(ApiServices.USERAMOUNT)
+                .accessToken(true)
+                .execute(UserAmountBean.class)
+                .subscribeWith(new TipRequestSubscriber<UserAmountBean>() {
+                    @Override
+                    protected void onSuccess(UserAmountBean amountBean) {
+                        assert getViewer() != null;
+                        getViewer().getUserAmountSuccess(amountBean);
                     }
                 });
     }

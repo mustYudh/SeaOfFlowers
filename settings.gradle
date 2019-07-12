@@ -1,1 +1,1 @@
-include ':app', ':common', ':http-lib', ':location', ':share', ':bottom_tab'
+include ':app', ':common', ':http-lib', ':location', ':share', ':bottom_tab', ':tuikit'

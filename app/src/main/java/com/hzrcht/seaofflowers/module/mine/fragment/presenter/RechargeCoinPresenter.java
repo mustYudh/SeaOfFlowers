@@ -8,7 +8,6 @@ import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.hzrcht.seaofflowers.module.mine.bean.UserAmountBean;
 import com.xuexiang.xhttp2.XHttp;
-import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -29,11 +28,6 @@ public class RechargeCoinPresenter extends BaseViewPresenter<RechargeCoinViewer>
                         assert getViewer() != null;
                         getViewer().getSysMoneySuccess(sysMoneyBean);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
-                    }
                 });
     }
 
@@ -50,11 +44,6 @@ public class RechargeCoinPresenter extends BaseViewPresenter<RechargeCoinViewer>
                         assert getViewer() != null;
                         getViewer().orderAddSuccess(payInfo);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
-                    }
                 });
     }
 
@@ -67,11 +56,6 @@ public class RechargeCoinPresenter extends BaseViewPresenter<RechargeCoinViewer>
                     protected void onSuccess(UserAmountBean amountBean) {
                         assert getViewer() != null;
                         getViewer().getUserAmountSuccess(amountBean);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
                     }
                 });
     }

@@ -56,10 +56,12 @@ public class SelectLoginActivity extends BaseActivity implements View.OnClickLis
                 if (type == 0) {
                     startActivityForResult(new Intent(getActivity(), SelectGenderActivity.class), 1);
                 } else {
+                    loadDialog.show();
                     loginIm();
                 }
                 break;
             case 2:
+                loadDialog.show();
                 loginIm();
                 break;
         }
@@ -74,6 +76,9 @@ public class SelectLoginActivity extends BaseActivity implements View.OnClickLis
                 //错误码 code 和错误描述 desc，可用于定位请求失败原因
                 //错误码 code 列表请参见错误码表
                 Log.e("im", "登录失败了....." + code + "..." + desc);
+                if (loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
             }
 
             @Override
@@ -83,5 +88,13 @@ public class SelectLoginActivity extends BaseActivity implements View.OnClickLis
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loadDialog != null && loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
     }
 }

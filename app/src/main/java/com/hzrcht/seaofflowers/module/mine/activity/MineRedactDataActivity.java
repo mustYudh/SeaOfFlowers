@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,7 +23,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MarginDecoration;
+import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineSysLabelGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.SelectPhotoAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysLabelBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserPhotoListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataViewer;
@@ -35,6 +38,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
 
 import java.util.ArrayList;
@@ -44,8 +48,12 @@ public class MineRedactDataActivity extends BaseBarActivity
         implements MineRedactDataViewer, View.OnClickListener,
         BaseQuickAdapter.OnItemChildClickListener {
     private List<String> workList = new ArrayList<>();
+    private List<String> weightList = new ArrayList<>();
+    private List<String> heightList = new ArrayList<>();
+    private List<String> ageList = new ArrayList<>();
+    private List<String> constellationList = new ArrayList<>();
     @PresenterLifeCycle
-    private MineRedactDataPresenter presenter = new MineRedactDataPresenter(this);
+    private MineRedactDataPresenter mPresenter = new MineRedactDataPresenter(this);
     private MyOneLineView view_work;
     private MyOneLineView view_mobile;
     private DialogUtils dataDialog;
@@ -58,6 +66,9 @@ public class MineRedactDataActivity extends BaseBarActivity
     private int picType = 0;
     private CircleImageView iv_headimg;
     private MyOneLineView view_signature;
+    private MyOneLineView view_constellation;
+    private DialogUtils labelDialog;
+    private List<SysLabelBean.RowsBean> labelList = new ArrayList<>();
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -66,6 +77,37 @@ public class MineRedactDataActivity extends BaseBarActivity
 
     @Override
     protected void loadData() {
+        mPresenter.getSysLabel();
+        for (int i = 150; i < 205; i++) {
+            if (i % 5 == 0) {
+                heightList.add(i + "");
+            }
+        }
+
+        for (int i = 18; i < 61; i++) {
+            ageList.add(i + "");
+        }
+
+        for (int i = 40; i < 105; i++) {
+            if (i % 5 == 0) {
+                weightList.add(i + "");
+            }
+        }
+
+
+        constellationList.add("白羊座");
+        constellationList.add("金牛座");
+        constellationList.add("双子座");
+        constellationList.add("巨蟹座");
+        constellationList.add("狮子座");
+        constellationList.add("处女座");
+        constellationList.add("天秤座");
+        constellationList.add("天蝎座");
+        constellationList.add("射手座");
+        constellationList.add("魔蝎座");
+        constellationList.add("水瓶座");
+        constellationList.add("双鱼座");
+
         workList.add("网红");
         workList.add("模特");
         workList.add("白领");
@@ -73,8 +115,12 @@ public class MineRedactDataActivity extends BaseBarActivity
         workList.add("空姐");
         workList.add("学生");
         workList.add("健身教练");
+        workList.add("医生");
+        workList.add("客服");
+        workList.add("老师");
+        workList.add("其他");
         setTitle("编辑资料");
-        presenter.getPhotoList();
+        mPresenter.getPhotoList();
         gv_pic = bindView(R.id.gv_pic);
         RelativeLayout rl_headimg = bindView(R.id.rl_headimg);
         iv_headimg = bindView(R.id.iv_headimg);
@@ -84,7 +130,7 @@ public class MineRedactDataActivity extends BaseBarActivity
         view_height = bindView(R.id.view_height);
         view_age = bindView(R.id.view_age);
         view_weight = bindView(R.id.view_weight);
-        MyOneLineView view_constellation = bindView(R.id.view_constellation);
+        view_constellation = bindView(R.id.view_constellation);
         MyOneLineView view_city = bindView(R.id.view_city);
         view_signature = bindView(R.id.view_signature);
         MyOneLineView view_label = bindView(R.id.view_label);
@@ -186,7 +232,7 @@ public class MineRedactDataActivity extends BaseBarActivity
                 showDataDialog(0);
                 break;
             case R.id.view_work:
-                initWordData();
+                initWordData(0);
                 break;
             case R.id.view_mobile:
                 Intent intentMobile = new Intent(this, PhoneVerificationActivity.class);
@@ -197,25 +243,29 @@ public class MineRedactDataActivity extends BaseBarActivity
                 PhotoUtils.changeAvatar(getActivity(), "上传您的头像,以供展示");
                 break;
             case R.id.view_height:
-                initWordData();
+                initWordData(1);
                 break;
             case R.id.view_age:
-                initWordData();
+                initWordData(2);
                 break;
             case R.id.view_weight:
-                initWordData();
+                initWordData(3);
                 break;
             case R.id.view_constellation:
-                initWordData();
+                initWordData(4);
                 break;
             case R.id.view_city:
-                initWordData();
+
                 break;
             case R.id.view_signature:
                 showDataDialog(1);
                 break;
             case R.id.view_label:
-
+                if (labelList != null && labelList.size() != 0) {
+                    showLabelDialog();
+                } else {
+                    ToastUtils.show("获取标签失败");
+                }
                 break;
             default:
         }
@@ -265,11 +315,27 @@ public class MineRedactDataActivity extends BaseBarActivity
         }
     }
 
-    private void initWordData() {
-        OptionsPickerView JiGouOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+    private void initWordData(int type) {
+        OptionsPickerView options = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                view_work.setTextRight(workList.get(options1));
+                switch (type) {
+                    case 0:
+                        view_work.setTextRight(workList.get(options1));
+                        break;
+                    case 1:
+                        view_height.setTextRight(heightList.get(options1) + "CM");
+                        break;
+                    case 2:
+                        view_age.setTextRight(ageList.get(options1) + "岁");
+                        break;
+                    case 3:
+                        view_weight.setTextRight(weightList.get(options1) + "kg");
+                        break;
+                    case 4:
+                        view_constellation.setTextRight(constellationList.get(options1));
+                        break;
+                }
             }
         })
 
@@ -290,9 +356,25 @@ public class MineRedactDataActivity extends BaseBarActivity
                 .setOutSideCancelable(true)//点击外部dismiss default true
                 .isDialog(false)//是否显示为对话框样式
                 .build();
+        switch (type) {
+            case 0:
+                options.setNPicker(workList, null, null);
+                break;
+            case 1:
+                options.setNPicker(heightList, null, null);
+                break;
+            case 2:
+                options.setNPicker(ageList, null, null);
+                break;
+            case 3:
+                options.setNPicker(weightList, null, null);
+                break;
+            case 4:
+                options.setNPicker(constellationList, null, null);
+                break;
+        }
 
-        JiGouOptions.setNPicker(workList, null, null);
-        JiGouOptions.show();
+        options.show();
     }
 
     private ClearEditText et_content;
@@ -349,6 +431,47 @@ public class MineRedactDataActivity extends BaseBarActivity
         }
         adapter.setNewData(list);
     }
+
+    @Override
+    public void getSysLabelSuccess(SysLabelBean sysLabelBean) {
+        if (sysLabelBean != null && sysLabelBean.rows != null) {
+            labelList = sysLabelBean.rows;
+        }
+    }
+
+    /**
+     * 形象label弹窗
+     */
+    private void showLabelDialog() {
+        labelDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_label)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .addViewOnclick(R.id.tv_cancle, view -> {
+                    if (labelDialog.isShowing()) {
+                        labelDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.tv_down, view -> {
+                    if (labelDialog.isShowing()) {
+                        labelDialog.dismiss();
+                    }
+
+                })
+                .build();
+        labelDialog.show();
+        GridView gv_label = labelDialog.findViewById(R.id.gv_label);
+        MineSysLabelGvAdapter adapter = new MineSysLabelGvAdapter(labelList, getActivity());
+        gv_label.setAdapter(adapter);
+
+        adapter.setOnItemChcekCheckListener(new MineSysLabelGvAdapter.OnItemChcekCheckListener() {
+            @Override
+            public void setOnItemChcekCheckClick(String title, String id) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

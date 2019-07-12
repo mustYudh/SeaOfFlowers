@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.message.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -13,16 +14,15 @@ import com.hzrcht.seaofflowers.module.message.activity.MineCallActivity;
 import com.hzrcht.seaofflowers.module.message.activity.SystemMessageActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessagePresenter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessageViewer;
+import com.hzrcht.seaofflowers.module.mine.activity.MineChatActivity;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
+import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.yu.common.mvp.PresenterLifeCycle;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MessageFragment extends BaseBarFragment implements MessageViewer, View.OnClickListener {
-    private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
     private MessagePresenter mPresenter = new MessagePresenter(this);
     private DialogUtils cleanDialog;
@@ -51,9 +51,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
 
         ll_mine_call.setOnClickListener(this);
         ll_system_message.setOnClickListener(this);
-        for (int i = 0; i < 10; i++) {
-            list.add("");
-        }
+
 //        RecyclerView rv_msg = bindView(R.id.rv_msg);
 //        rv_msg.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        MessageRvAdapter adapter = new MessageRvAdapter(R.layout.item_mine_message, list, getActivity());
@@ -65,7 +63,17 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         conversationLayout.initDefault();
 
         conversationLayout.getTitleBar().setVisibility(View.GONE);
+        ConversationListLayout conversationList = conversationLayout.getConversationList();
+        conversationList.setOnItemClickListener(new ConversationListLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, ConversationInfo messageInfo) {
+                Intent intent = new Intent(getActivity(), MineChatActivity.class);
+                intent.putExtra("IM_ID", messageInfo.getId());
+                intent.putExtra("IM_NAME", messageInfo.getId());
+                startActivity(intent);
 
+            }
+        });
 
         tv_clean.setOnClickListener(view -> {
             showCleanDialog();

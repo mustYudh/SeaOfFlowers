@@ -9,12 +9,12 @@ import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
+@SuppressLint("CheckResult")
 public class SelectGenderPresenter extends BaseViewPresenter<SelectGenderViewer> {
     public SelectGenderPresenter(SelectGenderViewer viewer) {
         super(viewer);
     }
 
-    @SuppressLint("CheckResult")
     public void selectSex(String sex) {
         XHttp.post(ApiServices.SELECTSEX)
                 .params("sex", sex)

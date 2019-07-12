@@ -159,12 +159,22 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="15dp"
-            android:background="@color/color_E5E5E5"/>
+            android:background="@color/color_E5E5E5"
+            android:visibility="invisible"/>
 
-        <com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout
-            android:id="@+id/conversation_layout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:descendantFocusability="blocksDescendants">
+
+
+            <com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout
+                android:id="@+id/conversation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"/>
+        </RelativeLayout>
 
     </LinearLayout>
 

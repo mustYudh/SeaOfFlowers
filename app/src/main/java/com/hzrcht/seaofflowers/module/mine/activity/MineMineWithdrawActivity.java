@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -13,8 +14,10 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineWithdrawPresen
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineWithdrawViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineSysMoneyGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
+import com.hzrcht.seaofflowers.module.mine.bean.UserAmountBean;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickTextView;
 import com.yu.common.ui.NoSlidingGridView;
 
@@ -62,13 +65,17 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
         });
 
 
-        mBind.setOnClickListener(view -> {
-            LauncherHelper.from(getActivity()).startActivity(BindAliPayActivity.class);
-        });
-
         gv_type = bindView(R.id.gv_type);
         mPresenter.getSysMoney();
         mPresenter.getUserAccounts();
+        mPresenter.getUserAmount();
+        bindView(R.id.tv_commit, view -> {
+            if (TextUtils.isEmpty(type_id)) {
+                ToastUtils.show("请选择提现选项");
+                return;
+            }
+            mPresenter.userWithdraw(type, type_id);
+        });
     }
 
     @Override
@@ -85,6 +92,13 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
                     bindText(R.id.tv_amount, "您还未绑定提现账号哦");
                     bindText(R.id.tv_bind, "立即绑定");
                 }
+                mBind.setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("TYPE", type);
+                    bundle.putString("NUMTYPE", userAccountsBean.ali_num);
+                    bundle.putString("NAMETYPE", userAccountsBean.ali_name);
+                    LauncherHelper.from(getActivity()).startActivityForResult(BindWithdrawAccountActivity.class, bundle, 1);
+                });
             } else {
                 //微信账号
                 if (userAccountsBean.wechat_num != null && !TextUtils.isEmpty(userAccountsBean.wechat_num)) {
@@ -96,6 +110,14 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
                     bindText(R.id.tv_amount, "您还未绑定提现账号哦");
                     bindText(R.id.tv_bind, "立即绑定");
                 }
+                mBind.setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("TYPE", type);
+                    bundle.putString("NUMTYPE", userAccountsBean.wechat_num);
+                    bundle.putString("NAMETYPE", userAccountsBean.wechat_name);
+                    LauncherHelper.from(getActivity()).startActivityForResult(BindWithdrawAccountActivity.class, bundle, 1);
+                });
+
             }
         }
     }
@@ -109,13 +131,37 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
 
                 adapter.setOnItemChcekCheckListener(new MineSysMoneyGvAdapter.OnItemChcekCheckListener() {
                     @Override
-                    public void setOnItemChcekCheckClick(String key, String id) {
+                    public void setOnItemChcekCheckClick(String val, String id) {
                         adapter.notifyDataSetChanged();
                         type_id = id;
-                        bindText(R.id.tv_count, key + "金币");
+                        bindText(R.id.tv_count, val + "金币");
                     }
                 });
             }
+        }
+    }
+
+    @Override
+    public void userWithdrawSuccess() {
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
+    }
+
+    @Override
+    public void getUserAmountSuccess(UserAmountBean amountBean) {
+        if (amountBean != null) {
+            bindText(R.id.tv_coin, amountBean.withdrawal + "");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                mPresenter.getUserAccounts();
+                break;
         }
     }
 }

@@ -224,5 +224,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
     implementation files('libs/alipaySdk-15.6.2-20190416165036.aar')
     implementation 'com.tencent.imsdk:imsdk:4.4.631'
-    implementation 'com.tencent.imsdk:tuikit:4.4.627'
+    implementation project(path: ':tuikit')
+//    implementation 'com.tencent.imsdk:tuikit:4.4.627'
 }

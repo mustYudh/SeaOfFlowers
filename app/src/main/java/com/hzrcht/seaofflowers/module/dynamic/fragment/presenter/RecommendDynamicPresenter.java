@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.dynamic.fragment.presenter;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
@@ -13,7 +14,7 @@ import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xhttp2.request.PostRequest;
 import com.yu.common.framework.BaseViewPresenter;
 
-
+@SuppressLint("CheckResult")
 public class RecommendDynamicPresenter extends BaseViewPresenter<RecommendDynamicViewer> {
 
     public RecommendDynamicPresenter(RecommendDynamicViewer viewer) {

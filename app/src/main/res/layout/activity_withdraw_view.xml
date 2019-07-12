@@ -35,6 +35,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -142,9 +143,9 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:paddingRight="19dp"
                 android:gravity="center"
                 android:includeFontPadding="false"
+                android:paddingRight="19dp"
                 android:text="立即绑定"
                 android:textColor="@color/color_9897E7"
                 android:textSize="15sp"
@@ -206,6 +207,7 @@
 
 
         <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_commit"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="39dp"

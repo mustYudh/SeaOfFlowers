@@ -28,7 +28,7 @@ public class HomeNewerRvAdapter extends BaseQuickAdapter<HomeAnchorListBean.Rows
     @Override
     protected void convert(BaseViewHolder helper, HomeAnchorListBean.RowsBean item) {
         helper.setText(R.id.tv_nickname, item.nick_name);
-        helper.setText(R.id.tv_video_amout, item.video_amout + "金币/分钟");
+        helper.setText(R.id.tv_video_amout, item.video_amount + "金币/分钟");
 
         ImageView iv_cover = helper.getView(R.id.iv_cover);
         ImageLoader.getInstance().displayImage(iv_cover, item.cover, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);

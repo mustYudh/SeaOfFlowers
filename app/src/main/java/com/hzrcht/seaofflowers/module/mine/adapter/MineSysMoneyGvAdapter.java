@@ -86,7 +86,7 @@ public class MineSysMoneyGvAdapter extends BaseAdapter {
                 }
 
                 if (onItemChcekCheckListener != null) {
-                    onItemChcekCheckListener.setOnItemChcekCheckClick(list.get(i).key, list.get(i).id + "");
+                    onItemChcekCheckListener.setOnItemChcekCheckClick(list.get(i).val, list.get(i).id + "");
                 }
             }
         });
@@ -99,7 +99,7 @@ public class MineSysMoneyGvAdapter extends BaseAdapter {
     }
 
     public interface OnItemChcekCheckListener {
-        void setOnItemChcekCheckClick(String key, String id);
+        void setOnItemChcekCheckClick(String val, String id);
 
 
     }

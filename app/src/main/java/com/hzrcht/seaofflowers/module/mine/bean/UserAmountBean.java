@@ -10,4 +10,5 @@ public class UserAmountBean {
      */
 
     public BigDecimal amount;
+    public BigDecimal withdrawal;
 }

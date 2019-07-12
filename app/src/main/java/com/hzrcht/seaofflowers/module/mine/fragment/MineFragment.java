@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -113,7 +114,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 break;
             case R.id.ll_withdraw:
                 //提现
-                getLaunchHelper().startActivity(MineMineWithdrawActivity.class);
+                getLaunchHelper().startActivityForResult(MineMineWithdrawActivity.class,1);
                 break;
             case R.id.ll_photo_album:
                 //相册
@@ -170,6 +171,16 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             bindText(R.id.tv_state, mineUserInfoBean.state + "");
             bindText(R.id.tv_attent, mineUserInfoBean.attent + "");
             bindText(R.id.tv_friend, mineUserInfoBean.friend + "");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                mPresenter.userInfo();
+                break;
         }
     }
 }

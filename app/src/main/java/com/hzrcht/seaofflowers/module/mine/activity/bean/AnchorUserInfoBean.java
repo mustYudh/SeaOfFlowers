@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity.bean;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AnchorUserInfoBean {
@@ -38,19 +39,19 @@ public class AnchorUserInfoBean {
     public String phone;
     public int sex;
     public String work;
-    public int hight;
-    public int age;
-    public int kg;
+    public String hight;
+    public String age;
+    public String kg;
     public String star;
     public String city;
     public String sign;
     public int id;
-    public int video_amout;
-    public int lang_amout;
-    public int look_amout;
-    public int fans;
+    public BigDecimal video_amount;
+    public BigDecimal lang_amout;
+    public BigDecimal look_amout;
+    public BigDecimal fans;
     public String last_login;
-    public int listen;
+    public BigDecimal listen;
     public int is_look;
     public int is_attent;
     public int online_type;

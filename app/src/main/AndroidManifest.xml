@@ -48,7 +48,7 @@
             android:name=".module.mine.activity.MineRechargeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".module.mine.activity.BindAliPayActivity"
+            android:name=".module.mine.activity.BindWithdrawAccountActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.home.activity.HomeReportActivity"

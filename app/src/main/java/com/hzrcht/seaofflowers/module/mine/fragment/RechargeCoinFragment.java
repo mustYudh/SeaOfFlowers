@@ -100,7 +100,6 @@ public class RechargeCoinFragment extends BaseFragment implements RechargeCoinVi
                 .getPayResult(new PayUtils.PayCallBack() {
                     @Override
                     public void onPaySuccess(int type) {
-                        ToastUtils.show("支付宝支付成功");
                         mPresenter.getUserAmount();
                     }
 

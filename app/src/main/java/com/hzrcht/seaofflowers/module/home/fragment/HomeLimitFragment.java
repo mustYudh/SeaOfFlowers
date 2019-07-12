@@ -151,7 +151,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
                     mineLocationAnchorBean.age = rowsBean.age;
                     mineLocationAnchorBean.sign = rowsBean.sign;
                     mineLocationAnchorBean.work = rowsBean.work;
-                    mineLocationAnchorBean.video_amout = rowsBean.video_amout;
+                    mineLocationAnchorBean.video_amount = rowsBean.video_amount;
                     mineLocationAnchorBean.online_type = rowsBean.online_type;
                     mineLocationAnchorBean.itemType = 1;
                     list.add(mineLocationAnchorBean);

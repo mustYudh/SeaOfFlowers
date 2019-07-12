@@ -29,13 +29,13 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 /**
  * @author yudenghao
  */
+@SuppressLint("CheckResult")
 public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
 
     public LoginPresenter(LoginViewer viewer) {
         super(viewer);
     }
 
-    @SuppressLint("CheckResult")
     public void sendVerCode(String number, RxCountDown countDown, DelayClickTextView textView) {
         XHttp.post(ApiServices.SENDVERCODE)
                 .params("type", "Login")
@@ -59,7 +59,6 @@ public class LoginPresenter extends BaseViewPresenter<LoginViewer> {
                 });
     }
 
-    @SuppressLint("CheckResult")
     public void phoneLogin(String number, String code) {
         // 获取剪贴板数据
         String content = null;

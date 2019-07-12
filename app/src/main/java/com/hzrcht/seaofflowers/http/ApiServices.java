@@ -65,9 +65,6 @@ public class ApiServices {
     //动态发布
     public static final String STATEADD = BASEURL + "/api/state/add";
 
-    //提现列表
-    public static final String USERWITHDRAW = BASEURL + "/api/user/withdraw";
-
     //礼物柜
     public static final String GIFTINDEX = BASEURL + "/api/gift/index";
 
@@ -82,5 +79,20 @@ public class ApiServices {
 
     //用户余额
     public static final String USERAMOUNT = BASEURL + "/api/user/amount";
+
+    //获取形象标签
+    public static final String SYSLABEL = BASEURL + "/api/sys/label";
+
+    //用户修改/添加提现账号
+    public static final String USERADDACC = BASEURL + "/api/user/addacc";
+
+    //提现
+    public static final String USERWITHDRAW = BASEURL + "/api/user/withdraw";
+
+    //提现列表
+    public static final String BILLWITHDRAW = BASEURL + "/api/bill/withdraw";
+
+    //账户余额详情列表
+    public static final String BILLINDEX = BASEURL + "/api/bill/index";
 
 }

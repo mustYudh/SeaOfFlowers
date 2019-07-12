@@ -9,14 +9,13 @@ import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
-
+@SuppressLint("CheckResult")
 public class MinePresenter extends BaseViewPresenter<MineViewer> {
 
     public MinePresenter(MineViewer viewer) {
         super(viewer);
     }
 
-    @SuppressLint("CheckResult")
     public void userInfo() {
         XHttp.post(ApiServices.MINEUSERINFO)
                 .accessToken(true)
