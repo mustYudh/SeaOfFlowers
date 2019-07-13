@@ -126,7 +126,7 @@ public abstract class MessageContentHolder extends MessageEmptyHolder {
             if (properties.getRightBubble() != null) {
                 msgContentFrame.setBackground(properties.getRightBubble());
             } else {
-                msgContentFrame.setBackgroundResource(R.drawable.chat_bubble_myself);
+                msgContentFrame.setBackgroundResource(R.drawable.my_chat_other_bg);
             }
         } else {
             if (properties.getLeftBubble() != null) {

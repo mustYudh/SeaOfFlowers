@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/black"
+              android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="礼物"
+        android:textColor="@color/color_9897E7"
+        android:textSize="15sp"
+        />
+
+
+    <GridView
+        android:id="@+id/gv_present"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="#626262"
+        android:horizontalSpacing="1dp"
+        android:numColumns="4"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:verticalSpacing="1dp"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:includeFontPadding="false"
+            android:text="可用金币：36"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            />
+
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_recharge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/tv_coin"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="充值>>"
+            android:textColor="@color/color_EB96F4"
+            android:textSize="17sp"
+            />
+
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/shape_authentication"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="打赏"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+</LinearLayout>

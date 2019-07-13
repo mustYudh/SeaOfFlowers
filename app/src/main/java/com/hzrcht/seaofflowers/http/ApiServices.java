@@ -68,6 +68,12 @@ public class ApiServices {
     //礼物柜
     public static final String GIFTINDEX = BASEURL + "/api/gift/index";
 
+    //礼物列表
+    public static final String SYSGIFT = BASEURL + "/api/sys/gift";
+
+    //送礼
+    public static final String GIFTGIVE = BASEURL + "/api/gift/give";
+
     //金额目录
     public static final String SYSLANMU = BASEURL + "/api/sys/lanmu";
 
