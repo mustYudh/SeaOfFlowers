@@ -361,4 +361,22 @@ public abstract class InputLayoutUI extends LinearLayout implements IInputLayout
         });
         return this;
     }
+
+    /**
+     * 视频点击事件
+     */
+    public static interface OnVideoClickListener {
+        void onVideoClick(View view);
+    }
+
+    public InputLayoutUI setOnVideoClickListener(final OnVideoClickListener onVideoClickListener) {
+
+        mChatVideo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onVideoClickListener.onVideoClick(mChatVideo);
+            }
+        });
+        return this;
+    }
 }

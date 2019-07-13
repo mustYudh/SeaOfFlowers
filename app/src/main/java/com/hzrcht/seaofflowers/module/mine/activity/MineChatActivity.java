@@ -5,8 +5,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatViewer;
 import com.tencent.imsdk.TIMConversationType;
@@ -16,6 +19,9 @@ import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayoutUI;
+import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
+import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
+import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -82,11 +88,31 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         InputLayout inputLayout = mChatLayout.getInputLayout();
         inputLayout.disableEmojiInput(true);
         inputLayout.disableAudioInput(true);
+        //送礼
         inputLayout.setOnPresentClickListener(new InputLayoutUI.OnPresentClickListener() {
             @Override
             public void onPresentClick(View view) {
                 ToastUtils.show("点击了礼物");
+                Gson gson = new Gson();
+                CustomMessageData customMessageData = new CustomMessageData();
+                String data = gson.toJson(customMessageData);
+                MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
+                mChatLayout.sendMessage(info, false);
             }
         });
+
+        //视频
+        inputLayout.setOnVideoClickListener(new InputLayoutUI.OnVideoClickListener() {
+            @Override
+            public void onVideoClick(View view) {
+                ToastUtils.show("点击了视频");
+            }
+        });
+
+        //渲染自定义消息
+//        MessageInfo info = MessageInfoUtil.buildCustomMessage("{\"text\": \"这是一个带链接的测试消息，可点击查看\",\"url\": \"https://cloud.tencent.com\"}");
+        MessageLayout messageLayout = mChatLayout.getMessageLayout();
+        // 设置自定义的消息渲染时的回调
+        messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
     }
 }
