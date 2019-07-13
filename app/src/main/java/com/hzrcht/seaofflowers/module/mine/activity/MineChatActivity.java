@@ -2,14 +2,19 @@ package com.hzrcht.seaofflowers.module.mine.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatViewer;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftGvAdapter;
+import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.qcloud.tim.uikit.component.NoticeLayout;
 import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
@@ -23,11 +28,16 @@ import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
+import com.yu.common.ui.DelayClickTextView;
+
+import java.util.List;
 
 
 public class MineChatActivity extends BaseBarActivity implements MineChatViewer {
     @PresenterLifeCycle
     private MineChatPresenter mPresenter = new MineChatPresenter(this);
+    private DialogUtils presentDialog;
+    private String im_id;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -37,7 +47,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     @Override
     protected void loadData() {
         Bundle bundle = getIntent().getExtras();
-        String im_id = bundle.getString("IM_ID");
+        im_id = bundle.getString("IM_ID");
         String im_name = bundle.getString("IM_NAME");
 
         //从布局文件中获取聊天面板组件
@@ -91,12 +101,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
             @Override
             public void onPresentClick(View view) {
                 ToastUtils.show("点击了礼物");
-//                Gson gson = new Gson();
-//                CustomMessageData customMessageData = new CustomMessageData();
-//                String data = gson.toJson(customMessageData);
-                String data = "http://hdbos.test.upcdn.net/DS/image/20180123/biipcq38ul7zk4ytjrvk.png,测试发送礼物礼物,140";
-                MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
-                mChatLayout.sendMessage(info, false);
+                mPresenter.getSysGift(mChatLayout);
             }
         });
 
@@ -114,5 +119,53 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         // 设置自定义的消息渲染时的回调
         messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
 
+
+    }
+
+    /**
+     * 清空
+     */
+    private void showPresentDialog(List<SysGiftBean.ResultBean> rows, ChatLayout mChatLayout) {
+        presentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_present)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .build();
+        presentDialog.show();
+
+        GridView gv_present = presentDialog.findViewById(R.id.gv_present);
+        TextView tv_coin = presentDialog.findViewById(R.id.tv_coin);
+        DelayClickTextView tv_recharge = presentDialog.findViewById(R.id.tv_recharge);
+        MineSysGiftGvAdapter adapter = new MineSysGiftGvAdapter(rows, getActivity());
+        gv_present.setAdapter(adapter);
+
+        adapter.setOnItemChcekCheckListener(new MineSysGiftGvAdapter.OnItemChcekCheckListener() {
+            @Override
+            public void setOnItemChcekCheckClick(SysGiftBean.ResultBean resultBean) {
+                if (presentDialog.isShowing()) {
+                    presentDialog.dismiss();
+                }
+                mPresenter.sendGift(im_id, resultBean.id + "", mChatLayout, resultBean);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void getSysGiftSuccess(SysGiftBean sysGiftBean, ChatLayout mChatLayout) {
+        if (sysGiftBean != null) {
+            if (sysGiftBean.rows != null && sysGiftBean.rows.size() != 0) {
+                showPresentDialog(sysGiftBean.rows, mChatLayout);
+            }
+        } else {
+            ToastUtils.show("获取礼物列表失败,请重试");
+        }
+    }
+
+    @Override
+    public void sendGiftSuccess(ChatLayout mChatLayout, SysGiftBean.ResultBean resultBean) {
+        MessageInfo info = MessageInfoUtil.buildCustomMessage(resultBean.img + "," + resultBean.title + "," + resultBean.price);
+        mChatLayout.sendMessage(info, false);
     }
 }

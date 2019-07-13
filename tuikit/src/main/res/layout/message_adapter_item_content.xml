@@ -89,7 +89,9 @@
             android:src="@drawable/message_send_fail"
             android:visibility="gone" />
 
-        <FrameLayout
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="vertical"
             android:id="@+id/msg_content_fl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

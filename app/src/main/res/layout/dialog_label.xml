@@ -49,6 +49,8 @@
         android:layout_marginBottom="20dp"
         android:horizontalSpacing="20dp"
         android:numColumns="4"
+        android:overScrollMode="never"
+        android:scrollbars="none"
         android:verticalSpacing="10dp"/>
 
 </LinearLayout>

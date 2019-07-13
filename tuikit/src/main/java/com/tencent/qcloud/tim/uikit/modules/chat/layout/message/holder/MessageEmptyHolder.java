@@ -1,7 +1,7 @@
 package com.tencent.qcloud.tim.uikit.modules.chat.layout.message.holder;
 
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tencent.imsdk.TIMMessage;
@@ -14,7 +14,7 @@ import java.util.Date;
 public abstract class MessageEmptyHolder extends MessageBaseHolder {
 
     public TextView chatTimeText;
-    public FrameLayout msgContentFrame;
+    public LinearLayout msgContentFrame;
 
     public MessageEmptyHolder(View itemView) {
         super(itemView);
