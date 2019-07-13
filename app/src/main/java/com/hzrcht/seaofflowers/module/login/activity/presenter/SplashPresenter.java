@@ -1,8 +1,18 @@
 package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
+
 import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.http.ApiServices;
+import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
+import com.hzrcht.seaofflowers.module.login.bean.UserSigBean;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
+import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.countdown.RxCountDown;
 import com.yu.common.countdown.RxCountDownAdapter;
 import com.yu.common.framework.BaseViewPresenter;
@@ -41,15 +51,56 @@ public class SplashPresenter extends BaseViewPresenter<SplashViewer> {
         });
     }
 
+    @SuppressLint("CheckResult")
     private void getHome() {
-        if (UserProfile.getInstance().isAppLogin()) {
+        if (UserProfile.getInstance().getApplogin()) {
             //登录了
-            getLauncherHelper().startActivity(HomePageActivity.class);
+            XHttp.post(ApiServices.GETUSERSIG)
+                    .accessToken(true)
+                    .execute(UserSigBean.class)
+                    .subscribeWith(new TipRequestSubscriber<UserSigBean>() {
+                        @Override
+                        protected void onSuccess(UserSigBean userSigBean) {
+                            loginIm(userSigBean.UserSig);
+                        }
+
+                        @Override
+                        protected void onError(ApiException apiException) {
+                            UserProfile.getInstance().setApplogin(false);
+                            getLauncherHelper().startActivity(SelectLoginActivity.class);
+                            getActivity().finish();
+                        }
+                    });
+
+
         } else {
             //未登录
             getLauncherHelper().startActivity(SelectLoginActivity.class);
+            getActivity().finish();
         }
-        getActivity().finish();
+
+    }
+
+    private void loginIm(String userSig) {
+        // identifier为用户名，userSig 为用户登录凭证
+        TIMManager.getInstance().login(UserProfile.getInstance().getUserId() + "", userSig, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                Log.e("im", "登录失败了....." + code + "..." + desc);
+
+                UserProfile.getInstance().setApplogin(false);
+                getLauncherHelper().startActivity(SelectLoginActivity.class);
+                getActivity().finish();
+            }
+
+            @Override
+            public void onSuccess() {
+                getLauncherHelper().startActivity(HomePageActivity.class);
+                getActivity().finish();
+            }
+        });
     }
 
     @Override
