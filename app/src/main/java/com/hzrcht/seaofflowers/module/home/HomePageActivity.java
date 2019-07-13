@@ -42,7 +42,7 @@ import java.util.List;
 public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
     private PressHandle pressHandle = new PressHandle(this);
-
+    HomeCenterPopUpWindow homePopUpWindow;
     @PresenterLifeCycle
     HomePagePresenter presenter = new HomePagePresenter(this);
     private BottomNavigationView mBottomNavigationView;
@@ -66,7 +66,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         mBottomNavigationView.initControl(this).setPagerView(items, 0);
         mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
             if (position == 2) {
-                HomeCenterPopUpWindow homePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
+                homePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
                 homePopUpWindow.showPopupWindow();
             }
         });
@@ -103,8 +103,12 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
     @Override
     public void onBackPressed() {
-        if (!pressHandle.handlePress(KeyEvent.KEYCODE_BACK)) {
-            super.onBackPressed();
+        if (homePopUpWindow != null && homePopUpWindow.isShowing()) {
+            homePopUpWindow.dismiss();
+        } else  {
+            if (!pressHandle.handlePress(KeyEvent.KEYCODE_BACK)) {
+                super.onBackPressed();
+            }
         }
     }
 
