@@ -179,11 +179,13 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
                 if (loadDialog.isShowing()) {
                     loadDialog.dismiss();
                 }
+                UserProfile.getInstance().setApplogin(false);
             }
 
             @Override
             public void onSuccess() {
                 UserProfile.getInstance().setUserSig(loginBean.info.userSig);
+                UserProfile.getInstance().setApplogin(true);
                 Log.e("im", "登录成功了");
                 Intent intent = new Intent();
                 intent.putExtra("type", 1);

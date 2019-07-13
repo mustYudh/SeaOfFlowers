@@ -20,6 +20,7 @@ public class UserProfile implements Serializable {
     private static final String USERNAME = "user_name";
     private static final String ANCHORTYPE = "anchor_type";
     private static final String USERSIG = "user_sig";
+    private static final String APPLOGIN = "app_login";
 
     private SharedPreferencesHelper spHelper;
 
@@ -96,6 +97,13 @@ public class UserProfile implements Serializable {
         return spHelper.getInt(ANCHORTYPE, 0);
     }
 
+    public void setApplogin(boolean applogin) {
+        spHelper.putBoolean(APPLOGIN, applogin);
+    }
+
+    public boolean getApplogin() {
+        return spHelper.getBoolean(APPLOGIN, false);
+    }
 
     public boolean isAppLogin() {
         return !TextUtils.isEmpty(getAppToken()) && getUserSex() != 0 && !TextUtils.isEmpty(TIMManager.getInstance().getLoginUser());

@@ -107,11 +107,13 @@ public class SelectGenderActivity extends BaseBarActivity implements SelectGende
                 if (loadDialog.isShowing()) {
                     loadDialog.dismiss();
                 }
+                UserProfile.getInstance().setApplogin(false);
             }
 
             @Override
             public void onSuccess() {
                 UserProfile.getInstance().setUserSig(userSig);
+                UserProfile.getInstance().setApplogin(true);
                 Log.e("im", "登录成功了");
                 Intent intent = new Intent();
                 setResult(2, intent);
