@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.R;
 import com.tencent.imsdk.TIMCustomElem;
@@ -29,18 +28,27 @@ public class CustomMessageDraw implements IOnCustomMessageDrawListener {
         // 获取到自定义消息的json数据
         TIMCustomElem elem = (TIMCustomElem) info.getTIMMessage().getElement(0);
         TIMMessage timMessage = info.getTIMMessage();
-        Log.e("aaaacccc", timMessage.toString() + "..." + elem.getData().toString());
+        Log.e("aaaacccc", timMessage.toString() + "..." + new String(elem.getData()));
+        byte[] data = elem.getData();
+        String[] split = new String(elem.getData()).split(",");
+        CustomMessageData customMessageData = new CustomMessageData();
+        customMessageData.url = split[0];
+        customMessageData.title = split[1];
+        customMessageData.price = split[2];
+        view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_present, null, false);
+        // 把自定义消息view添加到TUIKit内部的父容器里
+        parent.addMessageContentView(view);
 
-        // 自定义的json数据，需要解析成bean实例
-        final CustomMessageData customMessageData = new Gson().fromJson(new String(elem.getData()), CustomMessageData.class);
-        // 通过类型来创建不同的自定义消息展示view
-        switch (customMessageData.type) {
-            case CustomMessageData.TYPE_PRESENT:
-                view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_present, null, false);
-                // 把自定义消息view添加到TUIKit内部的父容器里
-                parent.addMessageContentView(view);
-                break;
-        }
+//        // 自定义的json数据，需要解析成bean实例
+//        final CustomMessageData customMessageData = new Gson().fromJson(new String(elem.getData()), CustomMessageData.class);
+//        // 通过类型来创建不同的自定义消息展示view
+//        switch (customMessageData.type) {
+//            case CustomMessageData.TYPE_PRESENT:
+//                view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_present, null, false);
+//                // 把自定义消息view添加到TUIKit内部的父容器里
+//                parent.addMessageContentView(view);
+//                break;
+//        }
 
         // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
         ImageView iv_present = view.findViewById(R.id.iv_present);
