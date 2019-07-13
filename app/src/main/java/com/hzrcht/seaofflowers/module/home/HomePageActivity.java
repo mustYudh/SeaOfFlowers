@@ -10,6 +10,7 @@ import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.DynamicFragment;
 import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.fragment.HomeFragment;
@@ -44,7 +45,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     private PressHandle pressHandle = new PressHandle(this);
 
     @PresenterLifeCycle
-    HomePagePresenter presenter = new HomePagePresenter(this);
+    HomePagePresenter mPresenter = new HomePagePresenter(this);
     private BottomNavigationView mBottomNavigationView;
 
     @Override
@@ -116,6 +117,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     }
 
     public void login(boolean autoLogin) {
+        UserProfile.getInstance().clean();
         getLaunchHelper().startActivity(SelectLoginActivity.class);
     }
 

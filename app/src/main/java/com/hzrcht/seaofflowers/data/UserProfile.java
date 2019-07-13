@@ -44,7 +44,6 @@ public class UserProfile implements Serializable {
         setUserSex(userInfo.info.sex);
         setUserName(userInfo.info.nick_name);
         setToken(userInfo.token);
-        setUserSig(userInfo.userSig);
     }
 
 

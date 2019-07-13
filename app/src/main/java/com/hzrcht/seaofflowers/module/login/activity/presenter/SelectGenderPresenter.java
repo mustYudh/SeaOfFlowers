@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
+import com.hzrcht.seaofflowers.module.login.bean.UserSigBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
@@ -29,8 +30,27 @@ public class SelectGenderPresenter extends BaseViewPresenter<SelectGenderViewer>
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
+                        assert getViewer() != null;
+                        getViewer().selectSexFail();
+                    }
+                });
+    }
 
+    public void getUserSig() {
+        XHttp.post(ApiServices.GETUSERSIG)
+                .accessToken(true)
+                .execute(UserSigBean.class)
+                .subscribeWith(new TipRequestSubscriber<UserSigBean>() {
+                    @Override
+                    protected void onSuccess(UserSigBean userSigBean) {
+                        assert getViewer() != null;
+                        getViewer().getUserSigSuccess(userSigBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getUserSigFail();
                     }
                 });
     }
