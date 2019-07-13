@@ -5,10 +5,8 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatViewer;
@@ -93,9 +91,10 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
             @Override
             public void onPresentClick(View view) {
                 ToastUtils.show("点击了礼物");
-                Gson gson = new Gson();
-                CustomMessageData customMessageData = new CustomMessageData();
-                String data = gson.toJson(customMessageData);
+//                Gson gson = new Gson();
+//                CustomMessageData customMessageData = new CustomMessageData();
+//                String data = gson.toJson(customMessageData);
+                String data = "http://hdbos.test.upcdn.net/DS/image/20180123/biipcq38ul7zk4ytjrvk.png,测试发送礼物礼物,140";
                 MessageInfo info = MessageInfoUtil.buildCustomMessage(data);
                 mChatLayout.sendMessage(info, false);
             }
@@ -114,5 +113,6 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         MessageLayout messageLayout = mChatLayout.getMessageLayout();
         // 设置自定义的消息渲染时的回调
         messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
+
     }
 }
