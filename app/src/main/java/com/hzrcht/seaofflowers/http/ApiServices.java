@@ -14,6 +14,9 @@ public class ApiServices {
     //选择性别
     public static final String SELECTSEX = BASEURL + "/api/user/sex";
 
+    //获取userSig
+    public static final String GETUSERSIG = BASEURL + "/api/Im/userSig";
+
     //关注列表
     public static final String GETATTENTIONLIST = BASEURL + "/api/attent/index";
 

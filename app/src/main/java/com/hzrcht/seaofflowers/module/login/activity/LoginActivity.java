@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
@@ -13,6 +14,8 @@ import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginPresenter;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.LoginViewer;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
 import com.hzrcht.seaofflowers.module.view.ClearEditText;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.yu.common.countdown.RxCountDown;
 import com.yu.common.countdown.RxCountDownAdapter;
 import com.yu.common.login.LoginRedirectHelper;
@@ -158,12 +161,43 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
                     finish();
                 } else {
                     //已经设置过了
-                    Intent intent = new Intent();
-                    intent.putExtra("type", 1);
-                    setResult(1, intent);
-                    finish();
+                    loadDialog.show();
+                    loginIm(loginBean);
                 }
             }
+        }
+    }
+
+    private void loginIm(LoginBean loginBean) {
+        // identifier为用户名，userSig 为用户登录凭证
+        TIMManager.getInstance().login(loginBean.info.id + "", loginBean.info.userSig + "", new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                //错误码 code 列表请参见错误码表
+                Log.e("im", "登录失败了....." + code + "..." + desc);
+                if (loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onSuccess() {
+                UserProfile.getInstance().setUserSig(loginBean.info.userSig);
+                Log.e("im", "登录成功了");
+                Intent intent = new Intent();
+                intent.putExtra("type", 1);
+                setResult(1, intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loadDialog != null && loadDialog.isShowing()) {
+            loadDialog.dismiss();
         }
     }
 }

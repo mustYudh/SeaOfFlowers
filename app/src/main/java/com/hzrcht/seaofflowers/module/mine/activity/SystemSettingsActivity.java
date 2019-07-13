@@ -1,14 +1,18 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.SystemSettingsPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.SystemSettingsViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMManager;
 import com.yu.common.mvp.PresenterLifeCycle;
 
 
@@ -45,8 +49,24 @@ public class SystemSettingsActivity extends BaseBarActivity implements SystemSet
         opinion.init("意见反馈");
 
         bindView(R.id.tv_exit, view -> {
-            UserProfile.getInstance().clean();
-            finish();
+            TIMManager.getInstance().logout(new TIMCallBack() {
+                @Override
+                public void onError(int code, String desc) {
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    //错误码 code 列表请参见错误码表
+
+                }
+
+                @Override
+                public void onSuccess() {
+                    //登出成功
+                    UserProfile.getInstance().clean();
+                    Intent intent = new Intent(getActivity(), SelectLoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getLaunchHelper().startActivity(SelectLoginActivity.class);
+                }
+            });
+
         });
     }
 }

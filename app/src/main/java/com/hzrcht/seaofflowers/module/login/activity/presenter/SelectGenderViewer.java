@@ -1,6 +1,6 @@
 package com.hzrcht.seaofflowers.module.login.activity.presenter;
 
-import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
+import com.hzrcht.seaofflowers.module.login.bean.UserSigBean;
 import com.yu.common.mvp.Viewer;
 
 /**
@@ -9,4 +9,10 @@ import com.yu.common.mvp.Viewer;
  */
 public interface SelectGenderViewer extends Viewer {
     void selectSexSuccess();
+
+    void selectSexFail();
+
+    void getUserSigSuccess(UserSigBean userSigBean);
+
+    void getUserSigFail();
 }
