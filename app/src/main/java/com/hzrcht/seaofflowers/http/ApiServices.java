@@ -104,4 +104,25 @@ public class ApiServices {
     //账户余额详情列表
     public static final String BILLINDEX = BASEURL + "/api/bill/index";
 
+    //主播收费列表
+    public static final String USERCHARGE = BASEURL + "/api/user/charge";
+
+    //主播收费设置
+    public static final String USEREDITCHARGE = BASEURL + "/api/user/editCharge";
+
+    //用户配置修改
+    public static final String USEREEDITCONFIG = BASEURL + "/api/user/editConfig";
+
+    //用户提示音和震动
+    public static final String USERCONFIG = BASEURL + "/api/user/config";
+
+    //检测用户身份
+    public static final String USERISANCHOR = BASEURL + "/api/user/isAnchor";
+
+    //聊天扣钱
+    public static final String CHATSTART = BASEURL + "/api/Chat/start";
+
+    //查看手机号
+    public static final String LOOKPHONE = BASEURL + "/api/Look/phone";
+
 }

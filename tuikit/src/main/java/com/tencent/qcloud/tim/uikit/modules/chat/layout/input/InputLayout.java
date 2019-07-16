@@ -44,7 +44,7 @@ public class InputLayout extends InputLayoutUI implements View.OnClickListener, 
 
     private FaceFragment mFaceFragment;
     private ChatInputHandler mChatInputHandler;
-    private MessageHandler mMessageHandler;
+    public MessageHandler mMessageHandler;
     private FragmentManager mFragmentManager;
     private InputMoreFragment mInputMoreFragment;
 
@@ -54,7 +54,7 @@ public class InputLayout extends InputLayoutUI implements View.OnClickListener, 
     private static final int STATE_FACE_INPUT = 2;
     private static final int STATE_ACTION_INPUT = 3;
 
-    private boolean mSendEnable;
+    public boolean mSendEnable;
     private boolean mAudioCancel;
     private int mCurrentState;
     private int mLastMsgLineCount;
@@ -79,7 +79,7 @@ public class InputLayout extends InputLayoutUI implements View.OnClickListener, 
         mAudioInputSwitchButton.setOnClickListener(this);
         mEmojiInputButton.setOnClickListener(this);
         mMoreInputButton.setOnClickListener(this);
-        mSendTextButton.setOnClickListener(this);
+//        mSendTextButton.setOnClickListener(this);
         mTextInput.addTextChangedListener(this);
         mTextInput.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -339,14 +339,16 @@ public class InputLayout extends InputLayoutUI implements View.OnClickListener, 
                     mTextInput.setVisibility(VISIBLE);
                 }
             }
-        } else if (view.getId() == R.id.send_btn) {
-            if (mSendEnable) {
-                if (mMessageHandler != null) {
-                    mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(mTextInput.getText().toString().trim()));
-                }
-                mTextInput.setText("");
-            }
         }
+//        else if (view.getId() == R.id.send_btn) {
+//            if (mSendEnable) {
+//                if (mMessageHandler != null) {
+//                    Log.e("aaaa","消息发送");
+//                    mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(mTextInput.getText().toString().trim()));
+//                }
+//                mTextInput.setText("");
+//            }
+//        }
     }
 
     private void showSoftInput() {

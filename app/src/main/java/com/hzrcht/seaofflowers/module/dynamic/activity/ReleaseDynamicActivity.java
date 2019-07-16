@@ -72,6 +72,7 @@ public class ReleaseDynamicActivity extends BaseBarActivity implements ReleaseDy
                 if (loadDialog.isShowing()) {
                     loadDialog.dismiss();
                 }
+                imageFiles.clear();
                 ToastUtils.show("图片上传失败,请重试");
             }
         }
@@ -192,10 +193,20 @@ public class ReleaseDynamicActivity extends BaseBarActivity implements ReleaseDy
     }
 
     @Override
+    public void uploadImgFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        imageFiles.clear();
+        ToastUtils.show("图片上传失败,请重试");
+    }
+
+    @Override
     public void stateAddSuccess() {
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
         }
+        imageFiles.clear();
         ToastUtils.show("发布成功,等待审核");
         finish();
     }
@@ -205,6 +216,15 @@ public class ReleaseDynamicActivity extends BaseBarActivity implements ReleaseDy
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
         }
+        imageFiles.clear();
         ToastUtils.show("发布失败");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 }

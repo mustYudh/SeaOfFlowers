@@ -215,6 +215,7 @@ dependencies {
     implementation appDependencies.COMPRESSOR
     implementation appDependencies.LOADING
     implementation appDependencies.OSS
+    implementation appDependencies.NICEIMAGEVIEW
     //    implementation appDependencies.RXPERMISSIONVersion
     //    implementation appDependencies.RXANDROIDVersion
     //    implementation appDependencies.RXJAVAVersion

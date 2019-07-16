@@ -2,32 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/ll_root_second"
-              android:paddingBottom="50dp"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:paddingBottom="50dp"
               android:visibility="gone"
     >
 
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:descendantFocusability="blocksDescendants"
-        >
+        android:layout_height="match_parent">
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_video_photo"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            />
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:descendantFocusability="blocksDescendants"
+            >
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_video_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                />
+        </RelativeLayout>
+
+        <include layout="@layout/layout_empty_info_photo"/>
+    </FrameLayout>
+
 </LinearLayout>
 

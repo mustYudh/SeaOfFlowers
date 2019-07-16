@@ -57,7 +57,7 @@ public abstract class InputLayoutUI extends LinearLayout implements IInputLayout
     /**
      * 消息发送按钮
      */
-    protected Button mSendTextButton;
+    public Button mSendTextButton;
 
     /**
      * 语音长按按钮
@@ -67,7 +67,7 @@ public abstract class InputLayoutUI extends LinearLayout implements IInputLayout
     /**
      * 文本输入框
      */
-    protected EditText mTextInput;
+    public EditText mTextInput;
 
     /**
      * 送礼按钮

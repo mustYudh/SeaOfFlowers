@@ -4,12 +4,16 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
+import com.hzrcht.seaofflowers.bean.PayInfo;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
+import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xhttp2.request.PostRequest;
@@ -33,12 +37,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().getUserInfoSuccess(anchorUserInfoBean);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -53,12 +51,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().attentSuccess(type, anchorUserInfoBean);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
                     }
                 });
     }
@@ -77,12 +69,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().getStateListSuccess(mineDynamicBean);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -97,12 +83,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().stateLikeSuccess(item);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -116,12 +96,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().stateDelSuccess(position);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
                     }
                 });
     }
@@ -139,12 +113,6 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().getReviewListSuccess(reviewListBean, item, state_id);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -160,11 +128,81 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().stateReviewSuccess(item);
                     }
+                });
+    }
+
+    public void getPhotoAlbum(String user_id) {
+        XHttp.post(ApiServices.GETPHOTOALBUM)
+                .params("user_id", user_id)
+                .accessToken(true)
+                .execute(PhotoAlbumBean.class)
+                .subscribeWith(new TipRequestSubscriber<PhotoAlbumBean>() {
+                    @Override
+                    protected void onSuccess(PhotoAlbumBean photoAlbumBean) {
+                        assert getViewer() != null;
+                        getViewer().getPhotoAlbumSuccess(photoAlbumBean);
+                    }
+                });
+    }
+
+    public void lookPhone(String anchor_id,AnchorUserInfoBean anchorUserInfoBean) {
+        XHttp.post(ApiServices.LOOKPHONE)
+                .params("anchor_id", anchor_id)
+                .accessToken(true)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().lookPhoneSuccess(anchorUserInfoBean);
+                    }
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
+                        assert getViewer() != null;
+                        getViewer().lookPhoneFail(apiException.getCode(),apiException.getDisplayMessage());
+                    }
+                });
+    }
 
+    public void getSysMoney() {
+        XHttp.post(ApiServices.SYSLANMU)
+                .params("type", "4")
+                .accessToken(true)
+                .execute(SysMoneyBean.class)
+                .subscribeWith(new TipRequestSubscriber<SysMoneyBean>() {
+                    @Override
+                    protected void onSuccess(SysMoneyBean sysMoneyBean) {
+                        assert getViewer() != null;
+                        getViewer().getSysMoneySuccess(sysMoneyBean);
+                    }
+                });
+    }
+
+    public void orderAdd(String type, String pay_id) {
+        XHttp.post(ApiServices.ORDERADD)
+                .params("type", type)
+                .params("pay_id", pay_id)
+                .accessToken(true)
+                .execute(PayInfo.class)
+                .subscribeWith(new TipRequestSubscriber<PayInfo>() {
+                    @Override
+                    protected void onSuccess(PayInfo payInfo) {
+                        assert getViewer() != null;
+                        getViewer().orderAddSuccess(payInfo);
+                    }
+                });
+    }
+
+    public void getIsAnchor() {
+        XHttp.post(ApiServices.USERISANCHOR)
+                .accessToken(true)
+                .execute(UserIsAnchorBean.class)
+                .subscribeWith(new TipRequestSubscriber<UserIsAnchorBean>() {
+                    @Override
+                    protected void onSuccess(UserIsAnchorBean userIsAnchorBean) {
+                        assert getViewer() != null;
+                        getViewer().getIsAnchorSuccess(userIsAnchorBean);
                     }
                 });
     }

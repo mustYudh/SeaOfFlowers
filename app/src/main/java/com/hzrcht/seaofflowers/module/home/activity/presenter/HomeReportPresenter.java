@@ -35,6 +35,12 @@ public class HomeReportPresenter extends BaseViewPresenter<HomeReportViewer> {
                         assert getViewer() != null;
                         getViewer().uploadImgSuccess(uploadImgBean);
                     }
+
+                    @Override
+                    public void onError(ApiException e) {
+                        assert getViewer() != null;
+                        getViewer().uploadImgFail();
+                    }
                 });
     }
 

@@ -22,19 +22,38 @@
             android:textSize="17sp"
             />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_vip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="17dp"
             android:layout_marginRight="30dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="会员免费畅聊、看私密视频 私照 立即升级VIP"
-            android:textColor="@color/color_999999"
-            android:textSize="13sp"
-            />
+            android:gravity="center">
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="会员免费畅聊、看私密视频 私照 "
+                android:textColor="@color/color_999999"
+                android:textSize="13sp"
+                />
+
+            <com.yu.common.ui.DelayClickTextView
+                android:id="@+id/tv_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="立即升级VIP"
+                android:textColor="@color/color_9897E7"
+                android:textSize="13sp"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,73 +62,20 @@
             android:gravity="center_horizontal">
 
 
-            <LinearLayout
-                android:layout_width="125dp"
+            <com.yu.common.ui.NoSlidingGridView
+                android:id="@+id/gv_type"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_withdraw_type"
-                android:gravity="center"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:id="@+id/tv_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:includeFontPadding="false"
-                    android:text="100元"
-                    android:textColor="@color/color_666666"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_coin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="10dp"
-                    android:includeFontPadding="false"
-                    android:text="100金币"
-                    android:textColor="@color/color_666666"
-                    android:textSize="13sp"
-                    />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="125dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="35dp"
-                android:background="@drawable/shape_withdraw_type"
-                android:gravity="center"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:includeFontPadding="false"
-                    android:text="100元"
-                    android:textColor="@color/color_666666"
-                    android:textSize="16sp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="10dp"
-                    android:includeFontPadding="false"
-                    android:text="100金币"
-                    android:textColor="@color/color_666666"
-                    android:textSize="13sp"
-                    />
-            </LinearLayout>
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+                android:horizontalSpacing="30dp"
+                android:numColumns="2"
+                android:verticalSpacing="10dp"/>
 
         </LinearLayout>
 
-        <TextView
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -131,6 +97,7 @@
             >
 
             <RelativeLayout
+                android:id="@+id/rl_ali"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -157,6 +124,7 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/iv_ali"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_alignParentRight="true"
@@ -171,6 +139,7 @@
                 android:background="@color/color_E5E5E5"/>
 
             <RelativeLayout
+                android:id="@+id/rl_wx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp">
@@ -198,11 +167,12 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@id/iv_wx"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_circle_select"/>
+                    android:src="@drawable/ic_circle_normal"/>
             </RelativeLayout>
 
             <View
@@ -212,7 +182,7 @@
                 android:background="@color/color_E5E5E5"/>
         </LinearLayout>
 
-        <TextView
+        <com.yu.common.ui.DelayClickTextView
             android:id="@+id/down"
             android:layout_width="match_parent"
             android:layout_height="45dp"

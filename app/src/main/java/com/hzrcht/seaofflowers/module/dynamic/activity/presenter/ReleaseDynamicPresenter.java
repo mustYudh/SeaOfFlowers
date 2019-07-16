@@ -1,7 +1,6 @@
 package com.hzrcht.seaofflowers.module.dynamic.activity.presenter;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
@@ -10,7 +9,6 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xhttp2.lifecycle.RxLifecycle;
-import com.xuexiang.xhttp2.request.PostRequest;
 import com.xuexiang.xhttp2.subsciber.ProgressLoadingSubscriber;
 import com.yu.common.framework.BaseViewPresenter;
 
@@ -36,6 +34,12 @@ public class ReleaseDynamicPresenter extends BaseViewPresenter<ReleaseDynamicVie
 
                         assert getViewer() != null;
                         getViewer().uploadImgSuccess(uploadImgBean);
+                    }
+
+                    @Override
+                    public void onError(ApiException e) {
+                        assert getViewer() != null;
+                        getViewer().uploadImgFail();
                     }
                 });
     }

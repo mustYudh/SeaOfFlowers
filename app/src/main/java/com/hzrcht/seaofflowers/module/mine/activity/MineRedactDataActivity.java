@@ -232,7 +232,7 @@ public class MineRedactDataActivity extends BaseBarActivity
                 showDataDialog(0);
                 break;
             case R.id.view_work:
-                initWordData(0);
+                initConfigData(0);
                 break;
             case R.id.view_mobile:
                 Intent intentMobile = new Intent(this, PhoneVerificationActivity.class);
@@ -243,16 +243,16 @@ public class MineRedactDataActivity extends BaseBarActivity
                 PhotoUtils.changeAvatar(getActivity(), "上传您的头像,以供展示");
                 break;
             case R.id.view_height:
-                initWordData(1);
+                initConfigData(1);
                 break;
             case R.id.view_age:
-                initWordData(2);
+                initConfigData(2);
                 break;
             case R.id.view_weight:
-                initWordData(3);
+                initConfigData(3);
                 break;
             case R.id.view_constellation:
-                initWordData(4);
+                initConfigData(4);
                 break;
             case R.id.view_city:
 
@@ -315,7 +315,7 @@ public class MineRedactDataActivity extends BaseBarActivity
         }
     }
 
-    private void initWordData(int type) {
+    private void initConfigData(int type) {
         OptionsPickerView options = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {

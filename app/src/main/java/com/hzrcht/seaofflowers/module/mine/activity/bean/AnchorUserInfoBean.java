@@ -47,8 +47,8 @@ public class AnchorUserInfoBean {
     public String sign;
     public int id;
     public BigDecimal video_amount;
-    public BigDecimal lang_amout;
-    public BigDecimal look_amout;
+    public BigDecimal lang_amount;
+    public BigDecimal look_amount;
     public BigDecimal fans;
     public String last_login;
     public BigDecimal listen;

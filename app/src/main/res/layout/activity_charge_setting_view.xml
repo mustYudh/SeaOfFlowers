@@ -8,6 +8,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_video"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="10dp"
@@ -31,10 +32,11 @@
 
 
             <TextView
+                android:id="@+id/tv_video_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="20金币"
+                android:text="@string/text_null"
                 android:textColor="@color/color_CCCCCC"
                 android:textSize="17sp"
                 />
@@ -78,10 +80,11 @@
 
 
             <TextView
+                android:id="@+id/tv_lang_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="1金币"
+                android:text="@string/text_null"
                 android:textColor="@color/color_CCCCCC"
                 android:textSize="17sp"
                 />
@@ -125,10 +128,11 @@
 
 
             <TextView
+                android:id="@+id/tv_look_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="1200金币"
+                android:text="@string/text_null"
                 android:textColor="@color/color_CCCCCC"
                 android:textSize="17sp"
                 />
@@ -150,7 +154,8 @@
         android:background="@color/color_E5E5E5"/>
 
 
-    <TextView
+    <com.yu.common.ui.DelayClickTextView
+        android:id="@+id/tv_commit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="60dp"

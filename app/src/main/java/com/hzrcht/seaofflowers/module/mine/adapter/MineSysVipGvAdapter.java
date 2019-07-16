@@ -62,7 +62,7 @@ public class MineSysVipGvAdapter extends BaseAdapter {
         }
 
         holder.tv_money.setText(list.get(i).key);
-        holder.tv_coin.setText(list.get(i).val);
+        holder.tv_coin.setText(list.get(i).price);
 
         if (list.get(i).isIs_select) {
             holder.tv_money.setTextColor(context.getResources().getColor(R.color.white));

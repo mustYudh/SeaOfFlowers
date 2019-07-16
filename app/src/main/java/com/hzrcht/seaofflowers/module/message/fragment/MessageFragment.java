@@ -1,6 +1,5 @@
 package com.hzrcht.seaofflowers.module.message.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -15,6 +14,7 @@ import com.hzrcht.seaofflowers.module.message.activity.SystemMessageActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessagePresenter;
 import com.hzrcht.seaofflowers.module.message.fragment.presenter.MessageViewer;
 import com.hzrcht.seaofflowers.module.mine.activity.MineChatActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserChargeBean;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
@@ -64,14 +64,11 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
 
         conversationLayout.getTitleBar().setVisibility(View.GONE);
         ConversationListLayout conversationList = conversationLayout.getConversationList();
+        conversationList.enableItemRoundIcon(false);
         conversationList.setOnItemClickListener(new ConversationListLayout.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, ConversationInfo messageInfo) {
-                Intent intent = new Intent(getActivity(), MineChatActivity.class);
-                intent.putExtra("IM_ID", messageInfo.getId());
-                intent.putExtra("IM_NAME", messageInfo.getId());
-                startActivity(intent);
-
+                mPresenter.getUserCharge(messageInfo.getId(), messageInfo);
             }
         });
 
@@ -118,4 +115,14 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
     }
 
 
+    @Override
+    public void getUserChargeSuccess(UserChargeBean userChargeBean, ConversationInfo messageInfo) {
+        if (userChargeBean != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("IM_ID", messageInfo.getId());
+            bundle.putString("IM_NAME", messageInfo.getId());
+            bundle.putString("LANG_AMOUNT", userChargeBean.lang_amount + "");
+            getLaunchHelper().startActivity(MineChatActivity.class, bundle);
+        }
+    }
 }
