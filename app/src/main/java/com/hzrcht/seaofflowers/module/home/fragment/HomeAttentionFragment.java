@@ -13,6 +13,8 @@ import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionPrese
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionViewer;
 import com.yu.common.mvp.PresenterLifeCycle;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeAttentionFragment extends BaseFragment implements HomeAttentionViewer {
@@ -21,6 +23,8 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
     @PresenterLifeCycle
     private HomeAttentionPresenter mPresenter = new HomeAttentionPresenter(this);
     private RecyclerView mAttention;
+    private List<HomeAttentionBean.RowsBean> list = new ArrayList<>();
+    private HomeAttentionRvAdapter adapter;
 
     @Override
     protected int getContentViewId() {
@@ -56,8 +60,23 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
     public void getAttentionListSuccess(HomeAttentionBean homeAttentionBean) {
         if (homeAttentionBean != null) {
             if (homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
-                HomeAttentionRvAdapter adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, homeAttentionBean.rows, getActivity());
+                if (page > 1) {
+
+                } else {
+                    list.clear();
+                }
+                list.addAll(homeAttentionBean.rows);
+                adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, homeAttentionBean.rows, getActivity());
                 mAttention.setAdapter(adapter);
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rv_home_attention, true);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rv_home_attention, false);
+                }
             }
         }
     }

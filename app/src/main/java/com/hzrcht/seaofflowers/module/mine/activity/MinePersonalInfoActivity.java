@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,12 +12,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
+import com.hzrcht.seaofflowers.bean.PayInfo;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
@@ -25,16 +28,23 @@ import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDynamicRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoViewer;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineSysMoneyGvAdapter;
+import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.hzrcht.seaofflowers.utils.PayUtils;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
+import com.yu.common.ui.DelayClickTextView;
+import com.yu.common.ui.NoSlidingGridView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -44,7 +54,6 @@ import java.util.List;
 
 
 public class MinePersonalInfoActivity extends BaseActivity implements MinePersonalInfoViewer, View.OnClickListener {
-    private List<String> listData = new ArrayList<>();
     private List<MineLocationDynamicBean> list = new ArrayList<>();
     private List<LinearLayout> llList = new ArrayList<>();
     private List<LinearLayout> llRootList = new ArrayList<>();
@@ -67,6 +76,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private int pageSize = 10;
     private MineInfoDynamicRvAdapter adapter;
     private LinearLayout mPresentRoot;
+    private RecyclerView rv_video_photo;
+    private MineInfoDataRvAdapter photoAdapter;
+    private TextView tv_check_mobile;
+    private boolean is_vip = false;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -75,13 +88,9 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     @Override
     protected void loadData() {
+        mPresenter.getIsAnchor();
         Bundle bundle = getIntent().getExtras();
         user_id = bundle.getString("USER_ID");
-
-        for (int i = 0; i < 7; i++) {
-            listData.add("");
-        }
-
         mBanner = bindView(R.id.banner);
         LinearLayout ll_root_frist = bindView(R.id.ll_root_frist);
         LinearLayout ll_root_second = bindView(R.id.ll_root_second);
@@ -102,7 +111,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mPresentRoot = bindView(R.id.ll_present_root);
         mFlexboxSelf = bindView(R.id.flexbox);
         mMobile = bindView(R.id.tv_mobile);
-        TextView tv_check_mobile = bindView(R.id.tv_check_mobile);
+        tv_check_mobile = bindView(R.id.tv_check_mobile);
         mLCollect = bindView(R.id.ll_collect);
         mLOnline = bindView(R.id.ll_online);
         mLabel = bindView(R.id.ll_label);
@@ -117,7 +126,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         iv_share.setOnClickListener(this);
         mIntimacyRoot.setOnClickListener(this);
         mPresentRoot.setOnClickListener(this);
-        tv_check_mobile.setOnClickListener(this);
 
 
         llRootList.add(ll_root_frist);
@@ -136,15 +144,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
         mDynamic = bindView(R.id.rv_dynamic);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RecyclerView rv_video_photo = bindView(R.id.rv_video_photo);
+        rv_video_photo = bindView(R.id.rv_video_photo);
         rv_video_photo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         rv_video_photo.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 4, 2));
         setTypeCheck(ll_first);
-        //视频/照片
-        MineInfoDataRvAdapter adapter = new MineInfoDataRvAdapter(R.layout.item_info_data, listData, getActivity());
-
-        rv_video_photo.setAdapter(adapter);
-
 
         mIntimacy.removeAllViews();
         for (int i = 0; i < 6; i++) {
@@ -155,6 +158,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
         mPresenter.getUserInfo(user_id);
         mPresenter.getStateList(user_id);
+        mPresenter.getPhotoAlbum(user_id);
 
 
     }
@@ -207,9 +211,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 Bundle bundlePresent = new Bundle();
                 bundlePresent.putString("USER_ID", user_id + "");
                 LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class, bundlePresent);
-                break;
-            case R.id.tv_check_mobile:
-                showCleckDialog();
                 break;
         }
     }
@@ -290,27 +291,26 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     /**
      * 查看手机号弹窗
      */
-    private void showCleckDialog() {
+    private void showCleckDialog(AnchorUserInfoBean anchorUserInfoBean) {
         checkDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_layout)
                 .gravity(Gravity.CENTER)
                 .cancelTouchout(true)
                 .style(R.style.Dialog_NoAnimation)
-                .settext("本次查看将消费您1000金币", R.id.dialog_content)
+                .settext("本次查看将消费您" + anchorUserInfoBean.look_amount + "金币", R.id.dialog_content)
                 .settext("确定", R.id.cancle)
                 .settext("取消", R.id.down)
                 .addViewOnclick(R.id.cancle, view -> {
                     if (checkDialog.isShowing()) {
                         checkDialog.dismiss();
                     }
-                    showRechargeDialog();
+                    loadDialog.show();
+                    mPresenter.lookPhone(user_id, anchorUserInfoBean);
 
-                    mMobile.setText("手机号：17799999999");
                 })
                 .addViewOnclick(R.id.down, view -> {
                     if (checkDialog.isShowing()) {
                         checkDialog.dismiss();
                     }
-
                 })
                 .build();
         checkDialog.show();
@@ -319,26 +319,91 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     }
 
+    private String type_id = "";
+    private int type = 2;
 
     /**
      * 余额不足弹窗
      */
-    private void showRechargeDialog() {
+    private void showRechargeDialog(List<SysMoneyBean.RowsBean> rows) {
         rechargeDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_recharge)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
                 .style(R.style.Dialog)
-
-                .addViewOnclick(R.id.down, view -> {
-                    if (rechargeDialog.isShowing()) {
-                        rechargeDialog.dismiss();
-                    }
-
-                })
                 .build();
         rechargeDialog.show();
+        LinearLayout ll_vip = rechargeDialog.findViewById(R.id.ll_vip);
+        DelayClickTextView tv_vip = rechargeDialog.findViewById(R.id.tv_vip);
+        DelayClickTextView tv_more = rechargeDialog.findViewById(R.id.tv_more);
+        RelativeLayout rl_ali = rechargeDialog.findViewById(R.id.rl_ali);
+        RelativeLayout rl_wx = rechargeDialog.findViewById(R.id.rl_wx);
+        ImageView iv_ali = rechargeDialog.findViewById(R.id.iv_ali);
+        ImageView iv_wx = rechargeDialog.findViewById(R.id.iv_wx);
+        DelayClickTextView down = rechargeDialog.findViewById(R.id.down);
+        NoSlidingGridView gv_type = rechargeDialog.findViewById(R.id.gv_type);
+        MineSysMoneyGvAdapter adapter = new MineSysMoneyGvAdapter(rows, getActivity());
+        gv_type.setAdapter(adapter);
+
+        adapter.setOnItemChcekCheckListener(new MineSysMoneyGvAdapter.OnItemChcekCheckListener() {
+            @Override
+            public void setOnItemChcekCheckClick(String val, String id) {
+                type_id = id;
+                adapter.notifyDataSetChanged();
+            }
+        });
 
 
+        rl_ali.setOnClickListener(view -> {
+            type = 2;
+            iv_ali.setImageResource(R.drawable.ic_circle_select);
+            iv_wx.setImageResource(R.drawable.ic_circle_normal);
+        });
+
+        rl_wx.setOnClickListener(view -> {
+            type = 1;
+            iv_ali.setImageResource(R.drawable.ic_circle_normal);
+            iv_wx.setImageResource(R.drawable.ic_circle_select);
+        });
+
+        down.setOnClickListener(view -> {
+            if (TextUtils.isEmpty(type_id)) {
+                ToastUtils.show("请选择充值选项");
+                return;
+            }
+            mPresenter.orderAdd(type + "", type_id);
+
+        });
+
+        if (!is_vip) {
+            ll_vip.setVisibility(View.VISIBLE);
+        } else {
+            ll_vip.setVisibility(View.GONE);
+        }
+
+        tv_vip.setOnClickListener(view -> {
+            if (rechargeDialog.isShowing()) {
+                rechargeDialog.dismiss();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putInt("TYPE", 1);
+            getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+        });
+
+        tv_more.setOnClickListener(view -> {
+            if (rechargeDialog.isShowing()) {
+                rechargeDialog.dismiss();
+            }
+            Bundle bundle = new Bundle();
+            bundle.putInt("TYPE", 0);
+            getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+        });
+
+        rechargeDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                type_id = "";
+            }
+        });
     }
 
     /**
@@ -433,6 +498,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 Bundle bundle = new Bundle();
                 bundle.putString("IM_ID", anchorUserInfoBean.user_id);
                 bundle.putString("IM_NAME", anchorUserInfoBean.nick_name);
+                bundle.putString("LANG_AMOUNT", anchorUserInfoBean.lang_amount + "");
                 getLaunchHelper().startActivity(MineChatActivity.class, bundle);
             });
 
@@ -491,6 +557,13 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             } else {
                 mPresentRoot.setVisibility(View.GONE);
             }
+
+            //手机号是否被查看
+            bindText(R.id.tv_mobile, anchorUserInfoBean.is_look == 0 ? "手机号：***********" : "手机号：" + anchorUserInfoBean.phone);
+            bindView(R.id.tv_check_mobile, anchorUserInfoBean.is_look == 0);
+            bindView(R.id.tv_check_mobile, view -> {
+                showCleckDialog(anchorUserInfoBean);
+            });
         }
     }
 
@@ -545,9 +618,13 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     mineLocationDynamicBottomBean.itemType = 3;
                     list.add(mineLocationDynamicBottomBean);
                 }
+                if (adapter == null) {
+                    adapter = new MineInfoDynamicRvAdapter(list, getActivity());
+                    mDynamic.setAdapter(adapter);
+                } else {
+                    adapter.setNewData(list);
+                }
 
-                adapter = new MineInfoDynamicRvAdapter(list, getActivity());
-                mDynamic.setAdapter(adapter);
                 adapter.setOnItemDetailsDoCilckListener(new MineInfoDynamicRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override
                     public void onItemDetailsReportClick(String anchor_id, String state_id) {
@@ -564,6 +641,16 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                         mPresenter.stateLike(state_id + "", item);
                     }
                 });
+                bindView(R.id.rl_dynamic, true);
+                bindView(R.id.ll_empty, false);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    //空页面
+                    bindView(R.id.rl_dynamic, false);
+                    bindView(R.id.ll_empty, true);
+                }
             }
         }
 
@@ -610,6 +697,76 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         item.review_count = item.review_count + 1;
         ToastUtils.show("评论成功，等待审核");
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getPhotoAlbumSuccess(PhotoAlbumBean photoAlbumBean) {
+        if (photoAlbumBean != null) {
+            if (photoAlbumBean.rows != null && photoAlbumBean.rows.size() != 0) {
+                //视频/照片
+                photoAdapter = new MineInfoDataRvAdapter(R.layout.item_info_data, photoAlbumBean.rows, getActivity());
+                rv_video_photo.setAdapter(photoAdapter);
+                bindView(R.id.rv_video_photo, true);
+                bindView(R.id.ll_empty_photo, false);
+            } else {
+                bindView(R.id.rv_video_photo, false);
+                bindView(R.id.ll_empty_photo, true);
+            }
+        }
+    }
+
+    @Override
+    public void lookPhoneSuccess(AnchorUserInfoBean anchorUserInfoBean) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        mMobile.setText("手机号：" + anchorUserInfoBean.phone);
+    }
+
+    @Override
+    public void lookPhoneFail(int code, String msg) {
+
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        if (code == 10000) {
+            mPresenter.getSysMoney();
+        }else {
+            ToastUtils.show(msg);
+        }
+    }
+
+    @Override
+    public void getSysMoneySuccess(SysMoneyBean sysMoneyBean) {
+        if (sysMoneyBean != null && sysMoneyBean.rows != null && sysMoneyBean.rows.size() != 0) {
+            showRechargeDialog(sysMoneyBean.rows);
+        }
+    }
+
+    @Override
+    public void orderAddSuccess(PayInfo payInfo) {
+        if (rechargeDialog.isShowing()) {
+            rechargeDialog.dismiss();
+        }
+        PayUtils.getInstance().pay(getActivity(), type, payInfo)
+                .getPayResult(new PayUtils.PayCallBack() {
+                    @Override
+                    public void onPaySuccess(int type) {
+
+                    }
+
+                    @Override
+                    public void onFailed(int type) {
+                        ToastUtils.show("支付失败，请重试");
+                    }
+                });
+    }
+
+    @Override
+    public void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean) {
+        if (userIsAnchorBean != null) {
+            is_vip = userIsAnchorBean.is_vip;
+        }
     }
 
 

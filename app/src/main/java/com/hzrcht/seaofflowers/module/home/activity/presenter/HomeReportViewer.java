@@ -7,7 +7,10 @@ import com.yu.common.mvp.Viewer;
 public interface HomeReportViewer extends Viewer {
     void uploadImgSuccess(UploadImgBean uploadImgBean);
 
+    void uploadImgFail();
+
     void reportSuccess();
 
     void reportFail();
+
 }

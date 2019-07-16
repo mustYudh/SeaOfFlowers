@@ -7,8 +7,8 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -124,7 +124,7 @@ public class MessageImageHolder extends MessageContentHolder {
     }
 
     private void resetParentLayout() {
-        ((FrameLayout) contentImage.getParent().getParent()).setPadding(17, 0, 13, 0);
+        ((LinearLayout) contentImage.getParent().getParent()).setPadding(17, 0, 13, 0);
     }
 
     private void performImage(final MessageInfo msg, final int position) {

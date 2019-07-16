@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              android:id="@+id/ll_root"
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
@@ -91,11 +92,12 @@
 
     </LinearLayout>
 
-    <ImageView
+    <com.shehuan.niv.NiceImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_placeholder"/>
+        android:src="@drawable/ic_placeholder"
+        app:corner_radius="5dp"/>
 
 
     <ImageView

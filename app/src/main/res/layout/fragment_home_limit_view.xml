@@ -27,21 +27,32 @@
             app:open_mz_mode="false"/>
 
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:descendantFocusability="blocksDescendants">
+            >
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_home"
+
+            <RelativeLayout
+                android:id="@+id/rl_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:nestedScrollingEnabled="false"/>
+                android:descendantFocusability="blocksDescendants">
 
-        </RelativeLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:nestedScrollingEnabled="false"/>
+
+            </RelativeLayout>
+
+
+            <include layout="@layout/layout_empty"/>
+        </FrameLayout>
     </LinearLayout>
 
 

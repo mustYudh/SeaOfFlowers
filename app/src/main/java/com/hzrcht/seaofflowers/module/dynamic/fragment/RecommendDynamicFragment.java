@@ -172,8 +172,12 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
                     list.add(mineLocationDynamicBottomBean);
                 }
 
-                adapter = new DynamicListRvAdapter(list, getActivity());
-                mDynamic.setAdapter(adapter);
+                if (adapter == null) {
+                    adapter = new DynamicListRvAdapter(list, getActivity());
+                    mDynamic.setAdapter(adapter);
+                } else {
+                    adapter.setNewData(list);
+                }
 
                 adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override

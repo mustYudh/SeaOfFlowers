@@ -88,6 +88,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
                 if (loadDialog.isShowing()) {
                     loadDialog.dismiss();
                 }
+                imageFiles.clear();
                 ToastUtils.show("图片上传失败,请重试");
             }
         }
@@ -269,6 +270,15 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
     }
 
     @Override
+    public void uploadImgFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        imageFiles.clear();
+        ToastUtils.show("图片上传失败,请重试");
+    }
+
+    @Override
     public void reportSuccess() {
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
@@ -285,5 +295,13 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
         }
         imageFiles.clear();
         ToastUtils.show("投诉失败");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 }

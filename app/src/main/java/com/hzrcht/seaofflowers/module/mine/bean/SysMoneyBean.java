@@ -17,6 +17,7 @@ public class SysMoneyBean {
         public int id;
         public String key;
         public String val;
+        public String price;
         public boolean isIs_select;
     }
 }

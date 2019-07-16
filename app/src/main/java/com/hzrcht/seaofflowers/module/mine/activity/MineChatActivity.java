@@ -1,19 +1,23 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineChatViewer;
-import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftGvAdapter;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftRvAdapter;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.qcloud.tim.uikit.component.NoticeLayout;
@@ -25,19 +29,23 @@ import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayoutUI;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
-import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickTextView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-
+@SuppressLint("SetTextI18n")
 public class MineChatActivity extends BaseBarActivity implements MineChatViewer {
     @PresenterLifeCycle
     private MineChatPresenter mPresenter = new MineChatPresenter(this);
     private DialogUtils presentDialog;
     private String im_id;
+    private NoticeLayout mNoticeLayout;
+    private InputLayout inputLayout;
+    private String lang_amount;
+
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -49,7 +57,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         Bundle bundle = getIntent().getExtras();
         im_id = bundle.getString("IM_ID");
         String im_name = bundle.getString("IM_NAME");
-
+        lang_amount = bundle.getString("LANG_AMOUNT");
         //从布局文件中获取聊天面板组件
         ChatLayout mChatLayout = bindView(R.id.chat_layout);
 
@@ -74,33 +82,23 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         setTitle(im_name);
 
         //顶部通知
-        NoticeLayout mNoticeLayout = mChatLayout.getNoticeLayout();
+        mNoticeLayout = mChatLayout.getNoticeLayout();
         mNoticeLayout.setBackgroundColor(getResources().getColor(R.color.white));
-        // 可以使通知区域一致展示
-        mNoticeLayout.alwaysShow(true);
-        // 设置通知主题
-        mNoticeLayout.getContent().setText("私聊每条扣0.1金币");
-        // 设置通知提醒文字
-        TextView contentExtra = mNoticeLayout.getContentExtra();
-        contentExtra.setTextColor(getResources().getColor(R.color.red));
-        contentExtra.setText("升级VIP免费畅玩");
-        // 设置通知的点击事件
-        mNoticeLayout.setOnNoticeClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtil.toastShortMessage("赏白银五千两");
-            }
-        });
+
+        mPresenter.getIsAnchor();
+
 
         //输入模块
-        InputLayout inputLayout = mChatLayout.getInputLayout();
+        inputLayout = mChatLayout.getInputLayout();
         inputLayout.disableEmojiInput(true);
         inputLayout.disableAudioInput(true);
+        inputLayout.disableMoreInput(true);
+
+
         //送礼
         inputLayout.setOnPresentClickListener(new InputLayoutUI.OnPresentClickListener() {
             @Override
             public void onPresentClick(View view) {
-                ToastUtils.show("点击了礼物");
                 mPresenter.getSysGift(mChatLayout);
             }
         });
@@ -122,10 +120,12 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
 
     }
 
+    private SysGiftBean.ResultBean item = null;
+
     /**
-     * 清空
+     * 礼物列表
      */
-    private void showPresentDialog(List<SysGiftBean.ResultBean> rows, ChatLayout mChatLayout) {
+    private void showPresentDialog(BigDecimal user_amount, List<SysGiftBean.ResultBean> rows, ChatLayout mChatLayout) {
         presentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_present)
                 .gravity(Gravity.BOTTOM)
                 .cancelTouchout(true)
@@ -133,20 +133,39 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
                 .build();
         presentDialog.show();
 
-        GridView gv_present = presentDialog.findViewById(R.id.gv_present);
+        RecyclerView rv_present = presentDialog.findViewById(R.id.rv_present);
+        rv_present.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+//        CommItemDecoration horizontal = CommItemDecoration.createHorizontal(getActivity(), Color.parseColor("#626262"), 2);
+//        CommItemDecoration vertical = CommItemDecoration.createVertical(getActivity(), Color.parseColor("#626262"), 2);
+//        rv_present.addItemDecoration(horizontal);
+//        rv_present.addItemDecoration(vertical);
         TextView tv_coin = presentDialog.findViewById(R.id.tv_coin);
+        tv_coin.setText("可用金币：" + user_amount);
+        DelayClickTextView tv_commit = presentDialog.findViewById(R.id.tv_commit);
         DelayClickTextView tv_recharge = presentDialog.findViewById(R.id.tv_recharge);
-        MineSysGiftGvAdapter adapter = new MineSysGiftGvAdapter(rows, getActivity());
-        gv_present.setAdapter(adapter);
+        tv_recharge.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
+            //充值
+            Bundle bundle = new Bundle();
+            bundle.putInt("TYPE", 0);
+            getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+        });
+        MineSysGiftRvAdapter adapter = new MineSysGiftRvAdapter(R.layout.item_sys_present, rows, getActivity());
+        rv_present.setAdapter(adapter);
 
-        adapter.setOnItemChcekCheckListener(new MineSysGiftGvAdapter.OnItemChcekCheckListener() {
-            @Override
-            public void setOnItemChcekCheckClick(SysGiftBean.ResultBean resultBean) {
-                if (presentDialog.isShowing()) {
-                    presentDialog.dismiss();
-                }
-                mPresenter.sendGift(im_id, resultBean.id + "", mChatLayout, resultBean);
+        adapter.setOnItemChcekCheckListener(resultBean -> {
+            adapter.notifyDataSetChanged();
+            item = resultBean;
+        });
+        tv_commit.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
 
+            if (item != null) {
+                mPresenter.sendGift(im_id, item.id + "", mChatLayout, item);
             }
         });
 
@@ -156,7 +175,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     public void getSysGiftSuccess(SysGiftBean sysGiftBean, ChatLayout mChatLayout) {
         if (sysGiftBean != null) {
             if (sysGiftBean.rows != null && sysGiftBean.rows.size() != 0) {
-                showPresentDialog(sysGiftBean.rows, mChatLayout);
+                showPresentDialog(sysGiftBean.user_amount, sysGiftBean.rows, mChatLayout);
             }
         } else {
             ToastUtils.show("获取礼物列表失败,请重试");
@@ -164,8 +183,68 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     }
 
     @Override
+    public void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean) {
+        if (userIsAnchorBean != null) {
+            if (!userIsAnchorBean.is_vip) {
+                //非vip
+                // 可以使通知区域一致展示
+                mNoticeLayout.alwaysShow(true);
+                // 设置通知主题
+                mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
+                // 设置通知提醒文字
+                TextView contentExtra = mNoticeLayout.getContentExtra();
+                contentExtra.setTextColor(getResources().getColor(R.color.red));
+                contentExtra.setText("升级VIP免费畅玩");
+                // 设置通知的点击事件
+                mNoticeLayout.setOnNoticeClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("TYPE", 1);
+                        getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+                    }
+                });
+
+                //开启扣费
+                inputLayout.mSendTextButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (inputLayout.mSendEnable) {
+                            mPresenter.chatStart(im_id, inputLayout.mTextInput.getText().toString().trim());
+                        }
+                    }
+                });
+            } else {
+                //vip免费畅聊
+                inputLayout.mSendTextButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (inputLayout.mSendEnable) {
+                            if (inputLayout.mMessageHandler != null) {
+                                inputLayout.mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(inputLayout.mTextInput.getText().toString().trim()));
+                            }
+                            inputLayout.mTextInput.setText("");
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void chatStartSuccess() {
+        if (inputLayout.mMessageHandler != null) {
+            Log.e("aaaa", "消息发送");
+            inputLayout.mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(inputLayout.mTextInput.getText().toString().trim()));
+        }
+        inputLayout.mTextInput.setText("");
+    }
+
+    @Override
     public void sendGiftSuccess(ChatLayout mChatLayout, SysGiftBean.ResultBean resultBean) {
+        ToastUtils.show("打赏成功!");
         MessageInfo info = MessageInfoUtil.buildCustomMessage(resultBean.img + "," + resultBean.title + "," + resultBean.price);
         mChatLayout.sendMessage(info, false);
+        item = null;
     }
 }

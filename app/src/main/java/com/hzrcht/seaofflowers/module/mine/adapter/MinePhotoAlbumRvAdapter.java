@@ -11,16 +11,28 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.yu.common.glide.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cc.shinichi.library.ImagePreview;
 
 public class MinePhotoAlbumRvAdapter extends BaseQuickAdapter<PhotoAlbumBean.RowsBean, BaseViewHolder> {
     private Context context;
     private List<PhotoAlbumBean.RowsBean> data;
+    private List<String> imgList;
 
     public MinePhotoAlbumRvAdapter(int layoutResId, @Nullable List<PhotoAlbumBean.RowsBean> data, Context context) {
         super(layoutResId, data);
         this.context = context;
         this.data = data;
+        imgList = new ArrayList<>();
+        initDate();
+    }
+
+    public void initDate() {
+        for (int i = 0; i < data.size(); i++) {
+            imgList.add(data.get(i).img_url);
+        }
     }
 
     @Override
@@ -38,6 +50,12 @@ public class MinePhotoAlbumRvAdapter extends BaseQuickAdapter<PhotoAlbumBean.Row
 //                Intent intent = new Intent(context, ViewBigImageActivity.class);
 //                intent.putExtras(bundle);
 //                context.startActivity(intent);
+                ImagePreview.getInstance()
+                        .setContext(context)
+                        .setIndex(helper.getLayoutPosition())
+                        .setImageList(imgList)
+                        .setShowDownButton(false)
+                        .start();
             }
         });
     }

@@ -159,6 +159,15 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
                 adapter = new HomeLimitRvAdapter(list, getActivity());
                 mAnchor.setAdapter(adapter);
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rl_home, true);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rl_home, false);
+                }
             }
         }
     }

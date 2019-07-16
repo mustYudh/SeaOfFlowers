@@ -56,8 +56,18 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
                     list.clear();
                 }
                 list.addAll(homeAnchorListBean.rows);
+
                 adapter = new HomeNewerRvAdapter(R.layout.item_home_limit, list, getActivity());
                 mAnchor.setAdapter(adapter);
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rv_home, true);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rv_home, false);
+                }
             }
         }
     }

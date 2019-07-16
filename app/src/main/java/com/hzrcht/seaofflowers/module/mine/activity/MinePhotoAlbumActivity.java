@@ -16,6 +16,9 @@ import com.hzrcht.seaofflowers.module.mine.adapter.MinePhotoAlbumRvAdapter;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.yu.common.mvp.PresenterLifeCycle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhotoAlbumViewer {
     private int page = 1;
@@ -23,6 +26,8 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
     @PresenterLifeCycle
     private MinePhotoAlbumPresenter mPresenter = new MinePhotoAlbumPresenter(this);
     private RecyclerView mPic;
+    private List<PhotoAlbumBean.RowsBean> list = new ArrayList<>();
+    private MinePhotoAlbumRvAdapter adapter;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -66,8 +71,29 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
     public void getPhotoAlbumSuccess(PhotoAlbumBean photoAlbumBean) {
         if (photoAlbumBean != null) {
             if (photoAlbumBean.rows != null && photoAlbumBean.rows.size() != 0) {
-                MinePhotoAlbumRvAdapter adapter = new MinePhotoAlbumRvAdapter(R.layout.item_mine_photo_album, photoAlbumBean.rows, getActivity());
-                mPic.setAdapter(adapter);
+                if (page > 1) {
+
+                } else {
+                    list.clear();
+                }
+                list.addAll(photoAlbumBean.rows);
+                if (adapter == null) {
+                    adapter = new MinePhotoAlbumRvAdapter(R.layout.item_mine_photo_album, list, getActivity());
+                    mPic.setAdapter(adapter);
+                } else {
+                    adapter.setNewData(list);
+                }
+
+
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rv_pic, true);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rv_pic, false);
+                }
             }
         }
 

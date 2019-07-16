@@ -16,19 +16,19 @@
         android:textSize="15sp"
         />
 
+    <!--<View-->
+        <!--android:background="#626262"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"/>-->
 
-    <GridView
-        android:id="@+id/gv_present"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_present"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        android:background="#626262"
-        android:horizontalSpacing="1dp"
-        android:numColumns="4"
         android:overScrollMode="never"
         android:scrollbars="none"
-        android:verticalSpacing="1dp"/>
+       />
+
 
 
     <RelativeLayout
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:includeFontPadding="false"
-            android:text="可用金币：36"
+            android:text="可用金币：--"
             android:textColor="@color/white"
             android:textSize="12sp"
             />
@@ -62,7 +62,8 @@
             android:textSize="17sp"
             />
 
-        <TextView
+        <com.yu.common.ui.DelayClickTextView
+            android:id="@+id/tv_commit"
             android:layout_width="75dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"

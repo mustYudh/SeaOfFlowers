@@ -7,6 +7,8 @@ import com.yu.common.mvp.Viewer;
 public interface ReleaseDynamicViewer extends Viewer {
     void uploadImgSuccess(UploadImgBean uploadImgBean);
 
+    void uploadImgFail();
+
     void stateAddSuccess();
 
     void stateAddFail();

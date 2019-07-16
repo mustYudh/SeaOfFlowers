@@ -57,6 +57,7 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
 
         mPresenter.getStateList("", page, pageSize);
     }
+
     /**
      * 举报弹窗
      */
@@ -170,10 +171,12 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
                     mineLocationDynamicBottomBean.itemType = 3;
                     list.add(mineLocationDynamicBottomBean);
                 }
-
-                adapter = new DynamicListRvAdapter(list, getActivity());
-                mDynamic.setAdapter(adapter);
-
+                if (adapter == null) {
+                    adapter = new DynamicListRvAdapter(list, getActivity());
+                    mDynamic.setAdapter(adapter);
+                } else {
+                    adapter.setNewData(list);
+                }
                 adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override
                     public void onItemDetailsReportClick(String anchor_id, String state_id) {

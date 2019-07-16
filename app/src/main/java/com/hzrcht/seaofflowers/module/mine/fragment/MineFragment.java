@@ -37,6 +37,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
     private LinearLayout mLAge;
     private ImageView mIAge, mType;
     private LinearLayout mAuthentication;
+    private MyOneLineView view_open_msg;
 
     @Override
     protected int getContentViewId() {
@@ -69,7 +70,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         LinearLayout ll_photo_album = bindView(R.id.ll_photo_album);
         MyOneLineView view_invitation_code = bindView(R.id.view_invitation_code);
         MyOneLineView view_accept_apprentice = bindView(R.id.view_accept_apprentice);
-        MyOneLineView view_open_msg = bindView(R.id.view_open_msg);
+        view_open_msg = bindView(R.id.view_open_msg);
         MyOneLineView view_system_settings = bindView(R.id.view_system_settings);
 
 
@@ -77,7 +78,6 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         view_accept_apprentice.initMine(R.drawable.ic_accept_apprentice, "收徒赚钱", true, true);
         view_open_msg.initMine(R.drawable.ic_open_msg, "开启勿扰", false, true);
         view_open_msg.showSwitchView(true);
-        view_open_msg.setSwichButton(true);
         view_system_settings.initMine(R.drawable.ic_system_settings, "系统设置", true, true);
 
         //点击事件
@@ -114,7 +114,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 break;
             case R.id.ll_withdraw:
                 //提现
-                getLaunchHelper().startActivityForResult(MineMineWithdrawActivity.class,1);
+                getLaunchHelper().startActivityForResult(MineMineWithdrawActivity.class, 1);
                 break;
             case R.id.ll_photo_album:
                 //相册
@@ -149,7 +149,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 bindText(R.id.tv_withdrawal, mineUserInfoBean.userInfo.withdrawal + "");
                 bindText(R.id.tv_nickname, mineUserInfoBean.userInfo.nick_name);
                 bindText(R.id.tv_age, mineUserInfoBean.userInfo.age + "");
-                bindText(R.id.tv_id, mineUserInfoBean.userInfo.id + "");
+                bindText(R.id.tv_id, "ID:" + mineUserInfoBean.userInfo.id);
                 bindText(R.id.tv_sign, TextUtils.isEmpty(mineUserInfoBean.userInfo.sign) ? "这个人很懒，什么都没留下~" : mineUserInfoBean.userInfo.sign);
                 bindText(R.id.tv_type, mineUserInfoBean.userInfo.type == 0 ? "申请主播" : "收费设置");
                 mVip.setImageResource(mineUserInfoBean.is_vip ? R.drawable.ic_vip : R.drawable.ic_vip_no);
@@ -171,7 +171,17 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             bindText(R.id.tv_state, mineUserInfoBean.state + "");
             bindText(R.id.tv_attent, mineUserInfoBean.attent + "");
             bindText(R.id.tv_friend, mineUserInfoBean.friend + "");
+            view_open_msg.setSwichButton(mineUserInfoBean.disturb);
+
+            view_open_msg.setSwichlistener(switchStatus -> {
+                mPresenter.userEditConfig(mineUserInfoBean.disturb);
+            });
         }
+    }
+
+    @Override
+    public void userEditConfigSuccess(boolean disturb) {
+        view_open_msg.setSwichButton(!disturb);
     }
 
     @Override
