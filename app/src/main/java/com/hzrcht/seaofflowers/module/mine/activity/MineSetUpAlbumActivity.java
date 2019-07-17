@@ -1,10 +1,12 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
@@ -24,6 +26,11 @@ import com.yu.common.ui.DelayClickTextView;
 import java.io.File;
 import java.util.List;
 
+import id.zelory.compressor.Compressor;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * 新建相册
  */
@@ -39,6 +46,7 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
         setContentView(R.layout.activity_mine_set_up_album_view);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void loadData() {
         setTitle("新建相册");
@@ -50,8 +58,35 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
 
         DelayClickTextView tv_commit = bindView(R.id.tv_commit);
         tv_commit.setOnClickListener(view -> {
-            File file = new File(imgUrl);
-            mPresenter.uploadImg(file);
+            if (TextUtils.isEmpty(imgUrl)) {
+                ToastUtils.show("请选择图片");
+                return;
+            }
+            loadDialog.show();
+            File imageFileCrmera = new File(imgUrl);
+            /** 上传图片*/
+            new Compressor(getActivity())
+                    .compressToFileAsFlowable(imageFileCrmera)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<File>() {
+                        @Override
+                        public void accept(File file) {
+                            mPresenter.uploadImg(file);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            throwable.printStackTrace();
+//                                        showError(throwable.getMessage());
+                            if (loadDialog.isShowing()) {
+                                loadDialog.dismiss();
+                            }
+                            ToastUtils.show("图片压缩失败");
+                        }
+                    });
+
+
         });
     }
 
@@ -77,13 +112,37 @@ public class MineSetUpAlbumActivity extends BaseBarActivity implements MineSetUp
     public void uploadImgSuccess(UploadImgBean uploadImgBean) {
         if (uploadImgBean != null) {
             mPresenter.addAlbum(uploadImgBean.url);
+        } else {
+            if (loadDialog.isShowing()) {
+                loadDialog.dismiss();
+            }
+            ToastUtils.show("图片上传失败");
         }
     }
 
     @Override
+    public void uploadImgFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("图片上传失败");
+    }
+
+    @Override
     public void addAlbumSuccess() {
-        ToastUtils.show("上传成功");
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("添加相册成功");
         setResult(1);
         finish();
+    }
+
+    @Override
+    public void addAlbumFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("添加相册失败");
     }
 }

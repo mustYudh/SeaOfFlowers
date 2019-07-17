@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -76,8 +77,20 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
             }
             mPresenter.userWithdraw(type, type_id);
         });
+        bindView(R.id.action_back, view -> {
+            setResult(1);
+            finish();
+        });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(1);
+            finish();
+        }
+        return true;
+    }
     @Override
     public void getUserAccountsSuccess(UserAccountsBean userAccountsBean) {
         if (userAccountsBean != null) {

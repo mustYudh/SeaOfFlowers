@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:gravity="center"
-            android:text="取消"
+            android:text="确定"
             android:textColor="@color/color_9897E7"
             android:textSize="15sp"
             />
@@ -47,7 +47,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:horizontalSpacing="20dp"
+        android:horizontalSpacing="10dp"
         android:numColumns="4"
         android:overScrollMode="never"
         android:scrollbars="none"

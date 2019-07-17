@@ -34,6 +34,12 @@ public class MineSetUpAlbumPresenter extends BaseViewPresenter<MineSetUpAlbumVie
                         assert getViewer() != null;
                         getViewer().uploadImgSuccess(uploadImgBean);
                     }
+
+                    @Override
+                    public void onError(ApiException e) {
+                        assert getViewer() != null;
+                        getViewer().uploadImgFail();
+                    }
                 });
     }
 
@@ -41,6 +47,7 @@ public class MineSetUpAlbumPresenter extends BaseViewPresenter<MineSetUpAlbumVie
     public void addAlbum(String url) {
         XHttp.post(ApiServices.ADDALBUM)
                 .params("url", url)
+                .params("is_video", "0")
                 .accessToken(true)
                 .execute(UploadImgBean.class)
                 .subscribeWith(new TipRequestSubscriber<UploadImgBean>() {
@@ -52,8 +59,8 @@ public class MineSetUpAlbumPresenter extends BaseViewPresenter<MineSetUpAlbumVie
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().addAlbumFail();
                     }
                 });
     }

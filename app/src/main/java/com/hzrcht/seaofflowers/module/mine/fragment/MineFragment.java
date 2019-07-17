@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.ChargeSettingActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
@@ -25,6 +26,7 @@ import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
+import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
@@ -38,6 +40,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
     private ImageView mIAge, mType;
     private LinearLayout mAuthentication;
     private MyOneLineView view_open_msg;
+    private ImageView mHeadimg;
 
     @Override
     protected int getContentViewId() {
@@ -52,11 +55,12 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
     @Override
     protected void loadData() {
         mPresenter.userInfo();
-        ImageView iv_redact = bindView(R.id.iv_redact);
+        LinearLayout ll_redact = bindView(R.id.ll_redact);
         mVip = bindView(R.id.iv_vip);
         mLAge = bindView(R.id.ll_age);
         mIAge = bindView(R.id.iv_age);
         mType = bindView(R.id.iv_type);
+        mHeadimg = bindView(R.id.iv_headimg);
 
 
         DelayClickImageView iv_help = bindView(R.id.iv_help);
@@ -65,6 +69,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         LinearLayout ll_master = bindView(R.id.ll_master);
         LinearLayout ll_balance = bindView(R.id.ll_balance);
         LinearLayout ll_withdraw = bindView(R.id.ll_withdraw);
+        LinearLayout ll_vip = bindView(R.id.ll_vip);
         LinearLayout ll_recharge = bindView(R.id.ll_recharge);
         mAuthentication = bindView(R.id.ll_authentication);
         LinearLayout ll_photo_album = bindView(R.id.ll_photo_album);
@@ -81,7 +86,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         view_system_settings.initMine(R.drawable.ic_system_settings, "系统设置", true, true);
 
         //点击事件
-        iv_redact.setOnClickListener(this);
+        ll_redact.setOnClickListener(this);
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
         view_system_settings.setOnClickListener(this);
@@ -91,22 +96,23 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         ll_master.setOnClickListener(this);
         iv_help.setOnClickListener(this);
         ll_recharge.setOnClickListener(this);
+        ll_vip.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_redact:
+            case R.id.ll_redact:
                 //资料设置
-                getLaunchHelper().startActivity(MineRedactDataActivity.class);
+                getLaunchHelper().startActivityForResult(MineRedactDataActivity.class, 1);
                 break;
             case R.id.ll_attention:
                 //我的关注
-                getLaunchHelper().startActivity(MineAttentionActivity.class);
+                getLaunchHelper().startActivityForResult(MineAttentionActivity.class, 1);
                 break;
             case R.id.ll_balance:
                 //账号余额
-                getLaunchHelper().startActivity(MineBalanceActivity.class);
+                getLaunchHelper().startActivityForResult(MineBalanceActivity.class, 1);
                 break;
             case R.id.view_system_settings:
                 //系统设置
@@ -118,11 +124,11 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 break;
             case R.id.ll_photo_album:
                 //相册
-                getLaunchHelper().startActivity(MinePhotoAlbumActivity.class);
+                getLaunchHelper().startActivityForResult(MinePhotoAlbumActivity.class, 1);
                 break;
             case R.id.ll_dynamic:
                 //动态
-                getLaunchHelper().startActivity(MineDynamicActivity.class);
+                getLaunchHelper().startActivityForResult(MineDynamicActivity.class, 1);
                 break;
             case R.id.ll_master:
                 //师徒
@@ -136,7 +142,13 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 //充值
                 Bundle bundle = new Bundle();
                 bundle.putInt("TYPE", 0);
-                getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+                getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundle, 1);
+                break;
+            case R.id.ll_vip:
+                //充值
+                Bundle bundleVip = new Bundle();
+                bundleVip.putInt("TYPE", 1);
+                getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
                 break;
         }
     }
@@ -156,7 +168,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 mIAge.setImageResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_logo : R.drawable.ic_woman_logo);
                 mType.setImageResource(mineUserInfoBean.userInfo.type == 0 ? R.drawable.ic_apply : R.drawable.ic_charge);
                 mLAge.setBackgroundResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
-
+                ImageLoader.getInstance().displayImage(mHeadimg, mineUserInfoBean.userInfo.head_img, mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal, mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal);
                 mAuthentication.setOnClickListener(view -> {
                     if (mineUserInfoBean.userInfo.type == 0) {
                         //认证主播
@@ -166,7 +178,11 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                         getLaunchHelper().startActivity(ChargeSettingActivity.class);
                     }
                 });
+
+                UserProfile.getInstance().setAnchorType(mineUserInfoBean.userInfo.type);
             }
+            UserProfile.getInstance().setUserVip(mineUserInfoBean.is_vip);
+
             bindText(R.id.tv_img, mineUserInfoBean.img + "");
             bindText(R.id.tv_state, mineUserInfoBean.state + "");
             bindText(R.id.tv_attent, mineUserInfoBean.attent + "");
@@ -174,14 +190,15 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             view_open_msg.setSwichButton(mineUserInfoBean.disturb);
 
             view_open_msg.setSwichlistener(switchStatus -> {
-                mPresenter.userEditConfig(mineUserInfoBean.disturb);
+                mPresenter.userEditConfig(mineUserInfoBean);
             });
         }
     }
 
     @Override
-    public void userEditConfigSuccess(boolean disturb) {
-        view_open_msg.setSwichButton(!disturb);
+    public void userEditConfigSuccess(MineUserInfoBean mineUserInfoBean) {
+        view_open_msg.setSwichButton(!mineUserInfoBean.disturb);
+        mineUserInfoBean.disturb = !mineUserInfoBean.disturb;
     }
 
     @Override

@@ -202,6 +202,98 @@ public class PhotoUtils {
         mDialog.show();
     }
 
+
+    /**
+     * 更换图片
+     */
+    public static void changeAvatarOther(Activity activity, List<String> list, int num, String title) {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.tv_bottom:
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
+
+                        //检测权限
+                        PermissionManager.getInstance(activity).checkMorePermission(new MorePermissionsCallBack() {
+                                                                                        @Override
+                                                                                        protected void permissionGranted(Permission permission) {
+                                                                                            // 用户已经同意该权限
+                                                                                            if ("android.permission.WRITE_EXTERNAL_STORAGE".equals(permission.name)) {
+                                                                                                //拍照获取照片
+                                                                                                photoSelector(activity);
+                                                                                            }
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        protected void permissionShouldShowRequestPermissionRationale(Permission permission) {
+                                                                                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+//                                                                                                 ToastUtil.showCommonToast("请先开启权限");
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        protected void permissionRejected(Permission permission) {
+//                                                                                                 ToastUtil.showCommonToast("您已拒绝手机存储权限,请先开启权限");
+                                                                                        }
+                                                                                    },
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA
+                        );
+                        break;
+                    case R.id.tv_top:
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
+                        //检测权限
+                        PermissionManager.getInstance(activity).checkMorePermission(new MorePermissionsCallBack() {
+                                                                                        @Override
+                                                                                        protected void permissionGranted(Permission permission) {
+                                                                                            // 用户已经同意该权限
+                                                                                            if ("android.permission.WRITE_EXTERNAL_STORAGE".equals(permission.name)) {
+                                                                                                //从相册获取照片
+                                                                                                pictureSelector(activity, num - list.size());
+                                                                                            }
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        protected void permissionShouldShowRequestPermissionRationale(Permission permission) {
+                                                                                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+//                                                                                                 ToastUtil.showCommonToast("请先开启权限");
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        protected void permissionRejected(Permission permission) {
+//                                                                                                 ToastUtil.showCommonToast("您已拒绝手机存储权限,请先开启权限");
+                                                                                        }
+                                                                                    },
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        );
+
+
+                        break;
+                    case R.id.tv_cancle:
+                        if (mDialog.isShowing()) {
+                            mDialog.dismiss();
+                        }
+                        break;
+                }
+            }
+        };
+        DialogUtils.Builder builder = new DialogUtils.Builder(activity);
+        mDialog = builder.view(R.layout.dialog_normal)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .settext(title, R.id.tv_title)
+                .addViewOnclick(R.id.tv_top, listener)
+                .addViewOnclick(R.id.tv_bottom, listener)
+                .addViewOnclick(R.id.tv_cancle, listener)
+                .build();
+        mDialog.show();
+    }
+
     //选择图片
     public static void pictureSelector(Activity context, int num) {
         // 进入相册 以下是例子：用不到的api可以不写

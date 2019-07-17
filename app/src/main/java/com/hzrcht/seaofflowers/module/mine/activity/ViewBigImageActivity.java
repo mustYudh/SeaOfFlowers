@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +25,21 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.ViewBigImagePresenter;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.ViewBigImageViewer;
+import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.luck.picture.lib.photoview.OnPhotoTapListener;
 import com.luck.picture.lib.photoview.PhotoView;
+import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.utils.ScreentUtils;
 
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ViewBigImageActivity extends BaseActivity implements ViewPager.OnPageChangeListener, OnPhotoTapListener {
+public class ViewBigImageActivity extends BaseActivity implements ViewPager.OnPageChangeListener, OnPhotoTapListener, ViewBigImageViewer {
+    @PresenterLifeCycle
+    private ViewBigImagePresenter mPresenter = new ViewBigImagePresenter(this);
     // 接收传过来的uri地址
     List<String> imageuri;
     // 接收穿过来当前选择的图片的数量
@@ -65,6 +72,7 @@ public class ViewBigImageActivity extends BaseActivity implements ViewPager.OnPa
      */
     private boolean isApp;
     private LinearLayout mMore;
+    private DialogUtils moreDialog;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -145,13 +153,42 @@ public class ViewBigImageActivity extends BaseActivity implements ViewPager.OnPa
      * 更多操作弹窗
      */
     private void showMoreDialog() {
+        moreDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_normal)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .settext("请选择", R.id.tv_title)
+                .settext("删除", R.id.tv_bottom)
+                .addViewOnclick(R.id.tv_cancle, view -> {
+                    if (moreDialog.isShowing()) {
+                        moreDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.tv_bottom, view -> {
+                    if (moreDialog.isShowing()) {
+                        moreDialog.dismiss();
+                    }
+                    mPresenter.imgDel(imageId + "");
 
+                })
+                .build();
+        moreDialog.show();
+        moreDialog.findViewById(R.id.tv_top).setVisibility(View.GONE);
+        moreDialog.findViewById(R.id.view_middle).setVisibility(View.GONE);
     }
 
     @Override
     public void onPhotoTap(ImageView imageView, float v, float v1) {
         finish();
     }
+
+    @Override
+    public void imgDelSuccess() {
+
+        setResult(1);
+        finish();
+    }
+
 
     /**
      * 本应用图片适配器

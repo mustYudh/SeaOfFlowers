@@ -527,17 +527,17 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
             //在线状态
             switch (anchorUserInfoBean.online_type) {
-                case 0:
+                case 1:
                     //离线
                     bindText(R.id.tv_online, "离线");
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_off);
                     break;
-                case 1:
+                case 2:
                     //在线
                     bindText(R.id.tv_online, "在线");
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_on);
                     break;
-                case 2:
+                case 3:
                     //通话中
                     bindText(R.id.tv_online, "通话中");
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_ing);
@@ -720,6 +720,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
         }
+        tv_check_mobile.setVisibility(View.GONE);
+
         mMobile.setText("手机号：" + anchorUserInfoBean.phone);
     }
 
@@ -731,7 +733,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         }
         if (code == 10000) {
             mPresenter.getSysMoney();
-        }else {
+        } else {
             ToastUtils.show(msg);
         }
     }

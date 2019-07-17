@@ -7,5 +7,5 @@ import com.yu.common.mvp.Viewer;
 public interface MineViewer extends Viewer {
     void userInfoSuccess(MineUserInfoBean mineUserInfoBean);
 
-    void userEditConfigSuccess(boolean disturb);
+    void userEditConfigSuccess(MineUserInfoBean mineUserInfoBean);
 }

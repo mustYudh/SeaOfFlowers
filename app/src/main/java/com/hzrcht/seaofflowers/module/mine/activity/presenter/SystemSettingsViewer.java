@@ -7,5 +7,5 @@ import com.yu.common.mvp.Viewer;
 public interface SystemSettingsViewer extends Viewer {
     void getUserConfigSuccess(UserConfigBean userConfigBean);
 
-    void userEditConfigSuccess(boolean disturb,String type);
+    void userEditConfigSuccess(UserConfigBean userConfigBean,String type);
 }

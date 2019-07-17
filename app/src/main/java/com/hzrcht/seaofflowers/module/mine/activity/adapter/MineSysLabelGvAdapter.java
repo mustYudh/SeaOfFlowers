@@ -80,7 +80,7 @@ public class MineSysLabelGvAdapter extends BaseAdapter {
                 }
 
                 if (onItemChcekCheckListener != null) {
-                    onItemChcekCheckListener.setOnItemChcekCheckClick(list.get(i).title, list.get(i).id + "");
+                    onItemChcekCheckListener.setOnItemChcekCheckClick(list);
                 }
             }
         });
@@ -93,9 +93,7 @@ public class MineSysLabelGvAdapter extends BaseAdapter {
     }
 
     public interface OnItemChcekCheckListener {
-        void setOnItemChcekCheckClick(String title, String id);
-
-
+        void setOnItemChcekCheckClick(List<SysLabelBean.RowsBean> list);
     }
 
     OnItemChcekCheckListener onItemChcekCheckListener;

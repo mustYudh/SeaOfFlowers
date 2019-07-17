@@ -7,7 +7,6 @@ import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
 import com.xuexiang.xhttp2.XHttp;
-import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -30,7 +29,7 @@ public class MinePresenter extends BaseViewPresenter<MineViewer> {
                 });
     }
 
-    public void userEditConfig(boolean disturb) {
+    public void userEditConfig(MineUserInfoBean mineUserInfoBean) {
         XHttp.post(ApiServices.USEREEDITCONFIG)
                 .accessToken(true)
                 .params("type","1")
@@ -39,7 +38,7 @@ public class MinePresenter extends BaseViewPresenter<MineViewer> {
                     @Override
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
-                        getViewer().userEditConfigSuccess(disturb);
+                        getViewer().userEditConfigSuccess(mineUserInfoBean);
                     }
                 });
     }

@@ -18,6 +18,7 @@ import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
 import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
@@ -36,6 +37,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yudenghao
@@ -47,6 +53,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     @PresenterLifeCycle
     HomePagePresenter mPresenter = new HomePagePresenter(this);
     private BottomNavigationView mBottomNavigationView;
+    private Disposable subscribe;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -73,6 +80,11 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         });
 
         checkPermission();
+
+        if (UserProfile.getInstance().getAnchorType() == 0) {
+            //用户
+            userOnline();
+        }
     }
 
     /**
@@ -143,5 +155,32 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+            subscribe = null;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.getIsAnchor();
+    }
+
+    private void userOnline() {
+        subscribe = Observable.interval(0, 60, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(aLong -> {
+                    mPresenter.userOnline();
+                })
+                .subscribe();
+    }
+
+    @Override
+    public void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean) {
+        if (userIsAnchorBean != null) {
+            UserProfile.getInstance().setAnchorType(userIsAnchorBean.is_anchor);
+            UserProfile.getInstance().setUserVip(userIsAnchorBean.is_vip);
+        }
     }
 }

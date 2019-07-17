@@ -1,13 +1,22 @@
 package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysLabelBean;
-import com.hzrcht.seaofflowers.module.mine.activity.bean.UserPhotoListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserDetailBean;
 import com.yu.common.mvp.Viewer;
 
-import java.util.List;
-
 public interface MineRedactDataViewer extends Viewer {
-    void getPhotoList(List<UserPhotoListBean> list);
-
     void getSysLabelSuccess(SysLabelBean sysLabelBean);
+
+    void getUserDetailSuccess(UserDetailBean userDetailBean);
+
+    void setUserDetailSuccess();
+
+    void uploadImgSuccess(UploadImgBean uploadImgBean);
+
+    void uploadCoverSuccess(UploadImgBean uploadImgBean);
+
+    void uploadImgFail();
+
+    void uploadCoverFail();
 }

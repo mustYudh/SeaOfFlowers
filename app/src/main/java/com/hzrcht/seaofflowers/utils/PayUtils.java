@@ -174,24 +174,11 @@ public class PayUtils {
             isStart = true;
         }
         if (needCheck) {
-//            XHttpProxy.proxy(ApiServices.class)
-//                    .checkPaySuccess(info.lOrderId)
-//                    .subscribeWith(new TipRequestSubscriber<PayInfo>() {
-//                        @Override
-//                        protected void onSuccess(PayInfo payInfo) {
-//                            needCheck = false;
-//                            if (payCallback != null) {
-//                                payCallback.onPaySuccess(type);
-//                            }
-//                            recycle();
-//                        }
-//
-//                        @Override
-//                        public void onError(ApiException e) {
-//                            handler.postDelayed(() -> checkPaySuccess(type, info, payCallback), 2000);
-//
-//                        }
-//                    });
+            needCheck = false;
+            if (payCallback != null) {
+                payCallback.onPaySuccess(type);
+            }
+            recycle();
         }
     }
 

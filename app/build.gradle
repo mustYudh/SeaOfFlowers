@@ -216,6 +216,7 @@ dependencies {
     implementation appDependencies.LOADING
     implementation appDependencies.OSS
     implementation appDependencies.NICEIMAGEVIEW
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     //    implementation appDependencies.RXPERMISSIONVersion
     //    implementation appDependencies.RXANDROIDVersion
     //    implementation appDependencies.RXJAVAVersion

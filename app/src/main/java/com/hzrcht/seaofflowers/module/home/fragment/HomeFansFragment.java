@@ -8,18 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.module.home.adapter.HomeFansRvAdapter;
+import com.hzrcht.seaofflowers.module.home.bean.HomeFansBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeFansPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeFansViewer;
 import com.yu.common.mvp.PresenterLifeCycle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class HomeFansFragment extends BaseFragment implements HomeFansViewer {
-    private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
     private HomeFansPresenter mPresenter = new HomeFansPresenter(this);
+    private RecyclerView rv_home_fans;
 
     @Override
     protected int getContentViewId() {
@@ -41,12 +39,17 @@ public class HomeFansFragment extends BaseFragment implements HomeFansViewer {
 
     @Override
     protected void loadData() {
-        for (int i = 0; i < 10; i++) {
-            list.add("");
-        }
-        RecyclerView rv_home_fans = bindView(R.id.rv_home_fans);
+        rv_home_fans = bindView(R.id.rv_home_fans);
         rv_home_fans.setLayoutManager(new LinearLayoutManager(getActivity()));
-        HomeFansRvAdapter adapter = new HomeFansRvAdapter(R.layout.item_home_fans, list, getActivity());
-        rv_home_fans.setAdapter(adapter);
+
+        mPresenter.getFansList();
+    }
+
+    @Override
+    public void getFansListSuccess(HomeFansBean homeFansBean) {
+        if (homeFansBean != null && homeFansBean.row != null && homeFansBean.row.size() != 0) {
+            HomeFansRvAdapter adapter = new HomeFansRvAdapter(R.layout.item_home_fans, homeFansBean.row, getActivity());
+            rv_home_fans.setAdapter(adapter);
+        }
     }
 }

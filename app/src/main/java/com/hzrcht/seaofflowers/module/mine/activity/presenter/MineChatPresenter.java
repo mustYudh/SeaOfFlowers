@@ -46,9 +46,10 @@ public class MineChatPresenter extends BaseViewPresenter<MineChatViewer> {
                 });
     }
 
-    public void getIsAnchor() {
+    public void getIsAnchor(String user_id) {
         XHttp.post(ApiServices.USERISANCHOR)
                 .accessToken(true)
+                .params("user_id", user_id)
                 .execute(UserIsAnchorBean.class)
                 .subscribeWith(new TipRequestSubscriber<UserIsAnchorBean>() {
                     @Override

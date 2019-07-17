@@ -29,7 +29,7 @@ public class SystemSettingsPresenter extends BaseViewPresenter<SystemSettingsVie
                 });
     }
 
-    public void userEditConfig(boolean disturb,String type) {
+    public void userEditConfig(UserConfigBean userConfigBean,String type) {
         XHttp.post(ApiServices.USEREEDITCONFIG)
                 .accessToken(true)
                 .params("type",type)
@@ -38,7 +38,7 @@ public class SystemSettingsPresenter extends BaseViewPresenter<SystemSettingsVie
                     @Override
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
-                        getViewer().userEditConfigSuccess(disturb,type);
+                        getViewer().userEditConfigSuccess(userConfigBean,type);
                     }
                 });
     }

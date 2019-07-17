@@ -20,6 +20,9 @@ public class ApiServices {
     //关注列表
     public static final String GETATTENTIONLIST = BASEURL + "/api/attent/index";
 
+    //粉丝列表
+    public static final String GETUSERLIST = BASEURL + "/api/user/userList";
+
     //主播列表
     public static final String GETANCHORLIST = BASEURL + "/api/user/anchorList";
 
@@ -37,6 +40,9 @@ public class ApiServices {
 
     //我的相册列表
     public static final String GETPHOTOALBUM = BASEURL + "/api/img/index";
+
+    //相册删除
+    public static final String IMGDEL = BASEURL + "/api/img/del";
 
     //用户信息
     public static final String MINEUSERINFO = BASEURL + "/api/user/info";
@@ -124,5 +130,17 @@ public class ApiServices {
 
     //查看手机号
     public static final String LOOKPHONE = BASEURL + "/api/Look/phone";
+
+    //搜索
+    public static final String USERSEARCH = BASEURL + "/api/user/search";
+
+    //定时任务
+    public static final String USERONLINE = BASEURL + "/api/user/online";
+
+    //用户详情
+    public static final String USERDETAIL = BASEURL + "/api/user/detail";
+
+    //用户详情修改
+    public static final String USEREDIT = BASEURL + "/api/user/edit";
 
 }

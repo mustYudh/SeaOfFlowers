@@ -7,5 +7,9 @@ import com.yu.common.mvp.Viewer;
 public interface MineSetUpAlbumViewer extends Viewer {
     void uploadImgSuccess(UploadImgBean uploadImgBean);
 
+    void uploadImgFail();
+
     void addAlbumSuccess();
+
+    void addAlbumFail();
 }

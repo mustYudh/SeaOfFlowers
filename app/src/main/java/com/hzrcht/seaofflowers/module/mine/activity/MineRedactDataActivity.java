@@ -1,14 +1,14 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -19,19 +19,21 @@ import android.widget.TextView;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
-import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
-import com.hzrcht.seaofflowers.module.mine.activity.adapter.MarginDecoration;
+import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineRedactDataGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineSysLabelGvAdapter;
-import com.hzrcht.seaofflowers.module.mine.activity.adapter.SelectPhotoAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.JsonBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysLabelBean;
-import com.hzrcht.seaofflowers.module.mine.activity.bean.UserPhotoListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.UserDetailBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataViewer;
 import com.hzrcht.seaofflowers.module.view.ClearEditText;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.hzrcht.seaofflowers.utils.GetJsonDataUtil;
 import com.hzrcht.seaofflowers.utils.PhotoUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -40,25 +42,32 @@ import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
+import com.yu.common.ui.NoSlidingGridView;
 
+import org.json.JSONArray;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MineRedactDataActivity extends BaseBarActivity
-        implements MineRedactDataViewer, View.OnClickListener,
-        BaseQuickAdapter.OnItemChildClickListener {
+import id.zelory.compressor.Compressor;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+public class MineRedactDataActivity extends BaseBarActivity implements MineRedactDataViewer, View.OnClickListener {
     private List<String> workList = new ArrayList<>();
     private List<String> weightList = new ArrayList<>();
     private List<String> heightList = new ArrayList<>();
     private List<String> ageList = new ArrayList<>();
     private List<String> constellationList = new ArrayList<>();
+    private List<String> allLocationSelectedPicture = new ArrayList<>();
     @PresenterLifeCycle
     private MineRedactDataPresenter mPresenter = new MineRedactDataPresenter(this);
     private MyOneLineView view_work;
     private MyOneLineView view_mobile;
     private DialogUtils dataDialog;
-    private SelectPhotoAdapter adapter = new SelectPhotoAdapter();
-    private RecyclerView gv_pic;
+    private NoSlidingGridView gv_pic;
     private MyOneLineView view_height;
     private MyOneLineView view_nickname;
     private MyOneLineView view_age;
@@ -69,14 +78,71 @@ public class MineRedactDataActivity extends BaseBarActivity
     private MyOneLineView view_constellation;
     private DialogUtils labelDialog;
     private List<SysLabelBean.RowsBean> labelList = new ArrayList<>();
+    private MyOneLineView view_city;
+    private MyOneLineView view_label;
+    private String coverName = "";
+    private String head_img = "";
+    private String nick_name = "";
+    private String work = "";
+    private String phone = "";
+    private String age = "";
+    private String kg = "";
+    private String star = "";
+    private String city = "";
+    private String sign = "";
+    private String hight = "";
+    private String lableName = "";
+    private MineRedactDataGvAdapter adapter;
+    private int audit = 1;
+
+    private List<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private Thread thread;
+    private static final int MSG_LOAD_DATA = 0x0001;
+    private static final int MSG_LOAD_SUCCESS = 0x0002;
+    private static final int MSG_LOAD_FAILED = 0x0003;
+
+    private static boolean isLoaded = false;
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_LOAD_DATA:
+                    if (thread == null) {//如果已创建就不再重新创建子线程了
+                        thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 子线程中解析省市区数据
+                                initJsonData();
+                            }
+                        });
+                        thread.start();
+                    }
+                    break;
+
+                case MSG_LOAD_SUCCESS:
+                    isLoaded = true;
+                    break;
+
+                case MSG_LOAD_FAILED:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_mine_redact_data_view);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void loadData() {
+        initJsonData();
+        mPresenter.getUserDetail();
         mPresenter.getSysLabel();
         for (int i = 150; i < 205; i++) {
             if (i % 5 == 0) {
@@ -120,7 +186,6 @@ public class MineRedactDataActivity extends BaseBarActivity
         workList.add("老师");
         workList.add("其他");
         setTitle("编辑资料");
-        mPresenter.getPhotoList();
         gv_pic = bindView(R.id.gv_pic);
         RelativeLayout rl_headimg = bindView(R.id.rl_headimg);
         iv_headimg = bindView(R.id.iv_headimg);
@@ -131,9 +196,9 @@ public class MineRedactDataActivity extends BaseBarActivity
         view_age = bindView(R.id.view_age);
         view_weight = bindView(R.id.view_weight);
         view_constellation = bindView(R.id.view_constellation);
-        MyOneLineView view_city = bindView(R.id.view_city);
+        view_city = bindView(R.id.view_city);
         view_signature = bindView(R.id.view_signature);
-        MyOneLineView view_label = bindView(R.id.view_label);
+        view_label = bindView(R.id.view_label);
 
         view_nickname.init("昵称")
                 .setTextRight("聊友:21327")
@@ -207,19 +272,84 @@ public class MineRedactDataActivity extends BaseBarActivity
         view_signature.setOnClickListener(this);
         view_label.setOnClickListener(this);
         rl_headimg.setOnClickListener(this);
-        adapter.setOnItemChildClickListener(this);
 
-        gv_pic.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false) {
+        adapter = new MineRedactDataGvAdapter(getActivity(), allLocationSelectedPicture);
+        gv_pic.setAdapter(adapter);
+        adapter.setOnItemChcekCheckListener(new MineRedactDataGvAdapter.OnItemChcekCheckListener() {
             @Override
-            public boolean canScrollVertically() {
-                return false;
+            public void setOnItemChcekCheckClick() {
+                picType = 0;
+                PhotoUtils.changeAvatarOther(getActivity(), allLocationSelectedPicture, 4, "上传您的主播封面,以供主播页展示");
             }
         });
-        gv_pic.addItemDecoration(new MarginDecoration(getActivity(), 4, 4));
-        gv_pic.setNestedScrollingEnabled(false);
-        gv_pic.setHasFixedSize(true);
-        gv_pic.setFocusable(false);
-        gv_pic.setAdapter(adapter);
+        bindView(R.id.tv_commit, view -> {
+            if (audit == 0) {
+                ToastUtils.show("审核中，无法修改");
+                return;
+            }
+            if (allLocationSelectedPicture.size() == 0) {
+                ToastUtils.show("请至少上传一张封面图");
+                return;
+            }
+
+            if (TextUtils.isEmpty(head_img)) {
+                ToastUtils.show("请上传头像");
+                return;
+            }
+
+            if (TextUtils.isEmpty(nick_name)) {
+                ToastUtils.show("请填写昵称");
+                return;
+            }
+
+            if (TextUtils.isEmpty(work)) {
+                ToastUtils.show("请填写职业");
+                return;
+            }
+
+            if (TextUtils.isEmpty(phone)) {
+                ToastUtils.show("请填写手机号码");
+                return;
+            }
+
+            if (TextUtils.isEmpty(hight)) {
+                ToastUtils.show("请选择身高");
+                return;
+            }
+
+            if (TextUtils.isEmpty(age)) {
+                ToastUtils.show("请选择年龄");
+                return;
+            }
+
+            if (TextUtils.isEmpty(kg)) {
+                ToastUtils.show("请选择体重");
+                return;
+            }
+
+            if (TextUtils.isEmpty(star)) {
+                ToastUtils.show("请选择星座");
+                return;
+            }
+
+            if (TextUtils.isEmpty(city)) {
+                ToastUtils.show("请选择城市");
+                return;
+            }
+
+            loadDialog.show();
+            final StringBuilder urlNo = new StringBuilder();
+            if (allLocationSelectedPicture.size() != 0) {
+                for (int i = 0; i < allLocationSelectedPicture.size(); i++) {
+                    urlNo.append(allLocationSelectedPicture.get(i));
+                    if (i < allLocationSelectedPicture.size() - 1) {
+                        urlNo.append(",");
+                    }
+                }
+            }
+
+            mPresenter.setUserDetail(urlNo.toString().trim(), head_img, nick_name, work, phone, age, kg, star, city, sign, hight, lableName);
+        });
     }
 
     /**
@@ -255,7 +385,12 @@ public class MineRedactDataActivity extends BaseBarActivity
                 initConfigData(4);
                 break;
             case R.id.view_city:
-
+                if (isLoaded) {
+                    showPickerView();
+                } else {
+                    ToastUtils.show("获取城市数据失败");
+                    initJsonData();
+                }
                 break;
             case R.id.view_signature:
                 showDataDialog(1);
@@ -271,43 +406,75 @@ public class MineRedactDataActivity extends BaseBarActivity
         }
     }
 
+    @SuppressLint("CheckResult")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-        }
-
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
                     // 图片选择结果回调
                     if (picType == 0) {
-                        List<UserPhotoListBean> currentData = adapter.getData();
-                        currentData.remove(currentData.size() - 1);
-                        List<UserPhotoListBean> list = new ArrayList<>(currentData);
+                        loadDialog.show();
+                        // 图片选择结果回调
                         List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-                        selectList.stream()
-                                .filter(media -> !TextUtils.isEmpty(media.getCompressPath()))
-                                .forEach(media -> {
-                                    UserPhotoListBean bean = new UserPhotoListBean();
-                                    bean.url = media.getCompressPath();
-                                    list.add(bean);
+                        // 例如 LocalMedia 里面返回三种path
+                        // 1.media.getPath(); 为原图path
+                        // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+                        // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+                        // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+//                    allLocationSelectedPicture.put(count, compressPath);
+//                        for (int i = 0; i < selectList.size(); i++) {
+//                            allLocationSelectedPicture.add(selectList.get(i).getCompressPath());
+//                        }
+//                        if (adapter != null) {
+//                            gv_pic.setAdapter(adapter);
+//                        }
+                        File imageFileCrmera = new File(selectList.get(0).getCompressPath());
+                        /** 上传图片*/
+                        new Compressor(getActivity())
+                                .compressToFileAsFlowable(imageFileCrmera)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<File>() {
+                                    @Override
+                                    public void accept(File file) {
+                                        mPresenter.uploadCover(file);
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) {
+                                        throwable.printStackTrace();
+//                                        showError(throwable.getMessage());
+                                        if (loadDialog.isShowing()) {
+                                            loadDialog.dismiss();
+                                        }
+                                        ToastUtils.show("封面图片压缩失败,请重试");
+                                    }
                                 });
-                        if (list.size() > 4) {
-                            list.remove(list.size() - 1);
-                        }
-                        getPhotoList(list);
                     } else {
                         List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
                         ImageLoader.getInstance().displayImage(iv_headimg, selectList.get(0).getCompressPath());
+                        File imageFileCrmera = new File(selectList.get(0).getCompressPath());
+                        /** 上传图片*/
+                        new Compressor(getActivity())
+                                .compressToFileAsFlowable(imageFileCrmera)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Consumer<File>() {
+                                    @Override
+                                    public void accept(File file) {
+                                        mPresenter.uploadImg(file);
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(Throwable throwable) {
+                                        throwable.printStackTrace();
+//                                        showError(throwable.getMessage());
+                                        ToastUtils.show("头像压缩失败,请重试");
+                                    }
+                                });
                     }
                     break;
                 default:
@@ -322,18 +489,23 @@ public class MineRedactDataActivity extends BaseBarActivity
                 switch (type) {
                     case 0:
                         view_work.setTextRight(workList.get(options1));
+                        work = workList.get(options1);
                         break;
                     case 1:
                         view_height.setTextRight(heightList.get(options1) + "CM");
+                        hight = heightList.get(options1);
                         break;
                     case 2:
                         view_age.setTextRight(ageList.get(options1) + "岁");
+                        age = ageList.get(options1);
                         break;
                     case 3:
                         view_weight.setTextRight(weightList.get(options1) + "kg");
+                        kg = weightList.get(options1);
                         break;
                     case 4:
                         view_constellation.setTextRight(constellationList.get(options1));
+                        star = constellationList.get(options1);
                         break;
                 }
             }
@@ -397,10 +569,12 @@ public class MineRedactDataActivity extends BaseBarActivity
                         case 0:
                             //昵称
                             view_nickname.setTextRight(et_content.getText().toString().trim());
+                            nick_name = et_content.getText().toString().trim();
                             break;
                         case 1:
                             //个人签名
                             view_signature.setTextRight(et_content.getText().toString().trim());
+                            sign = et_content.getText().toString().trim();
                             break;
                         default:
                     }
@@ -422,15 +596,6 @@ public class MineRedactDataActivity extends BaseBarActivity
         }
     }
 
-    @Override
-    public void getPhotoList(List<UserPhotoListBean> list) {
-        if (list == null || list.size() < 4) {
-            UserPhotoListBean listBean = new UserPhotoListBean();
-            listBean.canAdd = true;
-            list.add(listBean);
-        }
-        adapter.setNewData(list);
-    }
 
     @Override
     public void getSysLabelSuccess(SysLabelBean sysLabelBean) {
@@ -438,6 +603,115 @@ public class MineRedactDataActivity extends BaseBarActivity
             labelList = sysLabelBean.rows;
         }
     }
+
+    @Override
+    public void getUserDetailSuccess(UserDetailBean userDetailBean) {
+        if (userDetailBean != null) {
+            view_nickname.setTextRight(userDetailBean.nick_name);
+            view_work.setTextRight(userDetailBean.work);
+            view_mobile.setTextRight(userDetailBean.phone);
+            view_height.setTextRight(userDetailBean.hight + "CM");
+            view_age.setTextRight(userDetailBean.age + "岁");
+            view_weight.setTextRight(userDetailBean.kg + "kg");
+            view_constellation.setTextRight(userDetailBean.star);
+            view_city.setTextRight(userDetailBean.city);
+            view_signature.setTextRight(TextUtils.isEmpty(userDetailBean.sign) ? "请输入个人签名(选填)" : userDetailBean.sign);
+            ImageLoader.getInstance().displayImage(iv_headimg, userDetailBean.head_img);
+            final StringBuilder label = new StringBuilder();
+            if (userDetailBean.lable != null && userDetailBean.lable.size() != 0) {
+                for (int i = 0; i < userDetailBean.lable.size(); i++) {
+                    label.append(userDetailBean.lable.get(i));
+                    if (i < userDetailBean.lable.size() - 1) {
+                        label.append(",");
+                    }
+                }
+                view_label.setTextRight(label.toString().trim());
+                lableName = label.toString().trim();
+            } else {
+                view_label.setTextRight("请输入形象标签(选填)");
+                lableName = "";
+            }
+            final StringBuilder cover = new StringBuilder();
+            if (userDetailBean.cover != null && userDetailBean.cover.size() != 0) {
+                for (int i = 0; i < userDetailBean.cover.size(); i++) {
+                    cover.append(userDetailBean.cover.get(i));
+                    if (i < userDetailBean.cover.size() - 1) {
+                        cover.append(",");
+                    }
+                }
+                coverName = cover.toString().trim();
+                allLocationSelectedPicture.clear();
+                allLocationSelectedPicture.addAll(userDetailBean.cover);
+                if (adapter != null) {
+                    gv_pic.setAdapter(adapter);
+                }
+            } else {
+                coverName = "";
+                allLocationSelectedPicture.clear();
+            }
+
+            work = userDetailBean.work;
+            phone = userDetailBean.phone;
+            head_img = userDetailBean.head_img;
+            nick_name = userDetailBean.nick_name;
+            age = userDetailBean.age + "";
+            kg = userDetailBean.kg + "";
+            hight = userDetailBean.hight + "";
+            star = userDetailBean.star;
+            city = userDetailBean.city;
+            sign = userDetailBean.sign;
+
+            audit = userDetailBean.audit;
+        }
+    }
+
+    @Override
+    public void setUserDetailSuccess() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("修改资料成功");
+        setResult(1);
+        finish();
+    }
+
+    @Override
+    public void uploadImgSuccess(UploadImgBean uploadImgBean) {
+        if (uploadImgBean != null) {
+            head_img = uploadImgBean.url;
+        }
+    }
+
+    @Override
+    public void uploadCoverSuccess(UploadImgBean uploadImgBean) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        if (uploadImgBean != null) {
+            allLocationSelectedPicture.add(uploadImgBean.url + "");
+            if (adapter != null) {
+                gv_pic.setAdapter(adapter);
+            }
+        } else {
+            ToastUtils.show("封面图片上传失败,请重试");
+        }
+    }
+
+    @Override
+    public void uploadImgFail() {
+
+    }
+
+    @Override
+    public void uploadCoverFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("封面图片上传失败,请重试");
+    }
+
+
+    private String temp = "";
 
     /**
      * 形象label弹窗
@@ -456,7 +730,12 @@ public class MineRedactDataActivity extends BaseBarActivity
                     if (labelDialog.isShowing()) {
                         labelDialog.dismiss();
                     }
-
+                    lableName = temp;
+                    if (TextUtils.isEmpty(temp)) {
+                        view_label.setTextRight("请输入形象标签(选填)");
+                    } else {
+                        view_label.setTextRight(lableName);
+                    }
                 })
                 .build();
         labelDialog.show();
@@ -465,20 +744,142 @@ public class MineRedactDataActivity extends BaseBarActivity
         gv_label.setAdapter(adapter);
 
         adapter.setOnItemChcekCheckListener(new MineSysLabelGvAdapter.OnItemChcekCheckListener() {
-            @Override
-            public void setOnItemChcekCheckClick(String title, String id) {
 
+            @Override
+            public void setOnItemChcekCheckClick(List<SysLabelBean.RowsBean> list) {
+                adapter.notifyDataSetChanged();
+                StringBuilder titleNo = new StringBuilder();
+                if (list.size() != 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        if (list.get(i).isIs_select) {
+                            titleNo.append((list.get(i).title) + ",");
+                        }
+                    }
+                    if (titleNo.toString().length() > 0) {
+                        temp = titleNo.toString().trim().substring(0, (titleNo.toString().length() - 1));
+                    } else {
+                        temp = "";
+                    }
+                }
             }
         });
     }
 
 
+    private void showPickerView() {// 弹出选择器
+
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                String opt1tx = options1Items.size() > 0 ?
+                        options1Items.get(options1).getPickerViewText() : "";
+
+                String opt2tx = options2Items.size() > 0
+                        && options2Items.get(options1).size() > 0 ?
+                        options2Items.get(options1).get(options2) : "";
+//
+//                String opt3tx = options2Items.size() > 0
+//                        && options3Items.get(options1).size() > 0
+//                        && options3Items.get(options1).get(options2).size() > 0 ?
+//                        options3Items.get(options1).get(options2).get(options3) : "";
+
+                String tx = opt1tx + opt2tx;
+                view_city.setTextRight(tx);
+                city = tx;
+            }
+        })
+
+                .setTitleText("")
+                .setDividerColor(Color.TRANSPARENT)
+                .setTextColorCenter(Color.parseColor("#333333")) //设置选中项文字颜色
+                .setContentTextSize(20)
+                .setSubmitColor(Color.parseColor("#9897E7"))//确定按钮文字颜色
+                .setCancelColor(Color.parseColor("#333333"))//取消按钮文字颜色
+                .build();
+
+        /*pvOptions.setPicker(options1Items);//一级选择器*/
+        pvOptions.setPicker(options1Items, options2Items);//二级选择器
+//        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show();
+    }
+
+    private void initJsonData() {//解析数据
+
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         *
+         * */
+        String JsonData = new GetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
+
+        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+
+        /**
+         * 添加省份数据
+         *
+         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
+         * PickerView会通过getPickerViewText方法获取字符串显示出来。
+         */
+        options1Items = jsonBean;
+
+        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
+            ArrayList<String> cityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
+                String cityName = jsonBean.get(i).getCityList().get(c).getName();
+                cityList.add(cityName);//添加城市
+                ArrayList<String> city_AreaList = new ArrayList<>();//该城市的所有地区列表
+
+                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
+                /*if (jsonBean.get(i).getCityList().get(c).getArea() == null
+                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
+                    city_AreaList.add("");
+                } else {
+                    city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                }*/
+                city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                province_AreaList.add(city_AreaList);//添加该省所有地区数据
+            }
+
+            /**
+             * 添加城市数据
+             */
+            options2Items.add(cityList);
+
+            /**
+             * 添加地区数据
+             */
+            options3Items.add(province_AreaList);
+        }
+
+        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
+
+    }
+
+    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
+        ArrayList<JsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
+        }
+        return detail;
+    }
+
+
     @Override
-    public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        if (view.getId() == R.id.iv_picture_item) {
-            picType = 0;
-            PhotoUtils.changeAvatar(getActivity(), adapter.getData(), 5, "上传您的主播封面,以供主播页展示");
-//            PhotoUtils.pictureSelector(getActivity(), 5 - adapter.getItemCount());
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
         }
     }
 }

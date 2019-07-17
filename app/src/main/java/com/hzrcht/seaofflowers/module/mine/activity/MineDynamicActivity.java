@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,6 +55,19 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
         mDynamic = bindView(R.id.rv_dynamic);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
         mPresenter.getStateList(page, pageSize);
+        bindView(R.id.action_back, view -> {
+            setResult(1);
+            finish();
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(1);
+            finish();
+        }
+        return true;
     }
 
     @Override
@@ -139,6 +153,15 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
                         mPresenter.stateLike(state_id + "", item);
                     }
                 });
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rv_dynamic, true);
+            } else {
+                if (page > 1) {
+
+                } else {
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rv_dynamic, false);
+                }
             }
         }
     }

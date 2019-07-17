@@ -3,6 +3,7 @@ package com.hzrcht.seaofflowers.module.mine.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
@@ -101,6 +102,7 @@ public class RechargeCoinFragment extends BaseFragment implements RechargeCoinVi
                     @Override
                     public void onPaySuccess(int type) {
                         mPresenter.getUserAmount();
+                        Log.e("aaaa", "支付成功了吗");
                     }
 
                     @Override
