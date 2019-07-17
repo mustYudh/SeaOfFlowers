@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -67,6 +68,19 @@ public class MineRechargeActivity extends BaseBarActivity implements MineRecharg
         bindView(R.id.tv_online_service, view -> {
 
         });
+        bindView(R.id.action_back, view -> {
+            setResult(1);
+            finish();
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setResult(1);
+            finish();
+        }
+        return true;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.hzrcht.seaofflowers.module.mine.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
@@ -90,7 +91,8 @@ public class DredgeVipFragment extends BaseFragment implements DredgeVipViewer {
                 .getPayResult(new PayUtils.PayCallBack() {
                     @Override
                     public void onPaySuccess(int type) {
-                        ToastUtils.show("支付宝支付成功");
+
+                        Log.e("aaaa", "支付成功了吗");
                     }
 
                     @Override

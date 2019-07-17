@@ -47,8 +47,12 @@ public class MineContentRvAdapter extends BaseQuickAdapter<ReviewListBean.RowsBe
             tv_name.setMovementMethod(instance);
             ImageLoader.getInstance().displayImage(iv_headimg, item.reviewInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         } else {
-            tv_name.setText(item.userInfo.nick_name);
-            ImageLoader.getInstance().displayImage(iv_headimg, item.userInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+            if (item.userInfo != null) {
+
+                tv_name.setText(item.userInfo.nick_name);
+                ImageLoader.getInstance().displayImage(iv_headimg, item.userInfo.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+            }
+
         }
         tv_content.setText(item.title);
     }

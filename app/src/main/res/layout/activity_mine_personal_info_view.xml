@@ -347,83 +347,97 @@
     </ScrollView>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <FrameLayout
         android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:gravity="center_vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ll_collect"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_collect"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
 
-            <ImageView
-                android:id="@+id/iv_collect"
-                android:layout_width="26dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_info_collect_normal"/>
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_collect"
+                    android:layout_width="26dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_info_collect_normal"/>
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/ll_chat"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            <LinearLayout
+                android:id="@+id/ll_chat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-            <ImageView
-                android:id="@+id/iv_chat"
-                android:layout_width="23dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_info_chat"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_info_present"/>
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_chat"
+                    android:layout_width="23dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_info_chat"/>
+            </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/shape_info_video"
-            android:gravity="center">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
 
-            <ImageView
-                android:layout_width="31dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_info_video_white"/>
+                <ImageView
+
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_info_present"/>
+            </LinearLayout>
 
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="15dp"
-                android:includeFontPadding="false"
-                android:text="与TA视频"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                />
+                android:layout_height="40dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/shape_info_video"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="31dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="15dp"
+                    android:src="@drawable/ic_info_video_white"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="15dp"
+                    android:includeFontPadding="false"
+                    android:text="与TA视频"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="35dp"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 </FrameLayout>
 

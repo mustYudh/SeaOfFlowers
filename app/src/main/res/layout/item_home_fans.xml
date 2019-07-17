@@ -31,10 +31,11 @@
 
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
-                    android:text="再见只是陌生人"
+                    android:text="@string/text_null"
                     android:textColor="@color/color_333333"
                     android:textSize="15sp"
                     />
@@ -50,6 +51,7 @@
 
 
                     <TextView
+                        android:id="@+id/tv_point"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
                         android:layout_marginLeft="10dp"
@@ -58,6 +60,7 @@
 
 
                     <TextView
+                        android:id="@+id/tv_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -76,22 +79,20 @@
                 android:layout_marginTop="13dp"
                 android:gravity="center_vertical">
 
-                <TextView
+                <ImageView
+                    android:id="@+id/iv_lv"
                     android:layout_width="30dp"
                     android:layout_height="15dp"
-                    android:background="@drawable/shape_level9"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="LV9"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    />
+                    android:layout_marginLeft="12dp"
+                    android:src="@drawable/lv1"/>
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_star"/>
+                    android:id="@+id/iv_vip"
+                    android:layout_width="19dp"
+                    android:layout_height="16dp"
+                    android:layout_marginLeft="13dp"
+                    android:src="@drawable/ic_vip"/>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -105,11 +106,13 @@
             android:gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/iv_chat"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home_chat"/>
 
             <ImageView
+                android:id="@+id/iv_video"
                 android:layout_width="31dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="21dp"

@@ -195,9 +195,12 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
                         mPresenter.stateLike(state_id + "", item);
                     }
                 });
+                bindView(R.id.ll_empty, false);
+                bindView(R.id.rv_dynamic, true);
             } else {
                 if (page == 1) {
-                    mDynamic.setVisibility(View.GONE);
+                    bindView(R.id.ll_empty, true);
+                    bindView(R.id.rv_dynamic, false);
                 }
             }
         }

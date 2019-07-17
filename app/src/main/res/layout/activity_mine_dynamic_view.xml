@@ -6,11 +6,21 @@
               android:orientation="vertical"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_dynamic"
-        android:layout_marginLeft="10dp"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_dynamic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"/>
+
+        <include layout="@layout/layout_empty"/>
+    </FrameLayout>
+
 </LinearLayout>

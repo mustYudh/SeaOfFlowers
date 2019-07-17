@@ -42,21 +42,34 @@
                         android:gravity="right"
                         android:paddingTop="@dimen/action_bar_height_top">
 
-                        <ImageView
-                            android:layout_width="19dp"
-                            android:layout_height="24dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_ranking"/>
+                        <LinearLayout
+                            android:gravity="center_horizontal"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="19dp"
+                                android:layout_height="24dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_ranking"/>
+                        </LinearLayout>
 
 
-                        <ImageView
-                            android:id="@+id/iv_redact"
-                            android:layout_width="21dp"
-                            android:layout_height="21dp"
-                            android:layout_marginLeft="23dp"
-                            android:layout_marginRight="15dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_redact"/>
+                        <LinearLayout
+                            android:id="@+id/ll_redact"
+                            android:gravity="center_horizontal"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/iv_redact"
+                                android:layout_width="21dp"
+                                android:layout_height="21dp"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/ic_redact"/>
+                        </LinearLayout>
+
+
                     </LinearLayout>
 
 
@@ -67,6 +80,7 @@
 
 
                         <com.yu.common.ui.CircleImageView
+                            android:id="@+id/iv_headimg"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_marginLeft="15dp"
@@ -358,6 +372,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/ll_vip"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

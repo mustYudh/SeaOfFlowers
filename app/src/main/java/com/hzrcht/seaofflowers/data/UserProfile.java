@@ -19,6 +19,7 @@ public class UserProfile implements Serializable {
     private static final String USERSEX = "user_sex";
     private static final String USERNAME = "user_name";
     private static final String ANCHORTYPE = "anchor_type";
+    private static final String USERVIP = "user_vip";
     private static final String USERSIG = "user_sig";
     private static final String APPLOGIN = "app_login";
 
@@ -95,6 +96,14 @@ public class UserProfile implements Serializable {
 
     public int getAnchorType() {
         return spHelper.getInt(ANCHORTYPE, 0);
+    }
+
+    public void setUserVip(boolean applogin) {
+        spHelper.putBoolean(USERVIP, applogin);
+    }
+
+    public boolean getUserVip() {
+        return spHelper.getBoolean(USERVIP, false);
     }
 
     public void setApplogin(boolean applogin) {

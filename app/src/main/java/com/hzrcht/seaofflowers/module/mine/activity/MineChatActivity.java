@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -85,7 +86,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         mNoticeLayout = mChatLayout.getNoticeLayout();
         mNoticeLayout.setBackgroundColor(getResources().getColor(R.color.white));
 
-        mPresenter.getIsAnchor();
+        mPresenter.getIsAnchor(im_id);
 
 
         //输入模块
@@ -184,49 +185,82 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
 
     @Override
     public void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean) {
-        if (userIsAnchorBean != null) {
-            if (!userIsAnchorBean.is_vip) {
-                //非vip
-                // 可以使通知区域一致展示
-                mNoticeLayout.alwaysShow(true);
-                // 设置通知主题
-                mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
-                // 设置通知提醒文字
-                TextView contentExtra = mNoticeLayout.getContentExtra();
-                contentExtra.setTextColor(getResources().getColor(R.color.red));
-                contentExtra.setText("升级VIP免费畅玩");
-                // 设置通知的点击事件
-                mNoticeLayout.setOnNoticeClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        //判断自己是否是vip
+        if (UserProfile.getInstance().getUserVip()) {
+            //是vip 畅聊
+            inputLayout.mSendTextButton.setOnClickListener(view -> {
+                if (inputLayout.mSendEnable) {
+                    if (inputLayout.mMessageHandler != null) {
+                        inputLayout.mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(inputLayout.mTextInput.getText().toString().trim()));
+                    }
+                    inputLayout.mTextInput.setText("");
+                }
+            });
+        } else {
+            //判断自己是否是主播
+            if (UserProfile.getInstance().getAnchorType() == 1) {
+                //自己非vip自己是主播
+                if (userIsAnchorBean.is_anchor == 1) {
+                    //对方是主播
+                    mNoticeLayout.alwaysShow(true);
+                    // 设置通知主题
+                    mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
+                    // 设置通知提醒文字
+                    TextView contentExtra = mNoticeLayout.getContentExtra();
+                    contentExtra.setTextColor(getResources().getColor(R.color.red));
+                    contentExtra.setText("升级VIP免费畅玩");
+                    // 设置通知的点击事件
+                    mNoticeLayout.setOnNoticeClickListener(v -> {
                         Bundle bundle = new Bundle();
                         bundle.putInt("TYPE", 1);
                         getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
-                    }
-                });
+                    });
 
-                //开启扣费
-                inputLayout.mSendTextButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    //开启扣费
+                    inputLayout.mSendTextButton.setOnClickListener(view -> {
                         if (inputLayout.mSendEnable) {
                             mPresenter.chatStart(im_id, inputLayout.mTextInput.getText().toString().trim());
                         }
-                    }
-                });
-            } else {
-                //vip免费畅聊
-                inputLayout.mSendTextButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    });
+                } else {
+                    //对方不是主播
+                    inputLayout.mSendTextButton.setOnClickListener(view -> {
                         if (inputLayout.mSendEnable) {
                             if (inputLayout.mMessageHandler != null) {
                                 inputLayout.mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(inputLayout.mTextInput.getText().toString().trim()));
                             }
                             inputLayout.mTextInput.setText("");
                         }
-                    }
-                });
+                    });
+                }
+            } else {
+                //自己非vip自己不是主播
+                if (userIsAnchorBean.is_anchor == 1) {
+                    //对方是主播
+                    mNoticeLayout.alwaysShow(true);
+                    // 设置通知主题
+                    mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
+                    // 设置通知提醒文字
+                    TextView contentExtra = mNoticeLayout.getContentExtra();
+                    contentExtra.setTextColor(getResources().getColor(R.color.red));
+                    contentExtra.setText("升级VIP免费畅玩");
+                    // 设置通知的点击事件
+                    mNoticeLayout.setOnNoticeClickListener(v -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("TYPE", 1);
+                        getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+                    });
+
+                    //开启扣费
+                    inputLayout.mSendTextButton.setOnClickListener(view -> {
+                        if (inputLayout.mSendEnable) {
+                            mPresenter.chatStart(im_id, inputLayout.mTextInput.getText().toString().trim());
+                        }
+                    });
+                } else {
+                    //对方不是主播
+                    ToastUtils.show("用户和用户直接无法聊天");
+                }
             }
         }
     }

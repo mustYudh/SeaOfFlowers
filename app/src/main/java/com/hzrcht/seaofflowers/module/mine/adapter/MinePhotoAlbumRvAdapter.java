@@ -14,8 +14,6 @@ import com.yu.common.glide.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.shinichi.library.ImagePreview;
-
 public class MinePhotoAlbumRvAdapter extends BaseQuickAdapter<PhotoAlbumBean.RowsBean, BaseViewHolder> {
     private Context context;
     private List<PhotoAlbumBean.RowsBean> data;
@@ -39,24 +37,24 @@ public class MinePhotoAlbumRvAdapter extends BaseQuickAdapter<PhotoAlbumBean.Row
     protected void convert(BaseViewHolder helper, PhotoAlbumBean.RowsBean item) {
         ImageView iv_img = helper.getView(R.id.iv_img);
         ImageLoader.getInstance().displayImage(iv_img, item.img_url, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
-
+        helper.setGone(R.id.tv_status, item.status == 0);
         helper.getView(R.id.fl_root).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
-//                bundle.putInt("code", helper.getLayoutPosition());//第几张
-//                bundle.putStringArrayList("imageuri", (ArrayList<PhotoAlbumBean.RowsBean>) data);
-//                Intent intent = new Intent(context, ViewBigImageActivity.class);
-//                intent.putExtras(bundle);
-//                context.startActivity(intent);
-                ImagePreview.getInstance()
-                        .setContext(context)
-                        .setIndex(helper.getLayoutPosition())
-                        .setImageList(imgList)
-                        .setShowDownButton(false)
-                        .start();
+                if (onItemChcekListener != null) {
+                    onItemChcekListener.setOnItemCheckClick(item.id, helper.getLayoutPosition(), (ArrayList<String>) imgList);
+                }
             }
         });
+    }
+
+    public interface OnItemCheckListener {
+        void setOnItemCheckClick(int id, int position, ArrayList<String> list);
+    }
+
+    OnItemCheckListener onItemChcekListener;
+
+    public void setOnItemCheckListener(OnItemCheckListener onItemChcekListener) {
+        this.onItemChcekListener = onItemChcekListener;
     }
 }

@@ -1,229 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
+    android:orientation="vertical"
     >
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/content_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+    </FrameLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#ffdddddd"
+        />
+
+    <LinearLayout
+        android:id="@+id/tab_control"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        >
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:id="@+id/img_home"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tab_home_selector"
+                />
+
+            <TextView
+                android:id="@+id/text_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="5dp"
+                android:text="首页"
+                android:textColor="@color/home_tab_text_color"
+                android:textSize="10sp"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tab_activity_selector"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="5dp"
+                android:text="动态"
+                android:textColor="@color/home_tab_text_color"
+                android:textSize="10sp"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/center_tab"
+            android:layout_width="0dp"
+            android:layout_height="71dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:id="@+id/tab_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_center_tab"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:paddingBottom="5dp"
+                android:text="速配"
+                android:textColor="@color/home_tab_text_color"
+                android:textSize="10sp"
+                />
+
+
+        </LinearLayout>
 
 
         <FrameLayout
-            android:id="@+id/content_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical"
             >
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:clipChildren="false"
+                android:gravity="bottom|center_horizontal"
+                android:orientation="vertical"
+                >
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/tab_message_selector"
+                    />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:text="消息"
+                    android:textColor="@color/home_tab_text_color"
+                    android:textSize="10sp"
+                    />
+
+            </LinearLayout>
+
+
+            <com.yu.common.ui.BadgeView
+                android:id="@+id/badge_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/shape_message_hint"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="9"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                />
+
+
         </FrameLayout>
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#ffdddddd"
-            />
-
         <LinearLayout
-            android:id="@+id/tab_control"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="bottom"
-            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical"
             >
 
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/tab_mine_selector"
+                />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="bottom|center_horizontal"
-                android:orientation="vertical"
-                >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="5dp"
+                android:text="我的"
+                android:textColor="@color/home_tab_text_color"
+                android:textSize="10sp"
+                />
 
-                <ImageView
-                    android:id="@+id/img_home"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/tab_home_selector"
-                    />
-
-                <TextView
-                    android:id="@+id/text_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:paddingBottom="5dp"
-                    android:text="首页"
-                    android:textColor="@color/home_tab_text_color"
-                    android:textSize="10sp"
-                    />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="bottom|center_horizontal"
-                android:orientation="vertical"
-                >
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/tab_activity_selector"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:paddingBottom="5dp"
-                    android:text="动态"
-                    android:textColor="@color/home_tab_text_color"
-                    android:textSize="10sp"
-                    />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/center_tab"
-                android:layout_width="0dp"
-                android:layout_height="71dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                >
-
-                <ImageView
-                    android:id="@+id/tab_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_center_tab"
-                    />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:paddingBottom="5dp"
-                    android:text="速配"
-                    android:textColor="@color/home_tab_text_color"
-                    android:textSize="10sp"
-                    />
-
-
-            </LinearLayout>
-
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="bottom|center_horizontal"
-                android:orientation="vertical"
-                >
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:clipChildren="false"
-                    android:gravity="bottom|center_horizontal"
-                    android:orientation="vertical"
-                    >
-
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/tab_message_selector"
-                        />
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:gravity="center"
-                        android:paddingBottom="5dp"
-                        android:text="消息"
-                        android:textColor="@color/home_tab_text_color"
-                        android:textSize="10sp"
-                        />
-
-                </LinearLayout>
-
-
-                <com.yu.common.ui.BadgeView
-                    android:id="@+id/badge_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@drawable/shape_message_hint"
-                    android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:text="9"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    />
-
-
-            </FrameLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="bottom|center_horizontal"
-                android:orientation="vertical"
-                >
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/tab_mine_selector"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:paddingBottom="5dp"
-                    android:text="我的"
-                    android:textColor="@color/home_tab_text_color"
-                    android:textSize="10sp"
-                    />
-
-            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_marginBottom="65dp"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/ic_anim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-</FrameLayout>
+</LinearLayout>
 

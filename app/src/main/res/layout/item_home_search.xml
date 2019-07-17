@@ -28,20 +28,22 @@
 
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="小甜心"
+                android:text="@string/text_null"
                 android:textColor="@color/color_333333"
                 android:textSize="15sp"
                 />
 
             <TextView
+                android:id="@+id/tv_fans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:includeFontPadding="false"
-                android:text="粉丝：0"
+                android:text="@string/text_null"
                 android:textColor="@color/color_999999"
                 android:textSize="15sp"
                 />
@@ -61,6 +63,7 @@
 
 
             <TextView
+                android:id="@+id/tv_point"
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:layout_marginLeft="10dp"
@@ -69,6 +72,7 @@
 
 
             <TextView
+                android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"

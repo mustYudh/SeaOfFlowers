@@ -101,23 +101,25 @@ public class SystemSettingsActivity extends BaseBarActivity implements SystemSet
             msg_shake.setSwichButton(userConfigBean.shake);
 
             msg_voice.setSwichlistener(switchStatus -> {
-                mPresenter.userEditConfig(userConfigBean.voice, "2");
+                mPresenter.userEditConfig(userConfigBean, "2");
             });
 
             msg_shake.setSwichlistener(switchStatus -> {
-                mPresenter.userEditConfig(userConfigBean.shake, "3");
+                mPresenter.userEditConfig(userConfigBean, "3");
             });
         }
     }
 
     @Override
-    public void userEditConfigSuccess(boolean disturb, String type) {
+    public void userEditConfigSuccess(UserConfigBean userConfigBean, String type) {
         switch (type) {
             case "2":
-                msg_voice.setSwichButton(!disturb);
+                msg_voice.setSwichButton(!userConfigBean.voice);
+                userConfigBean.voice = !userConfigBean.voice;
                 break;
             case "3":
-                msg_shake.setSwichButton(!disturb);
+                msg_shake.setSwichButton(!userConfigBean.shake);
+                userConfigBean.shake = !userConfigBean.shake;
                 break;
         }
     }
