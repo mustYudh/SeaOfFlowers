@@ -37,4 +37,6 @@ public interface MinePersonalInfoViewer extends Viewer {
     void orderAddSuccess(PayInfo payInfo);
 
     void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean);
+
+    void liveStartSuccess();
 }
