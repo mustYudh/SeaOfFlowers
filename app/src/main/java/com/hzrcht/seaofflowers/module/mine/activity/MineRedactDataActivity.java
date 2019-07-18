@@ -24,6 +24,7 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineRedactDataGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineSysLabelGvAdapter;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.JsonBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysLabelBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserDetailBean;
@@ -32,6 +33,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataView
 import com.hzrcht.seaofflowers.module.view.ClearEditText;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.hzrcht.seaofflowers.utils.GetJsonDataUtil;
 import com.hzrcht.seaofflowers.utils.PhotoUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;

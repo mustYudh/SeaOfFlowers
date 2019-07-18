@@ -149,4 +149,7 @@ public class ApiServices {
     //申请主播
     public static final String USERAUDIT = BASEURL + "/api/user/audit";
 
+    //开始视频
+    public static final String LIVESTART = BASEURL + "/api/live/start";
+
 }

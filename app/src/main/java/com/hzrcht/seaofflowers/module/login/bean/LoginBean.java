@@ -28,6 +28,7 @@ public class LoginBean implements Serializable {
         public int sex;
         public int type;
         public String nick_name;
+        public String head_img;
         public String userSig;
     }
 }

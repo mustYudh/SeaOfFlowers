@@ -18,6 +18,7 @@ public class UserProfile implements Serializable {
     private static final String APP_USER_ID = "account";
     private static final String USERSEX = "user_sex";
     private static final String USERNAME = "user_name";
+    private static final String USERIMG = "user_img";
     private static final String ANCHORTYPE = "anchor_type";
     private static final String USERVIP = "user_vip";
     private static final String USERSIG = "user_sig";
@@ -46,6 +47,7 @@ public class UserProfile implements Serializable {
         setUserSex(userInfo.info.sex);
         setUserName(userInfo.info.nick_name);
         setToken(userInfo.token);
+        setUserImg(userInfo.info.head_img);
     }
 
 
@@ -88,6 +90,14 @@ public class UserProfile implements Serializable {
 
     public String getUserName() {
         return spHelper.getString(USERNAME, "");
+    }
+
+    public void setUserImg(String user_img) {
+        spHelper.putString(USERIMG, user_img);
+    }
+
+    public String getUserImg() {
+        return spHelper.getString(USERIMG, "");
     }
 
     public void setAnchorType(int type) {

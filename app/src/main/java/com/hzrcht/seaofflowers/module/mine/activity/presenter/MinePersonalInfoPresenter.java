@@ -206,4 +206,18 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                     }
                 });
     }
+
+    public void liveStart(String anchor_id) {
+        XHttp.post(ApiServices.LIVESTART)
+                .params("anchor_id",anchor_id)
+                .accessToken(true)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().liveStartSuccess();
+                    }
+                });
+    }
 }

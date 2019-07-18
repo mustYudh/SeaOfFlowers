@@ -21,9 +21,11 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.bean.PayInfo;
+import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
+import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.BannerInfoViewHolder;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
@@ -88,6 +90,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private TextView tv_check_mobile;
     private boolean is_vip = false;
     private LinearLayout mIntimacyRoot;
+    private String nick_name = "";
+    private String head_img = "";
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -215,27 +219,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class, bundlePresent);
                 break;
             case R.id.ll_video:
-                TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
-                TIMMessage msg = new TIMMessage();
-                TIMTextElem elem = new TIMTextElem();
-                elem.setText("A new test msg!");
-                msg.addElement(elem);
-
-                //发送消息
-                conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
-                    @Override
-                    public void onError(int code, String desc) {//发送消息失败
-                        //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                        Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc);
-
-                    }
-
-                    @Override
-                    public void onSuccess(TIMMessage msg) {//发送消息成功
-                        Log.e("自定义消息发送", "SendMsg ok");
-                    }
-                });
-
+                mPresenter.liveStart(user_id);
                 break;
         }
     }
@@ -503,6 +487,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     @Override
     public void getUserInfoSuccess(AnchorUserInfoBean anchorUserInfoBean) {
         if (anchorUserInfoBean != null) {
+            nick_name = anchorUserInfoBean.nick_name;
+            head_img = anchorUserInfoBean.head_img;
             bindText(R.id.tv_nickname, anchorUserInfoBean.nick_name);
             bindText(R.id.tv_sign, TextUtils.isEmpty(anchorUserInfoBean.sign) ? "我就是不一样的烟火" : anchorUserInfoBean.sign);
             bindText(R.id.tv_fans_count, anchorUserInfoBean.fans + "");
@@ -809,6 +795,37 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         if (userIsAnchorBean != null) {
             is_vip = userIsAnchorBean.is_vip;
         }
+    }
+
+    @Override
+    public void liveStartSuccess() {
+        TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+        TIMMessage msg = new TIMMessage();
+        TIMTextElem elem = new TIMTextElem();
+
+        CustomMessageData customMessageData = new CustomMessageData();
+        customMessageData.type = "1";
+        customMessageData.content = UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserImg()+ "," + UserProfile.getInstance().getUserName();
+        Gson gson = new Gson();
+        String toJson = gson.toJson(customMessageData);
+
+        elem.setText(toJson);
+        msg.addElement(elem);
+
+        //发送消息
+        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+            @Override
+            public void onError(int code, String desc) {//发送消息失败
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc);
+
+            }
+
+            @Override
+            public void onSuccess(TIMMessage msg) {//发送消息成功
+                Log.e("自定义消息发送", "SendMsg ok....."+toJson);
+            }
+        });
     }
 
 

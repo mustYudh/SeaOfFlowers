@@ -47,7 +47,7 @@ android {
                                 BAIDU_LOCATION: rootProject.ext.baidu]
 
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
         }
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -227,5 +227,6 @@ dependencies {
     implementation files('libs/alipaySdk-15.6.2-20190416165036.aar')
     implementation 'com.tencent.imsdk:imsdk:4.4.631'
     implementation project(path: ':tuikit')
+    implementation 'com.tencent.liteav:LiteAVSDK_TRTC:6.5.7272'
 //    implementation 'com.tencent.imsdk:tuikit:4.4.627'
 }

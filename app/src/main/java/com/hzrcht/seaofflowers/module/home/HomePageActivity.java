@@ -10,6 +10,7 @@ import com.denghao.control.TabItem;
 import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
@@ -97,17 +98,27 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         TIMManager.getInstance().addMessageListener(new TIMMessageListener() {//消息监听器
             @Override
             public boolean onNewMessages(List<TIMMessage> msgs) {//收到新消息
-                num++;
-                if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
-                    mBottomNavigationView.mControl.badge_view.setText(num + "");
+                try {
+                    num++;
+                    if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+                        mBottomNavigationView.mControl.badge_view.setText(num + "");
+                    }
+                    TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
+                    Gson gson = new Gson();
+                    CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
+
+                    switch (messageData.type) {
+                        case "1":
+                            //发起视频
+                            break;
+                        case "2":
+                            //拒绝视频
+                            break;
+                    }
+                    Log.e("aaaa", messageData.content + "...." + messageData.type);
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
                 }
-                TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
-                Gson gson = new Gson();
-                CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
-
-
-                Log.e("aaaa", messageData.content+"...."+messageData.type);
-
                 //消息的内容解析请参考消息收发文档中的消息解析说明
                 return true; //返回true将终止回调链，不再调用下一个新消息监听器
             }

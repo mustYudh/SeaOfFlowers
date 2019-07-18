@@ -37,6 +37,7 @@ public class AnchorUserInfoBean {
     public int type;
     public String nick_name;
     public String phone;
+    public String head_img;
     public int sex;
     public String work;
     public String hight;
