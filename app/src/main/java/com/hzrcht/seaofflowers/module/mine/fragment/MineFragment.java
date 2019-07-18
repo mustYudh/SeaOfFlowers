@@ -13,10 +13,12 @@ import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.mine.activity.ApplyAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.ChargeSettingActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.InAuthenticationActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineAttentionActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineBalanceActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineDynamicActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineHelpCenterActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MineIntimacyActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineMineWithdrawActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePhotoAlbumActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
@@ -27,6 +29,7 @@ import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.yu.common.glide.ImageLoader;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
@@ -64,6 +67,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
 
 
         DelayClickImageView iv_help = bindView(R.id.iv_help);
+        LinearLayout ll_near = bindView(R.id.ll_near);
         LinearLayout ll_attention = bindView(R.id.ll_attention);
         LinearLayout ll_dynamic = bindView(R.id.ll_dynamic);
         LinearLayout ll_master = bindView(R.id.ll_master);
@@ -97,6 +101,7 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         iv_help.setOnClickListener(this);
         ll_recharge.setOnClickListener(this);
         ll_vip.setOnClickListener(this);
+        ll_near.setOnClickListener(this);
     }
 
     @Override
@@ -150,6 +155,11 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 bundleVip.putInt("TYPE", 1);
                 getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
                 break;
+            case R.id.ll_near:
+                Bundle bundleNear = new Bundle();
+                bundleNear.putString("USER_ID", UserProfile.getInstance().getUserId() + "");
+                LauncherHelper.from(getActivity()).startActivity(MineIntimacyActivity.class, bundleNear);
+                break;
         }
     }
 
@@ -172,7 +182,11 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 mAuthentication.setOnClickListener(view -> {
                     if (mineUserInfoBean.userInfo.type == 0) {
                         //认证主播
-                        getLaunchHelper().startActivity(ApplyAuthenticationActivity.class);
+                        if (mineUserInfoBean.attent == 0) {
+                            getLaunchHelper().startActivityForResult(ApplyAuthenticationActivity.class, 1);
+                        } else {
+                            getLaunchHelper().startActivity(InAuthenticationActivity.class);
+                        }
                     } else {
                         //收费设置
                         getLaunchHelper().startActivity(ChargeSettingActivity.class);

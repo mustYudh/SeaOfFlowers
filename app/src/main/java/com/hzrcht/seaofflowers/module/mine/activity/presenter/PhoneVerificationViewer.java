@@ -4,5 +4,7 @@ import com.yu.common.mvp.Viewer;
 
 
 public interface PhoneVerificationViewer extends Viewer {
+    void sendVerCodeSuccess();
 
+    void bindUserPhoneSuccess();
 }

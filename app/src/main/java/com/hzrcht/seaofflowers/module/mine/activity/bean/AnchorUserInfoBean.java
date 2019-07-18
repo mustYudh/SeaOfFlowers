@@ -58,6 +58,7 @@ public class AnchorUserInfoBean {
     public List<String> cover;
     public List<String> lable;
     public List<GiftBean> gift;
+    public List<NearBean> near;
 
     public static class GiftBean {
         /**
@@ -71,5 +72,20 @@ public class AnchorUserInfoBean {
         public String gift_title;
         public String img;
         public int price;
+    }
+
+    public static class NearBean {
+        /**
+         * gift_id : 28
+         * gift_title : 礼物1
+         * img : http://hdbos.test.upcdn.net/DS/image/20180123/biipcq38ul7zk4ytjrvk.png
+         * price : 120
+         */
+
+        public BigDecimal near_num;
+        public int user_id;
+        public int lv;
+        public String head_img;
+        public String nick_name;
     }
 }

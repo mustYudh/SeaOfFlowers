@@ -143,4 +143,10 @@ public class ApiServices {
     //用户详情修改
     public static final String USEREDIT = BASEURL + "/api/user/edit";
 
+    //重新绑定手机号
+    public static final String USERPHONE = BASEURL + "/api/user/phone";
+
+    //申请主播
+    public static final String USERAUDIT = BASEURL + "/api/user/audit";
+
 }

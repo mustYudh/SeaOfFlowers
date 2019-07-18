@@ -23,5 +23,10 @@ public class InAuthenticationActivity extends BaseBarActivity implements InAuthe
     @Override
     protected void loadData() {
         setTitle("主播资料审核中");
+
+        bindView(R.id.tv_commit, view -> {
+            getLaunchHelper().startActivity(MineRedactDataActivity.class);
+            finish();
+        });
     }
 }

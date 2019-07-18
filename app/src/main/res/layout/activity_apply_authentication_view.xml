@@ -19,7 +19,8 @@
         />
 
 
-    <ImageView
+    <com.yu.common.ui.DelayClickImageView
+        android:id="@+id/iv_phto"
         android:layout_width="300dp"
         android:layout_height="170dp"
         android:layout_marginTop="10dp"
@@ -36,7 +37,8 @@
         />
 
 
-    <TextView
+    <com.yu.common.ui.DelayClickTextView
+        android:id="@+id/tv_commit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="15dp"

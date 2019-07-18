@@ -7,21 +7,19 @@ import android.support.v7.widget.RecyclerView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineIntimacyPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineIntimacyViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineIntimacyRvAdapter;
 import com.yu.common.mvp.PresenterLifeCycle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 亲密榜
  */
 public class MineIntimacyActivity extends BaseBarActivity implements MineIntimacyViewer {
-    private List<String> list = new ArrayList<>();
     @PresenterLifeCycle
-    private MineIntimacyPresenter presenter = new MineIntimacyPresenter(this);
+    private MineIntimacyPresenter mPresenter = new MineIntimacyPresenter(this);
+    private RecyclerView rv_intimacy;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -33,12 +31,24 @@ public class MineIntimacyActivity extends BaseBarActivity implements MineIntimac
         setTitle("亲密榜");
         Bundle bundle = getIntent().getExtras();
         String user_id = bundle.getString("USER_ID");
-        for (int i = 0; i < 10; i++) {
-            list.add("");
-        }
-        RecyclerView rv_intimacy = bindView(R.id.rv_intimacy);
+        rv_intimacy = bindView(R.id.rv_intimacy);
         rv_intimacy.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MineIntimacyRvAdapter adapter = new MineIntimacyRvAdapter(R.layout.item_mine_intimacy, list, getActivity());
-        rv_intimacy.setAdapter(adapter);
+
+        mPresenter.getUserInfo(user_id);
+
+    }
+
+    @Override
+    public void getUserInfoSuccess(AnchorUserInfoBean anchorUserInfoBean) {
+        if (anchorUserInfoBean != null && anchorUserInfoBean.near != null && anchorUserInfoBean.near.size() != 0) {
+            MineIntimacyRvAdapter adapter = new MineIntimacyRvAdapter(R.layout.item_mine_intimacy, anchorUserInfoBean.near, getActivity());
+            rv_intimacy.setAdapter(adapter);
+            bindView(R.id.rv_intimacy, true);
+            bindView(R.id.ll_empty, false);
+        } else {
+            //空页面
+            bindView(R.id.rv_intimacy, false);
+            bindView(R.id.ll_empty, true);
+        }
     }
 }
