@@ -19,7 +19,7 @@ import java.util.List;
 
 public class BottomNavigationView extends LinearLayout {
   private TabController mController;
-  private BottomNavigationControl mControl;
+  public BottomNavigationControl mControl;
 
   public BottomNavigationView(Context context) {
     this(context, null);

@@ -21,6 +21,7 @@ public class BottomNavigationControl extends LinearLayout implements TabViewCont
     private LinearLayout tabControlView;
     private FrameLayout frameLayout;
     private TabClickListener tabClickListener;
+    public BadgeView badge_view;
 
     public BottomNavigationControl(Context context) {
         this(context, null);
@@ -35,13 +36,13 @@ public class BottomNavigationControl extends LinearLayout implements TabViewCont
         View.inflate(context, R.layout.bottom_navigation_control_view, this);
         tabControlView = (LinearLayout) findViewById(R.id.tab_control);
         frameLayout = (FrameLayout) findViewById(R.id.content_view);
-        BadgeView badge_view = findViewById(R.id.badge_view);
+        badge_view = findViewById(R.id.badge_view);
         FrameLayout.LayoutParams linearParams = (FrameLayout.LayoutParams) badge_view.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
         linearParams.width = DensityUtils.dp2px(context, 18);
         linearParams.height = DensityUtils.dp2px(context, 18);
 //    badge_view.setPadding(5,4,5,4); //使设置好的布局参数应用到控件
         badge_view.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
-        badge_view.setText("9");
+
     }
 
 

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,8 +16,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserBillListBean;
-import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineBalancePresenter;
-import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineBalanceViewer;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineWithdrawDetailPresenter;
+import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineWithdrawDetailViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineBalanceRvAdapter;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.ui.DelayClickTextView;
@@ -29,30 +28,29 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 账号余额
- */
-public class MineBalanceActivity extends BaseBarActivity implements MineBalanceViewer {
-    private int type = 1;
-    private int page = 1;
-    private int pageSize = 10;
+
+public class MineWithdrawDetailActivity extends BaseBarActivity implements MineWithdrawDetailViewer {
+
     @PresenterLifeCycle
-    private MineBalancePresenter mPresenter = new MineBalancePresenter(this);
+    private MineWithdrawDetailPresenter mPresenter = new MineWithdrawDetailPresenter(this);
+
+    @Override
+    protected void setView(@Nullable Bundle savedInstanceState) {
+        setContentView(R.layout.activity_mine_withdraw_detail_view);
+    }
+
     private MineBalanceRvAdapter adapter;
     private RecyclerView mBalance;
     private List<UserBillListBean.RowsBean> list = new ArrayList<>();
     private TimePickerView pvCustomTime;
     private TextView tv_year;
     private TextView tv_month;
-
-    @Override
-    protected void setView(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.activity_mine_balance_view);
-    }
+    private int page = 1;
+    private int pageSize = 10;
 
     @Override
     protected void loadData() {
-        setTitle("账号余额明细");
+        setTitle("提现明细");
         mBalance = bindView(R.id.rv_balance);
         mBalance.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -62,41 +60,14 @@ public class MineBalanceActivity extends BaseBarActivity implements MineBalanceV
         bindText(R.id.tv_month, (calendar.get(Calendar.MONTH) + 1) + "");
         tv_year = bindView(R.id.tv_year);
         tv_month = bindView(R.id.tv_month);
-        mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
+        mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()));
 
-        bindView(R.id.ll_left, view -> {
-            page = 1;
-            type = 1;
-            bindView(R.id.view_left, true);
-            bindView(R.id.view_right, false);
-            mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
-        });
 
-        bindView(R.id.ll_right, view -> {
-            page = 1;
-            type = 2;
-            bindView(R.id.view_left, false);
-            bindView(R.id.view_right, true);
-            mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
-        });
         showTimeDialog();
 
         bindView(R.id.ll_select, view -> {
             pvCustomTime.show();
         });
-        bindView(R.id.action_back, view -> {
-            setResult(1);
-            finish();
-        });
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            setResult(1);
-            finish();
-        }
-        return true;
     }
 
     @Override
@@ -156,7 +127,7 @@ public class MineBalanceActivity extends BaseBarActivity implements MineBalanceV
                 calendar.setTime(date);
                 bindText(R.id.tv_year, calendar.get(Calendar.YEAR) + "");
                 bindText(R.id.tv_month, (calendar.get(Calendar.MONTH) + 1) + "");
-                mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
+                mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()));
             }
         })
                 .setDate(selectedDate)

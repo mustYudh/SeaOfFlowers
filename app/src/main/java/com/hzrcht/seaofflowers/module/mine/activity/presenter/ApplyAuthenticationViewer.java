@@ -10,4 +10,6 @@ public interface ApplyAuthenticationViewer extends Viewer {
     void uploadImgFail();
 
     void userAuditSuccess();
+
+    void userAuditFail(String msg);
 }

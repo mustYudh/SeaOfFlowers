@@ -10,9 +10,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -277,7 +279,12 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     @Override
     public void sendGiftSuccess(ChatLayout mChatLayout, SysGiftBean.ResultBean resultBean) {
         ToastUtils.show("打赏成功!");
-        MessageInfo info = MessageInfoUtil.buildCustomMessage(resultBean.img + "," + resultBean.title + "," + resultBean.price);
+        CustomMessageData customMessageData = new CustomMessageData();
+        customMessageData.type = "0";
+        customMessageData.content = resultBean.img + "," + resultBean.title + "," + resultBean.price;
+        Gson gson = new Gson();
+        String toJson = gson.toJson(customMessageData);
+        MessageInfo info = MessageInfoUtil.buildCustomMessage(toJson);
         mChatLayout.sendMessage(info, false);
         item = null;
     }

@@ -55,6 +55,12 @@ public class ApplyAuthenticationPresenter extends BaseViewPresenter<ApplyAuthent
                         assert getViewer() != null;
                         getViewer().userAuditSuccess();
                     }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().userAuditFail(apiException.getDisplayMessage());
+                    }
                 });
     }
 

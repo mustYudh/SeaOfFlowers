@@ -1,11 +1,12 @@
 package com.hzrcht.seaofflowers.module.im;
 
 public class CustomMessageData {
-    final static int TYPE_PRESENT = 1;
-    // 自定义消息类型，根据业务可能会有很多种
-    int type = TYPE_PRESENT;
-    public String title;
-    public String url;
-    public String price;
 
+    /**
+     * type : 1
+     * content : 21,21,https://mumaren233.oss-cn-hangzhou.aliyuncs.com/WechatIMG206.jpeg,马克爽
+     */
+
+    public String type;
+    public String content;
 }

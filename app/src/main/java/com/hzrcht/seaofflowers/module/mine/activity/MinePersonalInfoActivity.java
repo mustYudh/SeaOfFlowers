@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -38,6 +39,12 @@ import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.hzrcht.seaofflowers.utils.PayUtils;
+import com.tencent.imsdk.TIMConversation;
+import com.tencent.imsdk.TIMConversationType;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMTextElem;
+import com.tencent.imsdk.TIMValueCallBack;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
@@ -106,6 +113,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         View view_second = bindView(R.id.view_second);
         View view_third = bindView(R.id.view_third);
         ImageView iv_share = bindView(R.id.iv_share);
+        LinearLayout ll_video = bindView(R.id.ll_video);
         mIntimacy = bindView(R.id.ll_intimacy);
         mPresent = bindView(R.id.ll_present);
         mIntimacyRoot = bindView(R.id.ll_intimacy_root);
@@ -127,6 +135,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         iv_share.setOnClickListener(this);
         mIntimacyRoot.setOnClickListener(this);
         mPresentRoot.setOnClickListener(this);
+        ll_video.setOnClickListener(this);
 
 
         llRootList.add(ll_root_frist);
@@ -204,6 +213,29 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 Bundle bundlePresent = new Bundle();
                 bundlePresent.putString("USER_ID", user_id + "");
                 LauncherHelper.from(getActivity()).startActivity(MinePresentActivity.class, bundlePresent);
+                break;
+            case R.id.ll_video:
+                TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+                TIMMessage msg = new TIMMessage();
+                TIMTextElem elem = new TIMTextElem();
+                elem.setText("A new test msg!");
+                msg.addElement(elem);
+
+                //发送消息
+                conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+                    @Override
+                    public void onError(int code, String desc) {//发送消息失败
+                        //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                        Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc);
+
+                    }
+
+                    @Override
+                    public void onSuccess(TIMMessage msg) {//发送消息成功
+                        Log.e("自定义消息发送", "SendMsg ok");
+                    }
+                });
+
                 break;
         }
     }

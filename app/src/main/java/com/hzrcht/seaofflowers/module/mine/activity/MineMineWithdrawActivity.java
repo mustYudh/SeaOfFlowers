@@ -77,6 +77,11 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
             }
             mPresenter.userWithdraw(type, type_id);
         });
+
+        bindView(R.id.tv_sure, view -> {
+            getLaunchHelper().startActivity(MineWithdrawDetailActivity.class);
+        });
+
         bindView(R.id.action_back, view -> {
             setResult(1);
             finish();
@@ -91,6 +96,7 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
         }
         return true;
     }
+
     @Override
     public void getUserAccountsSuccess(UserAccountsBean userAccountsBean) {
         if (userAccountsBean != null) {

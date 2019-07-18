@@ -21,30 +21,28 @@
 
         <LinearLayout
             android:id="@+id/action_back"
-            android:gravity="center"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
             >
+
             <ImageView
-                android:src="@drawable/ic_back_arrow_black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_arrow_black"
                 />
 
             <TextView
-                android:textColor="@color/color_333333"
-                android:gravity="center"
-                android:text="返回"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_bar_height"
+                android:gravity="center"
+                android:text="返回"
+                android:textColor="@color/color_333333"
                 />
 
 
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>
@@ -59,13 +57,13 @@
         >
 
         <com.yu.common.ui.DelayClickTextView
-            android:text="提现"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="1"
             android:maxWidth="190dp"
+            android:maxLines="1"
+            android:text="提现"
             android:textColor="@color/color_333333"
             android:textSize="17sp"
             />
@@ -73,27 +71,17 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.yu.common.ui.DelayClickTextView
+        android:id="@+id/tv_sure"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
         android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-        <com.yu.common.ui.DelayClickTextView
-            android:id="@+id/tv_sure"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="18dp"
-            android:gravity="center"
-            android:text="明细"
-            android:textColor="@color/color_333333"
-            android:textSize="17sp"
-            />
-
-    </LinearLayout>
+        android:text="明细"
+        android:textColor="@color/color_333333"
+        android:textSize="17sp"
+        />
 
 
 </RelativeLayout>
