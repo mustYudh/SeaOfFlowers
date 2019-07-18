@@ -259,7 +259,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
                     });
                 } else {
                     //对方不是主播
-                    ToastUtils.show("用户和用户直接无法聊天");
+
                 }
             }
         }

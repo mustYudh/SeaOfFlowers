@@ -43,6 +43,7 @@
                         android:paddingTop="@dimen/action_bar_height_top">
 
                         <LinearLayout
+                            android:id="@+id/ll_near"
                             android:gravity="center_horizontal"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content">

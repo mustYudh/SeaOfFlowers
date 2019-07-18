@@ -80,6 +80,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private MineInfoDataRvAdapter photoAdapter;
     private TextView tv_check_mobile;
     private boolean is_vip = false;
+    private LinearLayout mIntimacyRoot;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -107,7 +108,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         ImageView iv_share = bindView(R.id.iv_share);
         mIntimacy = bindView(R.id.ll_intimacy);
         mPresent = bindView(R.id.ll_present);
-        LinearLayout mIntimacyRoot = bindView(R.id.ll_intimacy_root);
+        mIntimacyRoot = bindView(R.id.ll_intimacy_root);
         mPresentRoot = bindView(R.id.ll_present_root);
         mFlexboxSelf = bindView(R.id.flexbox);
         mMobile = bindView(R.id.tv_mobile);
@@ -149,18 +150,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         rv_video_photo.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 4, 2));
         setTypeCheck(ll_first);
 
-        mIntimacy.removeAllViews();
-        for (int i = 0; i < 6; i++) {
-            View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
-            mIntimacy.addView(view);
-        }
-
 
         mPresenter.getUserInfo(user_id);
         mPresenter.getStateList(user_id);
         mPresenter.getPhotoAlbum(user_id);
-
-
     }
 
     /**
@@ -557,6 +550,21 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             } else {
                 mPresentRoot.setVisibility(View.GONE);
             }
+
+            //与我亲密
+            mIntimacy.removeAllViews();
+            if (anchorUserInfoBean.near != null && anchorUserInfoBean.near.size() != 0) {
+                for (int i = 0; i < anchorUserInfoBean.near.size(); i++) {
+                    View view = View.inflate(getActivity(), R.layout.item_info_linearlayout, null);
+                    CircleImageView iv_gift = view.findViewById(R.id.iv_gift);
+                    ImageLoader.getInstance().displayImage(iv_gift, anchorUserInfoBean.near.get(i).head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+                    mIntimacy.addView(view);
+                }
+                mIntimacyRoot.setVisibility(View.VISIBLE);
+            } else {
+                mIntimacyRoot.setVisibility(View.GONE);
+            }
+
 
             //手机号是否被查看
             bindText(R.id.tv_mobile, anchorUserInfoBean.is_look == 0 ? "手机号：***********" : "手机号：" + anchorUserInfoBean.phone);

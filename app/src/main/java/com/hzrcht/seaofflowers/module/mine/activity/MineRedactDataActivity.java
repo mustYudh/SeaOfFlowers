@@ -365,8 +365,7 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
                 initConfigData(0);
                 break;
             case R.id.view_mobile:
-                Intent intentMobile = new Intent(this, PhoneVerificationActivity.class);
-                startActivityForResult(intentMobile, 0);
+                getLaunchHelper().startActivityForResult(PhoneVerificationActivity.class, 1);
                 break;
             case R.id.rl_headimg:
                 picType = 1;
@@ -411,6 +410,15 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode) {
+            case 1:
+                String mobile = data.getStringExtra("MOBILE");
+                phone = mobile;
+                view_mobile.setTextRight(mobile);
+                break;
+        }
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
