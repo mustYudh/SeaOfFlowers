@@ -10,6 +10,7 @@ import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -211,12 +212,12 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
         XHttp.post(ApiServices.LIVESTART)
                 .params("anchor_id",anchor_id)
                 .accessToken(true)
-                .execute(NoDataBean.class)
-                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                .execute(LiveStartBean.class)
+                .subscribeWith(new TipRequestSubscriber<LiveStartBean>() {
                     @Override
-                    protected void onSuccess(NoDataBean noDataBean) {
+                    protected void onSuccess(LiveStartBean liveStartBean) {
                         assert getViewer() != null;
-                        getViewer().liveStartSuccess();
+                        getViewer().liveStartSuccess(liveStartBean);
                     }
                 });
     }

@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -21,16 +20,15 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.bean.PayInfo;
-import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.BannerInfoViewHolder;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDataRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineInfoDynamicRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -41,12 +39,6 @@ import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.hzrcht.seaofflowers.utils.PayUtils;
-import com.tencent.imsdk.TIMConversation;
-import com.tencent.imsdk.TIMConversationType;
-import com.tencent.imsdk.TIMManager;
-import com.tencent.imsdk.TIMMessage;
-import com.tencent.imsdk.TIMTextElem;
-import com.tencent.imsdk.TIMValueCallBack;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
@@ -798,34 +790,15 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     }
 
     @Override
-    public void liveStartSuccess() {
-        TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
-        TIMMessage msg = new TIMMessage();
-        TIMTextElem elem = new TIMTextElem();
-
-        CustomMessageData customMessageData = new CustomMessageData();
-        customMessageData.type = "1";
-        customMessageData.content = UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserImg()+ "," + UserProfile.getInstance().getUserName();
-        Gson gson = new Gson();
-        String toJson = gson.toJson(customMessageData);
-
-        elem.setText(toJson);
-        msg.addElement(elem);
-
-        //发送消息
-        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
-            @Override
-            public void onError(int code, String desc) {//发送消息失败
-                //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc);
-
-            }
-
-            @Override
-            public void onSuccess(TIMMessage msg) {//发送消息成功
-                Log.e("自定义消息发送", "SendMsg ok....."+toJson);
-            }
-        });
+    public void liveStartSuccess(LiveStartBean liveStartBean) {
+        if (liveStartBean != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("USER_ID", user_id+"");
+            bundle.putString("LIVE_ID", liveStartBean.live_id + "");
+            getLaunchHelper().startActivity(TRTCMainActivity.class, bundle);
+        }else {
+            ToastUtils.show("开启视频出错!");
+        }
     }
 
 
