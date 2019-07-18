@@ -4,5 +4,5 @@ import com.yu.common.mvp.Viewer;
 
 
 public interface TRTCMainActivityViewer extends Viewer {
-
+    void liveEndSuccess();
 }

@@ -4,6 +4,7 @@ import com.hzrcht.seaofflowers.bean.PayInfo;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -38,5 +39,5 @@ public interface MinePersonalInfoViewer extends Viewer {
 
     void getIsAnchorSuccess(UserIsAnchorBean userIsAnchorBean);
 
-    void liveStartSuccess();
+    void liveStartSuccess(LiveStartBean liveStartBean);
 }

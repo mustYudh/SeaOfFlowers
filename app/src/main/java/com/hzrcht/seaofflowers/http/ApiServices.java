@@ -152,4 +152,7 @@ public class ApiServices {
     //开始视频
     public static final String LIVESTART = BASEURL + "/api/live/start";
 
+    //结束视频
+    public static final String LIVEEND = BASEURL + "/api/live/end";
+
 }
