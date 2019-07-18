@@ -128,4 +128,12 @@ public class ApplyAuthenticationActivity extends BaseBarActivity implements Appl
         setResult(1);
         finish();
     }
+
+    @Override
+    public void userAuditFail(String msg) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show(msg);
+    }
 }

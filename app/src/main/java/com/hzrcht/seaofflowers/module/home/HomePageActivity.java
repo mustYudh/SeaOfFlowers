@@ -3,11 +3,13 @@ package com.hzrcht.seaofflowers.module.home;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.denghao.control.TabItem;
 import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
+import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
@@ -16,6 +18,7 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.fragment.HomeFragment;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
+import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -24,6 +27,10 @@ import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
 import com.nhbs.fenxiao.module.center.HomeCenterPopUpWindow;
 import com.tbruyelle.rxpermissions2.Permission;
+import com.tencent.imsdk.TIMCustomElem;
+import com.tencent.imsdk.TIMManager;
+import com.tencent.imsdk.TIMMessage;
+import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -47,7 +54,7 @@ import io.reactivex.schedulers.Schedulers;
  * @author yudenghao
  */
 public class HomePageActivity extends BaseActivity implements HomePageViewer {
-
+    private int num = 0;
     private PressHandle pressHandle = new PressHandle(this);
 
     @PresenterLifeCycle
@@ -85,6 +92,26 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
             //用户
             userOnline();
         }
+
+        //设置消息监听器，收到新消息时，通过此监听器回调
+        TIMManager.getInstance().addMessageListener(new TIMMessageListener() {//消息监听器
+            @Override
+            public boolean onNewMessages(List<TIMMessage> msgs) {//收到新消息
+                num++;
+                if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+                    mBottomNavigationView.mControl.badge_view.setText(num + "");
+                }
+                TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
+                Gson gson = new Gson();
+                CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
+
+
+                Log.e("aaaa", messageData.content+"...."+messageData.type);
+
+                //消息的内容解析请参考消息收发文档中的消息解析说明
+                return true; //返回true将终止回调链，不再调用下一个新消息监听器
+            }
+        });
     }
 
     /**

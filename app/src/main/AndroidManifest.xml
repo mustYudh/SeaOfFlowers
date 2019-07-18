@@ -31,6 +31,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.mine.activity.MineWithdrawDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.MineChatActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -156,7 +159,6 @@
         <activity
             android:name=".module.login.activity.LoginActivity"
             android:screenOrientation="portrait"/>
-
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"

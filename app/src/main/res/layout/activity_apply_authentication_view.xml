@@ -24,6 +24,7 @@
         android:layout_width="300dp"
         android:layout_height="170dp"
         android:layout_marginTop="10dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_authentication"/>
 
 
@@ -31,7 +32,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:text="注：1、图片清晰可见，色彩明亮；\n         2、本照片仅用于认证，不会对外公开"
+        android:text="注：1、图片清晰可见，色彩明亮；"
+        android:textColor="@color/color_9897E7"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="                      2、本照片仅用于认证，不会对外公开"
         android:textColor="@color/color_9897E7"
         android:textSize="15sp"
         />
