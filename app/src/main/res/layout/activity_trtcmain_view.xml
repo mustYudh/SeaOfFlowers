@@ -524,21 +524,6 @@
             android:textSize="9sp"
             />
 
-
-        <TextView
-            android:id="@+id/tv_work"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/shape_home_job"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp"
-            android:text="模特"
-            android:textColor="@color/white"
-            android:textSize="9sp"
-            />
     </LinearLayout>
 
 </FrameLayout>

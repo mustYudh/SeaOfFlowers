@@ -5,7 +5,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import com.hzrcht.seaofflowers.APP;
-import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
+import com.hzrcht.seaofflowers.module.event.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.login.activity.LoginActivity;
 import com.hzrcht.seaofflowers.module.web.WebViewActivity;
 import com.hzrcht.seaofflowers.utils.UserUtils;

@@ -84,7 +84,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private LinearLayout mIntimacyRoot;
     private String nick_name = "";
     private String head_img = "";
-    private String work = "";
     private String age = "";
     private String is_attent = "0";
 
@@ -484,7 +483,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         if (anchorUserInfoBean != null) {
             nick_name = anchorUserInfoBean.nick_name;
             head_img = anchorUserInfoBean.head_img;
-            work = anchorUserInfoBean.work;
             age = anchorUserInfoBean.age;
             is_attent = anchorUserInfoBean.is_attent + "";
             bindText(R.id.tv_nickname, anchorUserInfoBean.nick_name);
@@ -802,10 +800,10 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             bundle.putString("USER_ID", user_id + "");
             bundle.putString("HEAD_IMG", head_img);
             bundle.putString("NICK_NAME", nick_name);
-            bundle.putString("USER_WORK", work);
             bundle.putString("USER_AGE", age);
             bundle.putString("IS_ATTENT", is_attent);
             bundle.putString("LIVE_ID", liveStartBean.live_id + "");
+            bundle.putString("TYPE_IN", "1");
             getLaunchHelper().startActivity(TRTCMainActivity.class, bundle);
         } else {
             ToastUtils.show("开启视频出错!");
