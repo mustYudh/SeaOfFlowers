@@ -33,21 +33,40 @@ public class CustomMessageDraw implements IOnCustomMessageDrawListener {
             Log.e("aaaa", new String(elem.getData()));
             Gson gson = new Gson();
             CustomMessageData customMessageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
-            if ("0".equals(customMessageData.type)) {
-                //礼物
-                String[] split = customMessageData.content.split(",");
-                view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_present, null, false);
-                // 把自定义消息view添加到TUIKit内部的父容器里
-                parent.addMessageContentView(view);
-                // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
-                ImageView iv_present = view.findViewById(R.id.iv_present);
-                TextView tv_name = view.findViewById(R.id.tv_name);
-                TextView tv_price = view.findViewById(R.id.tv_price);
-                tv_name.setText(split[1] + "");
-                tv_price.setText(split[2] + "");
-                ImageLoader.getInstance().displayImage(iv_present, split[0] + "");
+            switch (customMessageData.type) {
+                case "0":
+                    //礼物
+                    String[] split = customMessageData.content.split(",");
+                    view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_present, null, false);
+                    // 把自定义消息view添加到TUIKit内部的父容器里
+                    parent.addMessageContentView(view);
+                    // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
+                    ImageView iv_present = view.findViewById(R.id.iv_present);
+                    TextView tv_name = view.findViewById(R.id.tv_name);
+                    TextView tv_price = view.findViewById(R.id.tv_price);
+                    tv_name.setText(split[1] + "");
+                    tv_price.setText(split[2] + "");
+                    ImageLoader.getInstance().displayImage(iv_present, split[0] + "");
+                    break;
+                case "1":
+                    //发起视频
+                    view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_video, null, false);
+                    // 把自定义消息view添加到TUIKit内部的父容器里
+                    parent.addMessageContentView(view);
+                    // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
+                    TextView tv_name_video = view.findViewById(R.id.tv_name);
+                    tv_name_video.setText(info.isSelf() ? "您发起了视频聊天" : "对方发起了视频聊天");
+                    break;
+                case "2":
+                    //拒绝视频
+                    view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_video, null, false);
+                    // 把自定义消息view添加到TUIKit内部的父容器里
+                    parent.addMessageContentView(view);
+                    // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
+                    TextView tv_name_video_other = view.findViewById(R.id.tv_name);
+                    tv_name_video_other.setText(info.isSelf() ? "您取消了视频聊天" : "对方拒绝了您的视频聊天");
+                    break;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

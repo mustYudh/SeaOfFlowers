@@ -435,22 +435,25 @@
 
 
             <com.yu.common.ui.DelayClickImageView
+                android:id="@+id/iv_change_bottom"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_change"/>
 
             <com.yu.common.ui.DelayClickImageView
+                android:id="@+id/iv_video_bottom"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
                 android:src="@drawable/ic_video_bottom"/>
 
             <com.yu.common.ui.DelayClickImageView
+                android:id="@+id/iv_voice_bottom"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_video_bottom"/>
+                android:src="@drawable/ic_voice_bottom"/>
 
             <com.yu.common.ui.DelayClickImageView
                 android:layout_width="35dp"
@@ -470,5 +473,72 @@
             android:src="@drawable/ic_video_close"/>
 
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_info_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.yu.common.ui.CircleImageView
+                android:id="@+id/iv_info_top"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_woman_normal"/>
+
+            <com.yu.common.ui.DelayClickTextView
+                android:id="@+id/tv_attention"
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:background="@drawable/shape_dynamic_attention_normal"
+                android:gravity="center"
+                android:text="关注"
+                android:textColor="@color/white"
+                android:textSize="9sp"
+                />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/shape_age_red"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="18"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_work"
+            android:layout_width="wrap_content"
+            android:layout_height="14dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/shape_home_job"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="模特"
+            android:textColor="@color/white"
+            android:textSize="9sp"
+            />
+    </LinearLayout>
 
 </FrameLayout>

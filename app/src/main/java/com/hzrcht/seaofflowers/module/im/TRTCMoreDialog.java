@@ -79,7 +79,7 @@ public class TRTCMoreDialog extends Dialog implements View.OnClickListener {
         void onChangeRole(int role);
     }
 
-    private WeakReference<IMoreListener> mMoreListener;
+    public WeakReference<IMoreListener> mMoreListener;
 
     public TRTCMoreDialog(Context context, IMoreListener listener) {
         super(context, R.style.room_more_dlg);
