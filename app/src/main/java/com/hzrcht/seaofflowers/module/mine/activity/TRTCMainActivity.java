@@ -24,6 +24,7 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.http.ApiServices;
+import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
 import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.TRTCBeautySettingPanel;
 import com.hzrcht.seaofflowers.module.im.TRTCMoreDialog;
@@ -50,6 +51,10 @@ import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
@@ -97,7 +102,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private RelativeLayout rl_bottom;
     private boolean mCameraFront = true;
     private LinearLayout ll_mine_camera;
-    private String user_work;
     private String user_age;
     private String is_attent;
 
@@ -190,20 +194,28 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     @Override
     protected void loadData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
+
         Bundle bundle = getIntent().getExtras();
         user_id = bundle.getString("USER_ID");
         location_live_id = bundle.getString("LIVE_ID");
         head_img = bundle.getString("HEAD_IMG");
         nick_name = bundle.getString("NICK_NAME");
-        user_work = bundle.getString("USER_WORK");
         user_age = bundle.getString("USER_AGE");
         is_attent = bundle.getString("IS_ATTENT");
+        String type_in = bundle.getString("TYPE_IN");
+
 
         if (mEnableCustomVideoCapture) {
             mCustomCapture = new TestSendCustomVideoData(this);
             mCustomRender = new TestRenderVideoFrame(this);
         }
-        trtcParams = new TRTCCloudDef.TRTCParams(ApiServices.SDKAPPID, UserProfile.getInstance().getUserId() + "", UserProfile.getInstance().getUserSig(), UserProfile.getInstance().getUserId(), "", "");
+        if ("1".equals(type_in)) {
+            trtcParams = new TRTCCloudDef.TRTCParams(ApiServices.SDKAPPID, UserProfile.getInstance().getUserId() + "", UserProfile.getInstance().getUserSig(), UserProfile.getInstance().getUserId(), "", "");
+        } else {
+            trtcParams = new TRTCCloudDef.TRTCParams(ApiServices.SDKAPPID, UserProfile.getInstance().getUserId() + "", UserProfile.getInstance().getUserSig(), Integer.parseInt(user_id), "", "");
+        }
 //        trtcParams.role = intent.getIntExtra("role", TRTCCloudDef.TRTCRoleAnchor);
 
 
@@ -215,43 +227,47 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         trtcCloud = TRTCCloud.sharedInstance(this);
         trtcCloud.setListener(trtcListener);
 
-        TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+        if ("1".equals(type_in)) {
+            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+            CustomMessageData customMessageData = new CustomMessageData();
+            customMessageData.type = "1";
+            customMessageData.content = UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserImg() + "," + (TextUtils.isEmpty(UserProfile.getInstance().getUserName()) ? "聊友:" + UserProfile.getInstance().getUserId() : UserProfile.getInstance().getUserName()) + "," + location_live_id;
+            Gson gson = new Gson();
+            String toJson = gson.toJson(customMessageData);
+            //构造一条消息
+            TIMMessage msg = new TIMMessage();
+            //向 TIMMessage 中添加自定义内容
+            TIMCustomElem elem = new TIMCustomElem();
+            elem.setData(toJson.getBytes());      //自定义 byte[]
+            //将 elem 添加到消息
+            if (msg.addElement(elem) != 0) {
+                return;
+            }
+            //发送消息
+            conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+                @Override
+                public void onError(int code, String desc) {//发送消息失败
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
+                }
 
+                @Override
+                public void onSuccess(TIMMessage msg) {//发送消息成功
+                    Log.e("自定义消息发送", "SendMsg ok....." + toJson);
+                    //开始进入视频通话房间
+                    enterRoom();
+                }
+            });
+        } else {
+            isBegin = true;
+            ll_close.setVisibility(View.GONE);
+            ll_top.setVisibility(View.GONE);
+            ll_mine_camera.setVisibility(View.GONE);
+            rl_bottom.setVisibility(View.VISIBLE);
+            ll_info_top.setVisibility(View.VISIBLE);
 
-        CustomMessageData customMessageData = new CustomMessageData();
-        customMessageData.type = "1";
-        customMessageData.content = UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserId() + "," + UserProfile.getInstance().getUserImg() + "," + (TextUtils.isEmpty(UserProfile.getInstance().getUserName()) ? "聊友:" + UserProfile.getInstance().getUserId() : UserProfile.getInstance().getUserName()) + "," + location_live_id;
-        Gson gson = new Gson();
-        String toJson = gson.toJson(customMessageData);
-
-        //构造一条消息
-        TIMMessage msg = new TIMMessage();
-
-        //向 TIMMessage 中添加自定义内容
-        TIMCustomElem elem = new TIMCustomElem();
-        elem.setData(toJson.getBytes());      //自定义 byte[]
-
-        //将 elem 添加到消息
-        if (msg.addElement(elem) != 0) {
-            return;
+            enterRoom();
         }
-
-        //发送消息
-        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
-            @Override
-            public void onError(int code, String desc) {//发送消息失败
-                //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
-
-            }
-
-            @Override
-            public void onSuccess(TIMMessage msg) {//发送消息成功
-                Log.e("自定义消息发送", "SendMsg ok....." + toJson);
-                //开始进入视频通话房间
-                enterRoom();
-            }
-        });
 
 
         bindView(R.id.iv_close, view -> {
@@ -305,7 +321,14 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         super.onDestroy();
         trtcCloud.setListener(null);
         TRTCCloud.destroySharedInstance();
+        EventBus.getDefault().unregister(this);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onEvent(DataSynVideoEvent event) {
+        finish();
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -341,7 +364,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         iv_video_bottom.setOnClickListener(this);
         iv_voice_bottom.setOnClickListener(this);
         bindText(R.id.tv_age, user_age);
-        bindText(R.id.tv_work, user_work);
         bindText(R.id.tv_attention, "0".equals(is_attent) ? "关注" : "已关注");
         bindView(R.id.tv_attention).setBackgroundResource("0".equals(is_attent) ? R.drawable.shape_dynamic_attention_normal : R.drawable.shape_dynamic_attention_select);
         etRoomId = (EditText) findViewById(R.id.edit_room_id);
@@ -608,7 +630,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         public void onEnterRoom(long elapsed) {
             final TRTCMainActivity activity = mContext.get();
             if (activity != null) {
-                Toast.makeText(activity, "加入房间成功", Toast.LENGTH_SHORT).show();
                 activity.mVideoViewLayout.onRoomEnter();
                 activity.updateCloudMixtureParams();
                 activity.enableAudioVolumeEvaluation(activity.moreDlg.isAudioVolumeEvaluation());

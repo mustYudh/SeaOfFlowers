@@ -18,7 +18,9 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.DynamicFragment;
-import com.hzrcht.seaofflowers.module.home.bean.HomeDataRefreshEvent;
+import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
+import com.hzrcht.seaofflowers.module.event.DataSynVideoWaitEvent;
+import com.hzrcht.seaofflowers.module.event.HomeDataRefreshEvent;
 import com.hzrcht.seaofflowers.module.home.fragment.HomeFragment;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePagePresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomePageViewer;
@@ -113,9 +115,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                     switch (messageData.type) {
                         case "1":
                             //发起视频
+                            Log.e("视频选项", "发起");
+                            Bundle bundle = new Bundle();
+                            bundle.putString("CONTENT", messageData.content);
+                            getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
                             break;
                         case "2":
                             //拒绝视频
+                            Log.e("视频选项", "拒绝");
+                            EventBus.getDefault().post(new DataSynVideoWaitEvent());
+                            EventBus.getDefault().post(new DataSynVideoEvent());
                             break;
                     }
                     Log.e("aaaa", messageData.content + "...." + messageData.type);
@@ -127,6 +136,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
             }
         });
     }
+
 
     /**
      * 检查权限

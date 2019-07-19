@@ -14,5 +14,5 @@ public class UserChargeBean {
     public BigDecimal video_amount;
     public BigDecimal lang_amount;
     public BigDecimal look_amount;
-    public List<BigDecimal> video_amount_arr;
+    public List<String> video_amount_arr;
 }

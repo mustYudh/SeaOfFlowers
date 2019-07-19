@@ -75,7 +75,7 @@ public class ChargeSettingActivity extends BaseBarActivity implements ChargeSett
         finish();
     }
 
-    private void initConfigData(List<BigDecimal> list) {
+    private void initConfigData(List<String> list) {
         OptionsPickerView options = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {

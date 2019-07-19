@@ -31,6 +31,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".module.home.HomeVideoWaitActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".module.mine.activity.TRTCMainActivity"
             android:screenOrientation="portrait"/>
         <activity

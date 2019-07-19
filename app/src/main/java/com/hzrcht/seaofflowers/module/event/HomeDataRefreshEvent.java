@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.home.bean;
+package com.hzrcht.seaofflowers.module.event;
 
 import java.io.Serializable;
 
