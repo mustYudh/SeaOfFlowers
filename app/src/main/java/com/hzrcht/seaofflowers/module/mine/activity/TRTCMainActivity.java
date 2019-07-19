@@ -48,6 +48,7 @@ import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.TRTCStatistics;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
 
 import java.lang.ref.WeakReference;
@@ -90,11 +91,15 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private String location_live_id;
     private boolean isBegin = false;
     private DialogUtils exitDialog;
-    private LinearLayout ll_top, ll_close;
-    private CircleImageView iv_headimg;
+    private LinearLayout ll_top, ll_close, ll_info_top;
     private String head_img;
     private String nick_name;
     private RelativeLayout rl_bottom;
+    private boolean mCameraFront = true;
+    private LinearLayout ll_mine_camera;
+    private String user_work;
+    private String user_age;
+    private String is_attent;
 
     @Override
     public void liveEndSuccess() {
@@ -149,6 +154,15 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         }
     }
 
+    @Override
+    public void liveEndFail(String msg) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show(msg);
+        finish();
+    }
+
     private static class VideoStream {
         String userId;
         int streamType;
@@ -181,7 +195,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         location_live_id = bundle.getString("LIVE_ID");
         head_img = bundle.getString("HEAD_IMG");
         nick_name = bundle.getString("NICK_NAME");
-
+        user_work = bundle.getString("USER_WORK");
+        user_age = bundle.getString("USER_AGE");
+        is_attent = bundle.getString("IS_ATTENT");
 
         if (mEnableCustomVideoCapture) {
             mCustomCapture = new TestSendCustomVideoData(this);
@@ -302,11 +318,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private void initView() {
 
         initClickableLayout(R.id.ll_beauty);
-        initClickableLayout(R.id.ll_mine_camera);
         initClickableLayout(R.id.ll_voice);
         initClickableLayout(R.id.ll_log);
         initClickableLayout(R.id.ll_role);
-        initClickableLayout(R.id.ll_more);
 
         mVideoViewLayout = (TRTCVideoViewLayout) findViewById(R.id.ll_mainview);
         mVideoViewLayout.setUserId(trtcParams.userId);
@@ -318,15 +332,30 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ivLog = (ImageView) findViewById(R.id.iv_log);
         ivVoice = (ImageView) findViewById(R.id.iv_mic);
         ivCamera = (ImageView) findViewById(R.id.iv_mine_camera);
-
+        ll_mine_camera = (LinearLayout) findViewById(R.id.ll_mine_camera);
+        ImageView iv_change_bottom = (ImageView) findViewById(R.id.iv_change_bottom);
+        ImageView iv_video_bottom = (ImageView) findViewById(R.id.iv_video_bottom);
+        ImageView iv_voice_bottom = (ImageView) findViewById(R.id.iv_voice_bottom);
+        ll_mine_camera.setOnClickListener(this);
+        iv_change_bottom.setOnClickListener(this);
+        iv_video_bottom.setOnClickListener(this);
+        iv_voice_bottom.setOnClickListener(this);
+        bindText(R.id.tv_age, user_age);
+        bindText(R.id.tv_work, user_work);
+        bindText(R.id.tv_attention, "0".equals(is_attent) ? "关注" : "已关注");
+        bindView(R.id.tv_attention).setBackgroundResource("0".equals(is_attent) ? R.drawable.shape_dynamic_attention_normal : R.drawable.shape_dynamic_attention_select);
         etRoomId = (EditText) findViewById(R.id.edit_room_id);
         etUserId = (EditText) findViewById(R.id.edit_user_id);
         ll_top = (LinearLayout) findViewById(R.id.ll_top);
+        ll_info_top = (LinearLayout) findViewById(R.id.ll_info_top);
         ll_close = (LinearLayout) findViewById(R.id.ll_close);
-        iv_headimg = (CircleImageView) findViewById(R.id.iv_headimg);
+        CircleImageView iv_headimg = (CircleImageView) findViewById(R.id.iv_headimg);
+        CircleImageView iv_info_top = (CircleImageView) findViewById(R.id.iv_info_top);
         rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
 
         ImageLoader.getInstance().displayImage(iv_headimg, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        ImageLoader.getInstance().displayImage(iv_info_top, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+
         bindText(R.id.tv_nickname, TextUtils.isEmpty(nick_name) ? "未知" : nick_name);
         findViewById(R.id.btn_confirm).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
@@ -457,8 +486,14 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             onChangeLogStatus();
         } else if (v.getId() == R.id.ll_role) {
             onShowSettingDlg();
-        } else if (v.getId() == R.id.ll_more) {
-            onShowMoreDlg();
+        } else if (v.getId() == R.id.iv_change_bottom) {
+            onSwitchCamera(mCameraFront);
+            ToastUtils.show(mCameraFront ? "切换为后置摄像头" : "切换为前置摄像头");
+            mCameraFront = !mCameraFront;
+        } else if (v.getId() == R.id.iv_video_bottom) {
+            onEnableVideo();
+        } else if (v.getId() == R.id.iv_voice_bottom) {
+            onEnableAudio();
         } else if (v.getId() == R.id.btn_confirm) {
             startLinkMic();
         } else if (v.getId() == R.id.btn_cancel) {
@@ -488,7 +523,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
      * 开启/关闭视频上行
      */
     private void onEnableVideo() {
-
+        if (UserProfile.getInstance().getAnchorType() == 1) {
+            ToastUtils.show("主播无法关闭摄像头");
+            return;
+        }
         bEnableVideo = !bEnableVideo;
 
         startLocalVideo(bEnableVideo);
@@ -498,15 +536,22 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ivCamera.setImageResource(bEnableVideo ? R.drawable.ic_open_camera : R.drawable.ic_close_camera);
         bindText(R.id.tv_mine_camera, bEnableVideo ? "关闭摄像头" : "开启摄像头");
 
+        ToastUtils.show(bEnableVideo ? "开启摄像头" : "关闭摄像头");
     }
 
     /**
      * 开启/关闭音频上行
      */
     private void onEnableAudio() {
+        if (UserProfile.getInstance().getAnchorType() == 1) {
+            ToastUtils.show("主播无法关闭麦克风");
+            return;
+        }
         bEnableAudio = !bEnableAudio;
         trtcCloud.muteLocalAudio(!bEnableAudio);
         ivVoice.setImageResource(bEnableAudio ? R.mipmap.mic_enable : R.mipmap.mic_disable);
+
+        ToastUtils.show(bEnableAudio ? "开启麦克风" : "关闭麦克风");
     }
 
     /**
@@ -719,7 +764,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             activity.isBegin = true;
             activity.ll_close.setVisibility(View.GONE);
             activity.ll_top.setVisibility(View.GONE);
+            activity.ll_mine_camera.setVisibility(View.GONE);
             activity.rl_bottom.setVisibility(View.VISIBLE);
+            activity.ll_info_top.setVisibility(View.VISIBLE);
         }
 
         /**

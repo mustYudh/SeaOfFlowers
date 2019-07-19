@@ -1,8 +1,11 @@
 package com.hzrcht.seaofflowers.module.home;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -57,7 +60,7 @@ import io.reactivex.schedulers.Schedulers;
 public class HomePageActivity extends BaseActivity implements HomePageViewer {
     private int num = 0;
     private PressHandle pressHandle = new PressHandle(this);
-
+    private final static int REQ_PERMISSION_CODE = 0x1000;
     @PresenterLifeCycle
     HomePagePresenter mPresenter = new HomePagePresenter(this);
     private BottomNavigationView mBottomNavigationView;
@@ -128,7 +131,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     /**
      * 检查权限
      */
-    private void checkPermission() {
+    private boolean checkPermission() {
         //检测权限
         PermissionManager.getInstance(this).checkMorePermission(new MorePermissionsCallBack() {
                                                                     @Override
@@ -151,7 +154,47 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.RECORD_AUDIO
         );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<String> permissions = new ArrayList<>();
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO)) {
+                permissions.add(Manifest.permission.RECORD_AUDIO);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (permissions.size() != 0) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        (String[]) permissions.toArray(new String[0]),
+                        REQ_PERMISSION_CODE);
+                return false;
+            }
+        }
+
+        return true;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQ_PERMISSION_CODE:
+                for (int ret : grantResults) {
+                    if (PackageManager.PERMISSION_GRANTED != ret) {
+                        ToastUtils.show("用户没有允许需要的权限，使用可能会受到限制！");
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
