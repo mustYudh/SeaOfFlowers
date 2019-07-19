@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.TextureView;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import com.hzrcht.seaofflowers.module.im.TestCustomVideo.TestRenderVideoFrame;
 import com.hzrcht.seaofflowers.module.im.TestCustomVideo.TestSendCustomVideoData;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityViewer;
+import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -43,7 +46,9 @@ import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.TRTCStatistics;
+import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.ui.CircleImageView;
 
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
@@ -83,10 +88,65 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private int mAppScene = TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
     private String user_id;
     private String location_live_id;
+    private boolean isBegin = false;
+    private DialogUtils exitDialog;
+    private LinearLayout ll_top, ll_close;
+    private CircleImageView iv_headimg;
+    private String head_img;
+    private String nick_name;
+    private RelativeLayout rl_bottom;
 
     @Override
     public void liveEndSuccess() {
-        exitRoom();
+        if (isBegin) {
+            //接通视频
+            if (loadDialog.isShowing()) {
+                loadDialog.dismiss();
+            }
+            exitRoom();
+        } else {
+            //未接通视频
+            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+            CustomMessageData customMessageData = new CustomMessageData();
+            customMessageData.type = "2";
+            customMessageData.content = "no_accept";
+            Gson gson = new Gson();
+            String toJson = gson.toJson(customMessageData);
+
+            //构造一条消息
+            TIMMessage msg = new TIMMessage();
+
+            //向 TIMMessage 中添加自定义内容
+            TIMCustomElem elem = new TIMCustomElem();
+            elem.setData(toJson.getBytes());      //自定义 byte[]
+
+            //将 elem 添加到消息
+            if (msg.addElement(elem) != 0) {
+                return;
+            }
+
+            //发送消息
+            conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+                @Override
+                public void onError(int code, String desc) {//发送消息失败
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
+                    if (loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    exitRoom();
+                }
+
+                @Override
+                public void onSuccess(TIMMessage msg) {//发送消息成功
+                    Log.e("自定义消息发送", "SendMsg ok....." + toJson);
+                    if (loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    exitRoom();
+                }
+            });
+        }
     }
 
     private static class VideoStream {
@@ -119,6 +179,8 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         Bundle bundle = getIntent().getExtras();
         user_id = bundle.getString("USER_ID");
         location_live_id = bundle.getString("LIVE_ID");
+        head_img = bundle.getString("HEAD_IMG");
+        nick_name = bundle.getString("NICK_NAME");
 
 
         if (mEnableCustomVideoCapture) {
@@ -177,8 +239,43 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
 
         bindView(R.id.iv_close, view -> {
-            mPresenter.liveEnd(location_live_id + "");
+            showExitDialog();
         });
+
+        bindView(R.id.iv_close_bottom, view -> {
+            showExitDialog();
+        });
+
+
+    }
+
+
+    /**
+     * 退出弹窗提示
+     */
+    private void showExitDialog() {
+        exitDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_layout)
+                .gravity(Gravity.CENTER)
+                .cancelTouchout(true)
+                .settext("确定要退出视频聊天吗?", R.id.dialog_content)
+                .settext("确定", R.id.down)
+                .style(R.style.Dialog_NoAnimation)
+                .addViewOnclick(R.id.cancle, view -> {
+                    if (exitDialog.isShowing()) {
+                        exitDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.down, view -> {
+                    if (exitDialog.isShowing()) {
+                        exitDialog.dismiss();
+                    }
+                    loadDialog.show();
+                    mPresenter.liveEnd(location_live_id + "");
+                })
+                .build();
+        exitDialog.show();
+
+
     }
 
 
@@ -196,7 +293,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     @Override
     public void onBackPressed() {
-        exitRoom();
+        showExitDialog();
     }
 
     /**
@@ -205,7 +302,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private void initView() {
 
         initClickableLayout(R.id.ll_beauty);
-        initClickableLayout(R.id.ll_camera);
+        initClickableLayout(R.id.ll_mine_camera);
         initClickableLayout(R.id.ll_voice);
         initClickableLayout(R.id.ll_log);
         initClickableLayout(R.id.ll_role);
@@ -220,11 +317,17 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ivBeauty = (ImageView) findViewById(R.id.iv_beauty);
         ivLog = (ImageView) findViewById(R.id.iv_log);
         ivVoice = (ImageView) findViewById(R.id.iv_mic);
-        ivCamera = (ImageView) findViewById(R.id.iv_camera);
+        ivCamera = (ImageView) findViewById(R.id.iv_mine_camera);
 
         etRoomId = (EditText) findViewById(R.id.edit_room_id);
         etUserId = (EditText) findViewById(R.id.edit_user_id);
+        ll_top = (LinearLayout) findViewById(R.id.ll_top);
+        ll_close = (LinearLayout) findViewById(R.id.ll_close);
+        iv_headimg = (CircleImageView) findViewById(R.id.iv_headimg);
+        rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
 
+        ImageLoader.getInstance().displayImage(iv_headimg, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        bindText(R.id.tv_nickname, TextUtils.isEmpty(nick_name) ? "未知" : nick_name);
         findViewById(R.id.btn_confirm).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
 
@@ -321,7 +424,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
         trtcCloud.enterRoom(trtcParams, mAppScene);
 
-        Toast.makeText(this, "开始进房", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -347,7 +449,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             onChangeMode();
         } else if (v.getId() == R.id.ll_beauty) {
             onChangeBeauty();
-        } else if (v.getId() == R.id.ll_camera) {
+        } else if (v.getId() == R.id.ll_mine_camera) {
             onEnableVideo();
         } else if (v.getId() == R.id.ll_voice) {
             onEnableAudio();
@@ -393,7 +495,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
         mVideoViewLayout.updateVideoStatus(trtcParams.userId, bEnableVideo);
 
-        ivCamera.setImageResource(bEnableVideo ? R.mipmap.remote_video_enable : R.mipmap.remote_video_disable);
+        ivCamera.setImageResource(bEnableVideo ? R.drawable.ic_open_camera : R.drawable.ic_close_camera);
+        bindText(R.id.tv_mine_camera, bEnableVideo ? "关闭摄像头" : "开启摄像头");
+
     }
 
     /**
@@ -612,6 +716,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                 }
                 activity.enableAudioVolumeEvaluation(activity.moreDlg.isAudioVolumeEvaluation());
             }
+            activity.isBegin = true;
+            activity.ll_close.setVisibility(View.GONE);
+            activity.ll_top.setVisibility(View.GONE);
+            activity.rl_bottom.setVisibility(View.VISIBLE);
         }
 
         /**
@@ -641,6 +749,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                     }
                 }
             }
+//            activity.loadDialog.show();
+//            activity.mPresenter.liveEnd(activity.location_live_id + "");
+            activity.exitRoom();
         }
 
         /**

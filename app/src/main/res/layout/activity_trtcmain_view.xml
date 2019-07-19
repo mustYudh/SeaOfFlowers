@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageButton
                 android:id="@+id/rtc_double_room_back_button"
@@ -52,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_show_mode"
@@ -284,19 +286,189 @@
     </FrameLayout>
 
 
-    <com.yu.common.ui.DelayClickImageView
-        android:id="@+id/iv_close"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="46dp"
-        android:src="@drawable/ic_video_close"/>
-
     <LinearLayout
+        android:id="@+id/ll_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="26dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="您正在发起视频..."
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            />
+
+        <com.yu.common.ui.DelayClickImageView
+            android:id="@+id/iv_close"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/ic_video_close"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:includeFontPadding="false"
+            android:text="挂断"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_mine_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="120dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_mine_camera"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_open_camera"/>
+
+        <TextView
+            android:id="@+id/tv_mine_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:includeFontPadding="false"
+            android:text="关闭摄像头"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="75dp"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
 
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/shape_image_bg">
+
+            <com.yu.common.ui.CircleImageView
+                android:id="@+id/iv_headimg"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_woman_normal"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:includeFontPadding="false"
+            android:text="@string/text_null"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginRight="28dp"
+            android:background="#40FFFFFF"
+            >
+
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_warning"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:text="平台倡导绿色交友，严禁低俗、色情、暴力、赌博、反动等不良内容，一旦涉及将或被屏蔽或封停账号，网警24小时在线巡查，敬请配合。"
+                android:textColor="#ffffffff"
+                android:textSize="12sp"
+                />
+        </LinearLayout>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.yu.common.ui.DelayClickImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_change"/>
+
+            <com.yu.common.ui.DelayClickImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_video_bottom"/>
+
+            <com.yu.common.ui.DelayClickImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_video_bottom"/>
+
+            <com.yu.common.ui.DelayClickImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/ic_present_bottom"/>
+
+
+        </LinearLayout>
+
+        <com.yu.common.ui.DelayClickImageView
+            android:id="@+id/iv_close_bottom"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="26dp"
+            android:src="@drawable/ic_video_close"/>
+
+    </RelativeLayout>
+
 </FrameLayout>

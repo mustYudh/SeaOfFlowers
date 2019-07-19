@@ -794,6 +794,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         if (liveStartBean != null) {
             Bundle bundle = new Bundle();
             bundle.putString("USER_ID", user_id+"");
+            bundle.putString("HEAD_IMG", head_img);
+            bundle.putString("NICK_NAME", nick_name);
             bundle.putString("LIVE_ID", liveStartBean.live_id + "");
             getLaunchHelper().startActivity(TRTCMainActivity.class, bundle);
         }else {

@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.hzrcht.seaofflowers.R;
 import com.tencent.rtmp.TXLog;
@@ -796,7 +795,7 @@ public class TRTCVideoViewLayout extends RelativeLayout {
 
                     if (imageView != null) {
                         imageView.bringToFront();
-                        imageView.setVisibility(VISIBLE);
+                        imageView.setVisibility(GONE);
                         imageView.setImageResource(mapNetworkQuality.get(Integer.valueOf(quality).intValue()));
                     }
                 }
@@ -805,31 +804,31 @@ public class TRTCVideoViewLayout extends RelativeLayout {
     }
 
     public void updateVideoStatus(String userID, boolean bHasVideo) {
-        for (TXCloudVideoView videoView: mVideoViewList) {
-            if (videoView.getVisibility() == VISIBLE) {
-                String tempUserID = videoView.getUserId();
-                if (tempUserID != null && tempUserID.startsWith(userID)) {
-                    TextView textView = (TextView)videoView.findViewById(R.id.textview_userid);
-                    if (textView != null) {
-                        if (mSelfUserId.equalsIgnoreCase(userID)) {
-                            userID += "(您自己)";
-                        }
-                        textView.setText(userID);
-                    }
-                    if (bHasVideo == false) {
-                        View layoutToolbar = videoView.findViewById(R.id.layout_toolbar);
-                        if (layoutToolbar != null) {
-                            layoutToolbar.bringToFront();
-                            layoutToolbar.setVisibility(VISIBLE);
-                        }
-
-                        showNoVideoLayout(videoView, true);
-                    }
-                    else {
-                        showNoVideoLayout(videoView, false);
-                    }
-                }
-            }
-        }
+//        for (TXCloudVideoView videoView: mVideoViewList) {
+//            if (videoView.getVisibility() == VISIBLE) {
+//                String tempUserID = videoView.getUserId();
+//                if (tempUserID != null && tempUserID.startsWith(userID)) {
+//                    TextView textView = (TextView)videoView.findViewById(R.id.textview_userid);
+//                    if (textView != null) {
+//                        if (mSelfUserId.equalsIgnoreCase(userID)) {
+//                            userID += "(您自己)";
+//                        }
+//                        textView.setText(userID);
+//                    }
+//                    if (bHasVideo == false) {
+//                        View layoutToolbar = videoView.findViewById(R.id.layout_toolbar);
+//                        if (layoutToolbar != null) {
+//                            layoutToolbar.bringToFront();
+//                            layoutToolbar.setVisibility(VISIBLE);
+//                        }
+//
+//                        showNoVideoLayout(videoView, true);
+//                    }
+//                    else {
+//                        showNoVideoLayout(videoView, false);
+//                    }
+//                }
+//            }
+//        }
     }
 }
