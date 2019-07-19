@@ -29,11 +29,8 @@ public class BannerInfoViewHolder implements MZViewHolder<String> {
         // 数据绑定
         ImageLoader.getInstance().displayImage(mImageView, data, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
 
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mImageView.setOnClickListener(view -> {
 
-            }
         });
     }
 }

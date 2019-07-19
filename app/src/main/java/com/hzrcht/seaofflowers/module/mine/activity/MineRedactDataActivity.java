@@ -24,7 +24,7 @@ import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineRedactDataGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineSysLabelGvAdapter;
-import com.hzrcht.seaofflowers.module.mine.activity.bean.JsonBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.CityJsonBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysLabelBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserDetailBean;
@@ -33,7 +33,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRedactDataView
 import com.hzrcht.seaofflowers.module.view.ClearEditText;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
-import com.hzrcht.seaofflowers.utils.GetJsonDataUtil;
+import com.hzrcht.seaofflowers.utils.MineGetJsonDataUtil;
 import com.hzrcht.seaofflowers.utils.PhotoUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -95,7 +95,7 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
     private MineRedactDataGvAdapter adapter;
     private int audit = 1;
 
-    private List<JsonBean> options1Items = new ArrayList<>();
+    private List<CityJsonBean> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
     private Thread thread;
@@ -819,9 +819,9 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
          * 关键逻辑在于循环体
          *
          * */
-        String JsonData = new GetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
+        String JsonData = new MineGetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
 
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
+        ArrayList<CityJsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
 
         /**
          * 添加省份数据
@@ -866,13 +866,13 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
 
     }
 
-    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
-        ArrayList<JsonBean> detail = new ArrayList<>();
+    public ArrayList<CityJsonBean> parseData(String result) {//Gson 解析
+        ArrayList<CityJsonBean> detail = new ArrayList<>();
         try {
             JSONArray data = new JSONArray(result);
             Gson gson = new Gson();
             for (int i = 0; i < data.length(); i++) {
-                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
+                CityJsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), CityJsonBean.class);
                 detail.add(entity);
             }
         } catch (Exception e) {

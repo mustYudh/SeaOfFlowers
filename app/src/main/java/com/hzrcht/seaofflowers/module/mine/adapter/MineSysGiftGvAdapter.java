@@ -57,12 +57,9 @@ public class MineSysGiftGvAdapter extends BaseAdapter {
         holder.tv_count.setText(list.get(i).price + "金币");
         ImageLoader.getInstance().displayImage(holder.iv_present, list.get(i).img);
 
-        holder.ll_root.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onItemChcekCheckListener != null) {
-                    onItemChcekCheckListener.setOnItemChcekCheckClick(list.get(i));
-                }
+        holder.ll_root.setOnClickListener(view1 -> {
+            if (onItemChcekCheckListener != null) {
+                onItemChcekCheckListener.setOnItemChcekCheckClick(list.get(i));
             }
         });
         return view;
