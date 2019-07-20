@@ -17,6 +17,7 @@ import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
+import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -24,6 +25,11 @@ import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
@@ -36,6 +42,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private RecyclerView mAnchor;
     private List<MineLocationAnchorBean> list = new ArrayList<>();
     private HomeLimitRvAdapter adapter;
+    private Disposable subscribe;
 
     @Override
     protected int getContentViewId() {
@@ -124,6 +131,10 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         if (mBanner != null) {
             mBanner.pause();//暂停轮播
         }
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+            subscribe = null;
+        }
     }
 
     @Override
@@ -135,11 +146,11 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
                 } else {
                     list.clear();
                     MineLocationAnchorBean mineLocationAnchorTopBean = new MineLocationAnchorBean();
+                    mineLocationAnchorTopBean.pair = homeAnchorListBean.pair;
                     mineLocationAnchorTopBean.itemType = 0;
                     list.add(mineLocationAnchorTopBean);
 
                 }
-
 
                 for (int i = 0; i < homeAnchorListBean.rows.size(); i++) {
                     MineLocationAnchorBean mineLocationAnchorBean = new MineLocationAnchorBean();
@@ -159,6 +170,13 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
                 adapter = new HomeLimitRvAdapter(list, getActivity());
                 mAnchor.setAdapter(adapter);
+
+                adapter.setOnItemDetailsDoCilckListener((pair, imageView) -> subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .doOnNext(aLong -> {
+                            getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size())))));
+                        })
+                        .subscribe());
                 bindView(R.id.ll_empty, false);
                 bindView(R.id.rl_home, true);
             } else {
@@ -181,6 +199,4 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             }
         }
     }
-
-
 }

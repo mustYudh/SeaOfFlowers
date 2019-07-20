@@ -1,6 +1,6 @@
 package com.hzrcht.seaofflowers.module.home.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -10,15 +10,16 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
+import com.shehuan.niv.NiceImageView;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 
 import java.util.List;
 
 public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAnchorBean, BaseViewHolder> {
-    private Context context;
+    private Activity context;
 
-    public HomeLimitRvAdapter(List<MineLocationAnchorBean> data, Context context) {
+    public HomeLimitRvAdapter(List<MineLocationAnchorBean> data, Activity context) {
         super(data);
         addItemType(0, R.layout.item_home_limit_top);
         addItemType(1, R.layout.item_home_limit);
@@ -31,6 +32,12 @@ public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAn
     protected void convert(BaseViewHolder helper, MineLocationAnchorBean item) {
         switch (item.getItemType()) {
             case 0:
+                NiceImageView iv_pair = helper.getView(R.id.iv_pair);
+                if (item.pair != null && item.pair.size() != 0) {
+                    if (onItemRandomListener != null) {
+                        onItemRandomListener.onItemDetailsDelClick(item.pair, iv_pair);
+                    }
+                }
                 break;
             case 1:
                 helper.setText(R.id.tv_nickname, item.nick_name);
@@ -64,6 +71,15 @@ public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAn
                 }
                 break;
         }
+    }
 
+    public interface OnItemRandomListener {
+        void onItemDetailsDelClick(List<String> pair, NiceImageView imageView);
+    }
+
+    OnItemRandomListener onItemRandomListener;
+
+    public void setOnItemDetailsDoCilckListener(OnItemRandomListener onItemRandomListener) {
+        this.onItemRandomListener = onItemRandomListener;
     }
 }

@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
+import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
@@ -32,6 +33,26 @@ public class TRTCMainActivityPresenter extends BaseViewPresenter<TRTCMainActivit
                     protected void onError(ApiException apiException) {
                         assert getViewer() != null;
                         getViewer().liveEndFail(apiException.getDisplayMessage());
+                    }
+                });
+    }
+
+    public void livePayCoin(String live_id) {
+        XHttp.post(ApiServices.LIVEPAYCOIN)
+                .accessToken(true)
+                .params("live_id", live_id)
+                .execute(HomePayCoinBean.class)
+                .subscribeWith(new TipRequestSubscriber<HomePayCoinBean>() {
+                    @Override
+                    protected void onSuccess(HomePayCoinBean homePayCoinBean) {
+                        assert getViewer() != null;
+                        getViewer().livePayCoinSuccess(homePayCoinBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().livePayCoinFail(apiException.getCode(), apiException.getDisplayMessage());
                     }
                 });
     }

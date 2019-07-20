@@ -49,6 +49,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -114,11 +115,17 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
                     switch (messageData.type) {
                         case "1":
-                            //发起视频
-                            Log.e("视频选项", "发起");
-                            Bundle bundle = new Bundle();
-                            bundle.putString("CONTENT", messageData.content);
-                            getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
+                            long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(0).timestamp();
+                            if (time < 30) {
+                                //发起视频
+                                Log.e("视频选项", "发起");
+                                Bundle bundle = new Bundle();
+                                bundle.putString("CONTENT", messageData.content);
+                                getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
+                            } else {
+                                Log.e("视频选项", "超时" + time + "..." + getSecondTimestamp(new Date(System.currentTimeMillis())) + "..." + (msgs.get(0).timestamp() * 1000));
+                            }
+                            Log.e("视频选项", "正常" + time + "..." + getSecondTimestamp(new Date(System.currentTimeMillis())) + "..." + (msgs.get(0).timestamp() * 1000));
                             break;
                         case "2":
                             //拒绝视频
@@ -273,6 +280,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         if (userIsAnchorBean != null) {
             UserProfile.getInstance().setAnchorType(userIsAnchorBean.is_anchor);
             UserProfile.getInstance().setUserVip(userIsAnchorBean.is_vip);
+            UserProfile.getInstance().setUserName(userIsAnchorBean.nick_name);
+
         }
+    }
+
+    public static int getSecondTimestamp(Date date) {
+        if (null == date) {
+            return 0;
+        }
+        String timestamp = String.valueOf(date.getTime() / 1000);
+        return Integer.valueOf(timestamp);
     }
 }

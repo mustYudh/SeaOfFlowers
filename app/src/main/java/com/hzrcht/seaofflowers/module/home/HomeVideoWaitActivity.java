@@ -11,9 +11,11 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoWaitEvent;
+import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitPresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitViewer;
 import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.TRTCMainActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.tencent.imsdk.TIMConversation;
@@ -64,55 +66,13 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
 
             //拒绝视频邀请
             bindView(R.id.iv_close, view -> {
-                TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, split[0]);//会话类型：单聊
-                CustomMessageData customMessageData = new CustomMessageData();
-                customMessageData.type = "2";
-                customMessageData.content = "no_accept";
-                Gson gson = new Gson();
-                String toJson = gson.toJson(customMessageData);
-
-                //构造一条消息
-                TIMMessage msg = new TIMMessage();
-
-                //向 TIMMessage 中添加自定义内容
-                TIMCustomElem elem = new TIMCustomElem();
-                elem.setData(toJson.getBytes());      //自定义 byte[]
-
-                //将 elem 添加到消息
-                if (msg.addElement(elem) != 0) {
-                    return;
-                }
-
-                //发送消息
-                conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
-                    @Override
-                    public void onError(int code, String desc) {//发送消息失败
-                        //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                        Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
-                        finish();
-                    }
-
-                    @Override
-                    public void onSuccess(TIMMessage msg) {//发送消息成功
-                        Log.e("自定义消息发送", "SendMsg ok....." + toJson);
-
-                        finish();
-                    }
-                });
+                loadDialog.show();
+                mPresenter.liveEnd(split,0);
             });
 
             //加入视频聊天
             bindView(R.id.iv_open, view -> {
-                Bundle bundleVideo = new Bundle();
-                bundleVideo.putString("USER_ID", split[0] + "");
-                bundleVideo.putString("HEAD_IMG", head_img);
-                bundleVideo.putString("NICK_NAME", nick_name);
-                bundleVideo.putString("USER_AGE", age);
-                bundleVideo.putString("IS_ATTENT", is_attent);
-                bundleVideo.putString("LIVE_ID", split[4] + "");
-                bundleVideo.putString("TYPE_IN", "0");
-                getLaunchHelper().startActivity(TRTCMainActivity.class, bundleVideo);
-                finish();
+                mPresenter.livePayCoin(split);
             });
             mPresenter.getIsAnchor(split[0] + "");
         } else {
@@ -152,5 +112,99 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
             ImageLoader.getInstance().displayImage(iv_headimg, userIsAnchorBean.head_img, userIsAnchorBean.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal);
             ImageLoader.getInstance().displayImage(iv_bottom, userIsAnchorBean.head_img, userIsAnchorBean.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal);
         }
+    }
+
+    @Override
+    public void livePayCoinSuccess(HomePayCoinBean homePayCoinBean, String[] split) {
+        Bundle bundleVideo = new Bundle();
+        bundleVideo.putString("USER_ID", split[0] + "");
+        bundleVideo.putString("HEAD_IMG", head_img);
+        bundleVideo.putString("NICK_NAME", nick_name);
+        bundleVideo.putString("USER_AGE", age);
+        bundleVideo.putString("IS_ATTENT", is_attent);
+        bundleVideo.putString("LIVE_ID", split[4] + "");
+        bundleVideo.putString("TYPE_IN", "0");
+        getLaunchHelper().startActivity(TRTCMainActivity.class, bundleVideo);
+        finish();
+    }
+
+    @Override
+    public void livePayCoinFail(int code, String msg, String[] split) {
+        ToastUtils.show(msg);
+        loadDialog.show();
+        mPresenter.liveEnd(split, code);
+    }
+
+
+    @Override
+    public void liveEndSuccess(String[] split, int rechargeCode) {
+        TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, split[0]);//会话类型：单聊
+        CustomMessageData customMessageData = new CustomMessageData();
+        customMessageData.type = "2";
+        customMessageData.content = "no_accept";
+        Gson gson = new Gson();
+        String toJson = gson.toJson(customMessageData);
+
+        //构造一条消息
+        TIMMessage msg = new TIMMessage();
+
+        //向 TIMMessage 中添加自定义内容
+        TIMCustomElem elem = new TIMCustomElem();
+        elem.setData(toJson.getBytes());      //自定义 byte[]
+
+        //将 elem 添加到消息
+        if (msg.addElement(elem) != 0) {
+            return;
+        }
+
+        //发送消息
+        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+            @Override
+            public void onError(int code, String desc) {//发送消息失败
+                //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
+                if (loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
+                if (rechargeCode == 10000) {
+                    //充值
+                    Bundle bundleVip = new Bundle();
+                    bundleVip.putInt("TYPE", 1);
+                    getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
+                }
+                finish();
+            }
+
+            @Override
+            public void onSuccess(TIMMessage msg) {//发送消息成功
+                Log.e("自定义消息发送", "SendMsg ok....." + toJson);
+                if (loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
+                if (rechargeCode == 10000) {
+                    //充值
+                    Bundle bundleVip = new Bundle();
+                    bundleVip.putInt("TYPE", 1);
+                    getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
+                }
+                finish();
+            }
+        });
+
+    }
+
+    @Override
+    public void liveEndFail(String msg, int rechargeCode) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show(msg);
+        if (rechargeCode == 10000) {
+            //充值
+            Bundle bundleVip = new Bundle();
+            bundleVip.putInt("TYPE", 1);
+            getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
+        }
+        finish();
     }
 }
