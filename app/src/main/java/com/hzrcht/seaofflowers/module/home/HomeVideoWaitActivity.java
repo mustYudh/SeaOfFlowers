@@ -207,4 +207,9 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
         }
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

@@ -31,9 +31,11 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePersonalInfoViewer;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineSysMoneyGvAdapter;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
@@ -50,6 +52,7 @@ import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +89,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private String head_img = "";
     private String age = "";
     private String is_attent = "0";
+    private DialogUtils presentDialog;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -112,6 +116,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         View view_third = bindView(R.id.view_third);
         ImageView iv_share = bindView(R.id.iv_share);
         LinearLayout ll_video = bindView(R.id.ll_video);
+        LinearLayout ll_send_present = bindView(R.id.ll_send_present);
         mIntimacy = bindView(R.id.ll_intimacy);
         mPresent = bindView(R.id.ll_present);
         mIntimacyRoot = bindView(R.id.ll_intimacy_root);
@@ -134,6 +139,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mIntimacyRoot.setOnClickListener(this);
         mPresentRoot.setOnClickListener(this);
         ll_video.setOnClickListener(this);
+        ll_send_present.setOnClickListener(this);
 
 
         llRootList.add(ll_root_frist);
@@ -214,6 +220,9 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 break;
             case R.id.ll_video:
                 mPresenter.liveStart(user_id);
+                break;
+            case R.id.ll_send_present:
+                mPresenter.getSysGift();
                 break;
         }
     }
@@ -810,6 +819,73 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         }
     }
 
+    private SysGiftBean.ResultBean item = null;
+
+    @Override
+    public void sendGiftSuccess(SysGiftBean.ResultBean resultBean) {
+        ToastUtils.show("打赏成功!");
+        item = null;
+    }
+
+    @Override
+    public void getSysGiftSuccess(SysGiftBean sysGiftBean) {
+        if (sysGiftBean != null) {
+            if (sysGiftBean.rows != null && sysGiftBean.rows.size() != 0) {
+                showPresentDialog(sysGiftBean.user_amount, sysGiftBean.rows);
+            }
+        } else {
+            ToastUtils.show("获取礼物列表失败,请重试");
+        }
+    }
+
+    /**
+     * 礼物列表
+     */
+    private void showPresentDialog(BigDecimal user_amount, List<SysGiftBean.ResultBean> rows) {
+        presentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_present)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .build();
+        presentDialog.show();
+
+        RecyclerView rv_present = presentDialog.findViewById(R.id.rv_present);
+        rv_present.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+//        CommItemDecoration horizontal = CommItemDecoration.createHorizontal(getActivity(), Color.parseColor("#626262"), 2);
+//        CommItemDecoration vertical = CommItemDecoration.createVertical(getActivity(), Color.parseColor("#626262"), 2);
+//        rv_present.addItemDecoration(horizontal);
+//        rv_present.addItemDecoration(vertical);
+        TextView tv_coin = presentDialog.findViewById(R.id.tv_coin);
+        tv_coin.setText("可用金币：" + user_amount);
+        DelayClickTextView tv_commit = presentDialog.findViewById(R.id.tv_commit);
+        DelayClickTextView tv_recharge = presentDialog.findViewById(R.id.tv_recharge);
+        tv_recharge.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
+            //充值
+            Bundle bundle = new Bundle();
+            bundle.putInt("TYPE", 0);
+            getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+        });
+        MineSysGiftRvAdapter adapter = new MineSysGiftRvAdapter(R.layout.item_sys_present, rows, getActivity());
+        rv_present.setAdapter(adapter);
+
+        adapter.setOnItemChcekCheckListener(resultBean -> {
+            adapter.notifyDataSetChanged();
+            item = resultBean;
+        });
+        tv_commit.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
+
+            if (item != null) {
+                mPresenter.sendGift(user_id, item.id + "", item);
+            }
+        });
+
+    }
 
     @Override
     public void onResume() {

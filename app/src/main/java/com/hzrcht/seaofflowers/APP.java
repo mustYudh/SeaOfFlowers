@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
+import com.hzrcht.seaofflowers.http.interceptor.CustomExpiredInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
 import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
 import com.tencent.imsdk.TIMLogLevel;
@@ -66,6 +67,7 @@ public class APP extends BaseApp {
         XHttpSDK.setBaseUrl(getBaseUrl());
         XHttpSDK.setSubUrl(getSubUrl());
         XHttpSDK.addInterceptor(new CustomDynamicInterceptor().accessToken(true));
+        XHttpSDK.addInterceptor(new CustomExpiredInterceptor());
         XHttp.getInstance().setTimeout(60000);
         XHttp.getInstance().setRetryCount(3);
         XHttp.getInstance().addCommonHeaders(getHttpHeaders());

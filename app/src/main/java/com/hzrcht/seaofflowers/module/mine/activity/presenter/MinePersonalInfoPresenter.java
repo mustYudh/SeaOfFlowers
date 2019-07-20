@@ -13,8 +13,10 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.AnchorUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
+import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xhttp2.request.PostRequest;
@@ -218,6 +220,35 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                     protected void onSuccess(LiveStartBean liveStartBean) {
                         assert getViewer() != null;
                         getViewer().liveStartSuccess(liveStartBean);
+                    }
+                });
+    }
+
+    public void getSysGift() {
+        XHttp.post(ApiServices.SYSGIFT)
+                .accessToken(true)
+                .execute(SysGiftBean.class)
+                .subscribeWith(new TipRequestSubscriber<SysGiftBean>() {
+                    @Override
+                    protected void onSuccess(SysGiftBean sysGiftBean) {
+                        assert getViewer() != null;
+                        getViewer().getSysGiftSuccess(sysGiftBean);
+                    }
+                });
+    }
+
+
+    public void sendGift(String anchor_id, String gift_id,SysGiftBean.ResultBean resultBean) {
+        XHttp.post(ApiServices.GIFTGIVE)
+                .params("anchor_id", anchor_id)
+                .params("gift_id", gift_id)
+                .accessToken(true)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().sendGiftSuccess(resultBean);
                     }
                 });
     }
