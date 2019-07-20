@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.hzrcht.seaofflowers.R;
+import com.hzrcht.seaofflowers.utils.ActivityManager;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
@@ -16,7 +17,7 @@ public abstract class BaseActivity extends BasicActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //加载等待动画dialog
+        ActivityManager.getInstance().addActivity(this);
         DialogUtils.Builder builder = new DialogUtils.Builder(this);
         loadDialog = builder.view(R.layout.dialog_wait)
                 .gravity(Gravity.CENTER)

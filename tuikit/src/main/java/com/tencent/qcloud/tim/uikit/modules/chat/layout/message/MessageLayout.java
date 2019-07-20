@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,7 @@ public class MessageLayout extends MessageLayoutUI {
             public boolean showPopupList(View adapterView, View contextView, int contextPosition) {
                 return true;
             }
+
             @Override
             public void onPopupListClick(View contextView, int contextPosition, int position) {
                 PopMenuAction action = mPopActions.get(position);
@@ -216,12 +218,20 @@ public class MessageLayout extends MessageLayoutUI {
         mAdapter.setOnItemClickListener(new MessageLayout.OnItemClickListener() {
             @Override
             public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
-                mOnItemClickListener.onMessageLongClick(view, position, messageInfo);
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onMessageLongClick(view, position, messageInfo);
+                } else {
+                    Log.e("======>", "未初始化适配");
+                }
             }
 
             @Override
             public void onUserIconClick(View view, int position, MessageInfo info) {
-                mOnItemClickListener.onUserIconClick(view, position, info);
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onUserIconClick(view, position, info);
+                } else {
+                    Log.e("======>", "未初始化适配");
+                }
             }
         });
     }

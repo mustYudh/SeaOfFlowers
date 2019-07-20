@@ -9,6 +9,8 @@ import com.xuexiang.xhttp2.subsciber.BaseSubscriber;
 import com.yu.common.loading.LoadingDialog;
 import com.yu.common.toast.ToastUtils;
 
+
+
 public abstract class LoadingRequestSubscriber<T> extends BaseSubscriber<T> {
 
     private Activity activity;
@@ -20,6 +22,7 @@ public abstract class LoadingRequestSubscriber<T> extends BaseSubscriber<T> {
     public LoadingRequestSubscriber(FragmentActivity activity, boolean show) {
         if (show) {
             this.activity = activity;
+
         }
     }
 

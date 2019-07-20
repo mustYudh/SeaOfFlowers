@@ -120,7 +120,26 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         // 设置自定义的消息渲染时的回调
         messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
 
+        messageLayout.setOnItemClickListener(new MessageLayout.OnItemClickListener() {
+            @Override
+            public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
+                //长按消息    messageInfo消息载体
+                Log.e("======>","长按了消息");
+            }
 
+            @Override
+            public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
+                Log.e("======>","点击了用户");
+            }
+        });
+
+//        messageLayout.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                ToastUtils.show("长按了消息");
+//                return true;
+//            }
+//        });
     }
 
     private SysGiftBean.ResultBean item = null;

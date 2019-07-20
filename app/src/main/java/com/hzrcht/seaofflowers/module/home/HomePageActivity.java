@@ -1,6 +1,7 @@
 package com.hzrcht.seaofflowers.module.home;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
@@ -29,6 +31,7 @@ import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
+import com.hzrcht.seaofflowers.utils.ActivityManager;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
 import com.nhbs.fenxiao.module.center.HomeCenterPopUpWindow;
@@ -40,6 +43,7 @@ import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.PressHandle;
@@ -227,11 +231,6 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         bindView(R.id.center_tab, event.showCenterTab);
     }
 
-    public void login(boolean autoLogin) {
-        UserProfile.getInstance().clean();
-        getLaunchHelper().startActivity(SelectLoginActivity.class);
-    }
-
 
     private void setCustomConfig() {
         //注册IM事件回调，这里示例为用户被踢的回调，更多事件注册参考文档
@@ -239,8 +238,11 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
             @Override
             public void onForceOffline() {
                 ToastUtil.toastLongMessage("您的帐号已在其它终端登录");
-                login(false);
-                finish();
+                UserProfile.getInstance().clean();
+                Intent intent = new Intent(APP.getInstance(), SelectLoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                LauncherHelper.from(APP.getInstance()).startActivity(intent);
+                ActivityManager.getInstance().exit();
             }
 
             @Override
