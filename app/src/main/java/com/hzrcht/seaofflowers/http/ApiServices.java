@@ -155,4 +155,7 @@ public class ApiServices {
     //结束视频
     public static final String LIVEEND = BASEURL + "/api/live/end";
 
+    //视频扣费
+    public static final String LIVEPAYCOIN = BASEURL + "/api/live/payCoin";
+
 }

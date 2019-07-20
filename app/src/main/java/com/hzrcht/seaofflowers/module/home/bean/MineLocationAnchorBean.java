@@ -3,6 +3,7 @@ package com.hzrcht.seaofflowers.module.home.bean;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class MineLocationAnchorBean implements MultiItemEntity, Serializable {
@@ -21,8 +22,8 @@ public class MineLocationAnchorBean implements MultiItemEntity, Serializable {
     public int age;
     public String sign;
     public String work;
-    public int video_amount;
+    public BigDecimal video_amount;
     public int online_type;
-    public List<String> img_list;
+    public List<String> pair;
 
 }

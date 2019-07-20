@@ -50,6 +50,11 @@ public class HomeFansFragment extends BaseFragment implements HomeFansViewer {
         if (homeFansBean != null && homeFansBean.row != null && homeFansBean.row.size() != 0) {
             HomeFansRvAdapter adapter = new HomeFansRvAdapter(R.layout.item_home_fans, homeFansBean.row, getActivity());
             rv_home_fans.setAdapter(adapter);
+            bindView(R.id.rv_home_fans,true);
+            bindView(R.id.ll_empty,false);
+        }else {
+            bindView(R.id.rv_home_fans,false);
+            bindView(R.id.ll_empty,true);
         }
     }
 }

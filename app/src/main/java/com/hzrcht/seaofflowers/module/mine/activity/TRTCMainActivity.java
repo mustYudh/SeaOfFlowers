@@ -25,6 +25,7 @@ import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
+import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
 import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.TRTCBeautySettingPanel;
 import com.hzrcht.seaofflowers.module.im.TRTCMoreDialog;
@@ -61,6 +62,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityViewer, TRTCVideoViewLayout.ITRTCVideoViewLayoutListener, View.OnClickListener, TRTCSettingDialog.ISettingListener, TRTCMoreDialog.IMoreListener, TRTCBeautySettingPanel.IOnBeautyParamsChangeListener {
@@ -104,6 +110,8 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private LinearLayout ll_mine_camera;
     private String user_age;
     private String is_attent;
+    private int rechargeCode = 0;
+    private static Disposable subscribe;
 
     @Override
     public void liveEndSuccess() {
@@ -165,6 +173,19 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         }
         ToastUtils.show(msg);
         finish();
+    }
+
+    @Override
+    public void livePayCoinSuccess(HomePayCoinBean homePayCoinBean) {
+
+    }
+
+    @Override
+    public void livePayCoinFail(int code, String msg) {
+        ToastUtils.show(msg);
+        loadDialog.show();
+        mPresenter.liveEnd(location_live_id);
+        rechargeCode = code;
     }
 
     private static class VideoStream {
@@ -322,6 +343,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         trtcCloud.setListener(null);
         TRTCCloud.destroySharedInstance();
         EventBus.getDefault().unregister(this);
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+            subscribe = null;
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
@@ -490,7 +515,12 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         if (trtcCloud != null) {
             trtcCloud.exitRoom();
         }
-
+        if (rechargeCode == 10000) {
+            //充值
+            Bundle bundleVip = new Bundle();
+            bundleVip.putInt("TYPE", 1);
+            getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
+        }
         finish();
     }
 
@@ -788,6 +818,17 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             activity.ll_mine_camera.setVisibility(View.GONE);
             activity.rl_bottom.setVisibility(View.VISIBLE);
             activity.ll_info_top.setVisibility(View.VISIBLE);
+
+            //视频扣费
+            if (UserProfile.getInstance().getAnchorType() == 0) {
+                //用户
+                subscribe = Observable.interval(0, 60, TimeUnit.SECONDS)
+                        .subscribeOn(Schedulers.io())
+                        .doOnNext(aLong -> {
+                            activity.mPresenter.livePayCoin(activity.location_live_id);
+                        })
+                        .subscribe();
+            }
         }
 
         /**
