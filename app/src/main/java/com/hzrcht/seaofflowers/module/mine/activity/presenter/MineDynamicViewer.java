@@ -9,6 +9,8 @@ import com.yu.common.mvp.Viewer;
 public interface MineDynamicViewer extends Viewer {
     void getStateListSuccess(MineUserDynamicBean mineUserDynamicBean);
 
+    void getStateListFail();
+
     void stateLikeSuccess(MineLocationUserDynamicBean item);
 
     void stateDelSuccess(int position);

@@ -2,7 +2,6 @@ package com.hzrcht.seaofflowers.module.home.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -14,13 +13,11 @@ import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.ui.CircleImageView;
 
-import java.util.List;
-
 public class HomeAttentionRvAdapter extends BaseQuickAdapter<HomeAttentionBean.RowsBean, BaseViewHolder> {
     private Context context;
 
-    public HomeAttentionRvAdapter(int layoutResId, @Nullable List<HomeAttentionBean.RowsBean> data, Context context) {
-        super(layoutResId, data);
+    public HomeAttentionRvAdapter(int layoutResId, Context context) {
+        super(layoutResId);
         this.context = context;
     }
 

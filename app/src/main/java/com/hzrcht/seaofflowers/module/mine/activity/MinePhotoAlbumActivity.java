@@ -15,7 +15,12 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePhotoAlbumPres
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MinePhotoAlbumViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MinePhotoAlbumRvAdapter;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +29,12 @@ import java.util.List;
 public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhotoAlbumViewer {
     private int page = 1;
     private int pageSize = 10;
+    private List<String> imgList = new ArrayList<>();
     @PresenterLifeCycle
     private MinePhotoAlbumPresenter mPresenter = new MinePhotoAlbumPresenter(this);
     private RecyclerView mPic;
-    private List<PhotoAlbumBean.RowsBean> list = new ArrayList<>();
     private MinePhotoAlbumRvAdapter adapter;
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -46,15 +52,35 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
         LinearLayout ll_add = bindView(R.id.ll_add);
 
         mPic = bindView(R.id.rv_pic);
+        refreshLayout = bindView(R.id.refreshLayout);
         mPic.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mPic.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 3, 3));
 
+        adapter = new MinePhotoAlbumRvAdapter(R.layout.item_mine_photo_album, getActivity());
+        mPic.setAdapter(adapter);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
 
         ll_add.setOnClickListener(view -> {
             getLaunchHelper().startActivityForResult(MineSetUpAlbumActivity.class, 0);
         });
 
         mPresenter.getPhotoAlbum(page, pageSize);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getPhotoAlbum(page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getPhotoAlbum(page, pageSize);
+        });
 
         bindView(R.id.action_back, view -> {
             setResult(1);
@@ -83,44 +109,55 @@ public class MinePhotoAlbumActivity extends BaseBarActivity implements MinePhoto
 
     @Override
     public void getPhotoAlbumSuccess(PhotoAlbumBean photoAlbumBean) {
-        if (photoAlbumBean != null) {
-            if (photoAlbumBean.rows != null && photoAlbumBean.rows.size() != 0) {
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                }
-                list.addAll(photoAlbumBean.rows);
-                if (adapter == null) {
-                    adapter = new MinePhotoAlbumRvAdapter(R.layout.item_mine_photo_album, list, getActivity());
-                    mPic.setAdapter(adapter);
-                } else {
-                    adapter.setNewData(list);
-                }
-
-                adapter.setOnItemCheckListener(new MinePhotoAlbumRvAdapter.OnItemCheckListener() {
-                    @Override
-                    public void setOnItemCheckClick(int id, int position, ArrayList<String> list) {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
-                        bundle.putInt("code", position);//第几张
-                        bundle.putInt("id", id);//图片id
-                        bundle.putStringArrayList("imageuri", list);
-                        Intent intent = new Intent(getActivity(), ViewBigImageActivity.class);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 1);
-                    }
-                });
-
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_pic, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
+                refreshLayout.finishRefresh();
+            }
+        }
 
-                } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rv_pic, false);
+        if (photoAlbumBean != null && photoAlbumBean.rows != null && photoAlbumBean.rows.size() != 0) {
+            
+            if (page > 1) {
+                adapter.addData(photoAlbumBean.rows);
+            } else {
+                adapter.setNewData(photoAlbumBean.rows);
+            }
+
+            adapter.setOnItemCheckListener((id, position) -> {
+                for (int i = 0; i < adapter.getData().size(); i++) {
+                    imgList.add(adapter.getData().get(i).img_url);
                 }
+                Bundle bundle = new Bundle();
+                bundle.putInt("selet", 2);// 2,大图显示当前页数，1,头像，不显示页数
+                bundle.putInt("code", position);//第几张
+                bundle.putInt("id", id);//图片id
+                bundle.putStringArrayList("imageuri", (ArrayList<String>) imgList);
+                Intent intent = new Intent(getActivity(), ViewBigImageActivity.class);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, 1);
+            });
+
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rv_pic, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_pic, false);
+            }
+        }
+    }
+
+    @Override
+    public void getPhotoAlbumFail() {
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
             }
         }
     }

@@ -45,7 +45,6 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private int page = 1;
     private int pageSize = 10;
     private RecyclerView mAnchor;
-    private List<MineLocationAnchorBean> list = new ArrayList<>();
     private HomeLimitRvAdapter adapter;
     private Disposable subscribe;
     private SmartRefreshLayout refreshLayout;
@@ -88,6 +87,8 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             mPresenter.getBannerList();
         }
 
+        adapter = new HomeLimitRvAdapter(getActivity());
+        mAnchor.setAdapter(adapter);
         mPresenter.getAnchorList(home_type + "", page, pageSize);
 
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
@@ -163,68 +164,73 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
     @Override
     public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
-        }
-        if (homeAnchorListBean != null) {
-            if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                    MineLocationAnchorBean mineLocationAnchorTopBean = new MineLocationAnchorBean();
-                    mineLocationAnchorTopBean.pair = homeAnchorListBean.pair;
-                    mineLocationAnchorTopBean.itemType = 0;
-                    list.add(mineLocationAnchorTopBean);
-
-                }
-
-                for (int i = 0; i < homeAnchorListBean.rows.size(); i++) {
-                    MineLocationAnchorBean mineLocationAnchorBean = new MineLocationAnchorBean();
-                    HomeAnchorListBean.RowsBean rowsBean = homeAnchorListBean.rows.get(i);
-                    mineLocationAnchorBean.id = rowsBean.id;
-                    mineLocationAnchorBean.nick_name = rowsBean.nick_name;
-                    mineLocationAnchorBean.cover = rowsBean.cover;
-                    mineLocationAnchorBean.sex = rowsBean.sex;
-                    mineLocationAnchorBean.age = rowsBean.age;
-                    mineLocationAnchorBean.sign = rowsBean.sign;
-                    mineLocationAnchorBean.work = rowsBean.work;
-                    mineLocationAnchorBean.video_amount = rowsBean.video_amount;
-                    mineLocationAnchorBean.online_type = rowsBean.online_type;
-                    mineLocationAnchorBean.itemType = 1;
-                    list.add(mineLocationAnchorBean);
-                }
-
-                adapter = new HomeLimitRvAdapter(list, getActivity());
-                mAnchor.setAdapter(adapter);
-
-                adapter.setOnItemDetailsDoCilckListener((pair, imageView) -> subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
-                        .subscribeOn(Schedulers.io())
-                        .doOnNext(aLong -> {
-                            getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size())))));
-                        })
-                        .subscribe());
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rl_home, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
-                    ToastUtils.show("没有更多了");
-                } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rl_home, false);
-                }
+                refreshLayout.finishRefresh();
+            }
+        }
+
+        if (homeAnchorListBean != null && homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
+            List<MineLocationAnchorBean> list = new ArrayList<>();
+            if (page > 1) {
+
+            } else {
+                MineLocationAnchorBean mineLocationAnchorTopBean = new MineLocationAnchorBean();
+                mineLocationAnchorTopBean.pair = homeAnchorListBean.pair;
+                mineLocationAnchorTopBean.itemType = 0;
+                list.add(mineLocationAnchorTopBean);
+            }
+
+            for (int i = 0; i < homeAnchorListBean.rows.size(); i++) {
+                MineLocationAnchorBean mineLocationAnchorBean = new MineLocationAnchorBean();
+                HomeAnchorListBean.RowsBean rowsBean = homeAnchorListBean.rows.get(i);
+                mineLocationAnchorBean.id = rowsBean.id;
+                mineLocationAnchorBean.nick_name = rowsBean.nick_name;
+                mineLocationAnchorBean.cover = rowsBean.cover;
+                mineLocationAnchorBean.sex = rowsBean.sex;
+                mineLocationAnchorBean.age = rowsBean.age;
+                mineLocationAnchorBean.sign = rowsBean.sign;
+                mineLocationAnchorBean.work = rowsBean.work;
+                mineLocationAnchorBean.video_amount = rowsBean.video_amount;
+                mineLocationAnchorBean.online_type = rowsBean.online_type;
+                mineLocationAnchorBean.itemType = 1;
+                list.add(mineLocationAnchorBean);
+            }
+
+            if (page > 1) {
+                adapter.addData(list);
+            } else {
+                adapter.setNewData(list);
+            }
+
+            adapter.setOnItemDetailsDoCilckListener((pair, imageView) -> subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .doOnNext(aLong -> {
+                        getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size())))));
+                    })
+                    .subscribe());
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rl_home, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rl_home, false);
             }
         }
     }
 
     @Override
     public void getAnchorListFail() {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
     }
 

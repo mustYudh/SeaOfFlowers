@@ -6,6 +6,7 @@ import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.PhotoAlbumBean;
 import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 
@@ -27,6 +28,12 @@ public class MinePhotoAlbumPresenter extends BaseViewPresenter<MinePhotoAlbumVie
                     protected void onSuccess(PhotoAlbumBean photoAlbumBean) {
                         assert getViewer() != null;
                         getViewer().getPhotoAlbumSuccess(photoAlbumBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getPhotoAlbumFail();
                     }
                 });
     }

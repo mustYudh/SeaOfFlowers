@@ -40,7 +40,6 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
     private DynamicListRvAdapter adapter;
     private DialogUtils reportDialog, commentDialog;
     private RecyclerView mDynamic;
-    private List<MineLocationDynamicBean> list = new ArrayList<>();
     @PresenterLifeCycle
     private RecommendDynamicPresenter mPresenter = new RecommendDynamicPresenter(this);
     private SmartRefreshLayout refreshLayout;
@@ -60,6 +59,8 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
         mDynamic = bindView(R.id.rv_dynamic);
         refreshLayout = bindView(R.id.refreshLayout);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new DynamicListRvAdapter(getActivity());
+        mDynamic.setAdapter(adapter);
 
         mPresenter.getStateList(page, pageSize);
 
@@ -150,106 +151,103 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
 
     @Override
     public void getStateListSuccess(MineDynamicBean mineDynamicBean) {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
-        }
-
-        if (mineDynamicBean != null) {
-            if (mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
-                mDynamic.setVisibility(View.VISIBLE);
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                }
-                for (int i = 0; i < mineDynamicBean.rows.size(); i++) {
-                    MineDynamicBean.RowsBean rowsBean = mineDynamicBean.rows.get(i);
-                    //title
-                    MineLocationDynamicBean mineLocationDynamicTitleBean = new MineLocationDynamicBean();
-                    mineLocationDynamicTitleBean.userInfo = rowsBean.userInfo;
-                    mineLocationDynamicTitleBean.title = rowsBean.title;
-                    mineLocationDynamicTitleBean.create_at = rowsBean.create_at;
-                    mineLocationDynamicTitleBean.itemType = 0;
-                    list.add(mineLocationDynamicTitleBean);
-
-                    if (rowsBean.is_video == 0) {
-                        //pic
-                        MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
-                        mineLocationDynamicPicBean.imgs = rowsBean.imgs;
-                        mineLocationDynamicPicBean.itemType = 1;
-                        list.add(mineLocationDynamicPicBean);
-                    } else {
-                        //video
-                        MineLocationDynamicBean mineLocationDynamicVideoBean = new MineLocationDynamicBean();
-                        mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426510803&di=2bf93542ebc2b9a183695626fbffb5de&imgtype=0&src=http%3A%2F%2Fwww.desktx.cc%2Fd%2Ffile%2Fphone%2Fkatong%2F20161203%2F61ad328e4d8c741437ed00209a6bae35.jpg";
-                        mineLocationDynamicVideoBean.itemType = 2;
-                        list.add(mineLocationDynamicVideoBean);
-                    }
-
-                    //bottom
-                    MineLocationDynamicBean mineLocationDynamicBottomBean = new MineLocationDynamicBean();
-                    mineLocationDynamicBottomBean.like_count = rowsBean.like_count;
-                    mineLocationDynamicBottomBean.is_like = rowsBean.is_like;
-                    mineLocationDynamicBottomBean.review_count = rowsBean.review_count;
-                    mineLocationDynamicBottomBean.is_attent = rowsBean.is_attent;
-                    mineLocationDynamicBottomBean.id = rowsBean.id;
-                    mineLocationDynamicBottomBean.user_id = rowsBean.user_id;
-                    mineLocationDynamicBottomBean.userInfo = rowsBean.userInfo;
-
-                    mineLocationDynamicBottomBean.itemType = 3;
-                    list.add(mineLocationDynamicBottomBean);
-                }
-
-                if (adapter == null) {
-                    adapter = new DynamicListRvAdapter(list, getActivity());
-                    mDynamic.setAdapter(adapter);
-                } else {
-                    adapter.setNewData(list);
-                }
-
-                adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
-                    @Override
-                    public void onItemDetailsReportClick(String anchor_id, String state_id) {
-                        showReportDialog(anchor_id, state_id);
-                    }
-
-                    @Override
-                    public void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item) {
-                        mPresenter.getReviewList(state_id + "", item, 1, 1000);
-                    }
-
-                    @Override
-                    public void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item) {
-                        mPresenter.stateLike(state_id + "", item);
-                    }
-
-                    @Override
-                    public void onItemDetailsAttentClick(int anchor_id, MineLocationDynamicBean item) {
-                        mPresenter.attent(anchor_id + "", item);
-                    }
-                });
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_dynamic, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
-                    ToastUtils.show("没有更多了");
-                } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rv_dynamic, false);
-                }
+                refreshLayout.finishRefresh();
             }
         }
 
+        if (mineDynamicBean != null && mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
+            mDynamic.setVisibility(View.VISIBLE);
+            List<MineLocationDynamicBean> list = new ArrayList<>();
+
+            for (int i = 0; i < mineDynamicBean.rows.size(); i++) {
+                MineDynamicBean.RowsBean rowsBean = mineDynamicBean.rows.get(i);
+                //title
+                MineLocationDynamicBean mineLocationDynamicTitleBean = new MineLocationDynamicBean();
+                mineLocationDynamicTitleBean.userInfo = rowsBean.userInfo;
+                mineLocationDynamicTitleBean.title = rowsBean.title;
+                mineLocationDynamicTitleBean.create_at = rowsBean.create_at;
+                mineLocationDynamicTitleBean.itemType = 0;
+                list.add(mineLocationDynamicTitleBean);
+
+                if (rowsBean.is_video == 0) {
+                    //pic
+                    MineLocationDynamicBean mineLocationDynamicPicBean = new MineLocationDynamicBean();
+                    mineLocationDynamicPicBean.imgs = rowsBean.imgs;
+                    mineLocationDynamicPicBean.itemType = 1;
+                    list.add(mineLocationDynamicPicBean);
+                } else {
+                    //video
+                    MineLocationDynamicBean mineLocationDynamicVideoBean = new MineLocationDynamicBean();
+                    mineLocationDynamicVideoBean.video_pict_url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561426510803&di=2bf93542ebc2b9a183695626fbffb5de&imgtype=0&src=http%3A%2F%2Fwww.desktx.cc%2Fd%2Ffile%2Fphone%2Fkatong%2F20161203%2F61ad328e4d8c741437ed00209a6bae35.jpg";
+                    mineLocationDynamicVideoBean.itemType = 2;
+                    list.add(mineLocationDynamicVideoBean);
+                }
+
+                //bottom
+                MineLocationDynamicBean mineLocationDynamicBottomBean = new MineLocationDynamicBean();
+                mineLocationDynamicBottomBean.like_count = rowsBean.like_count;
+                mineLocationDynamicBottomBean.is_like = rowsBean.is_like;
+                mineLocationDynamicBottomBean.review_count = rowsBean.review_count;
+                mineLocationDynamicBottomBean.is_attent = rowsBean.is_attent;
+                mineLocationDynamicBottomBean.id = rowsBean.id;
+                mineLocationDynamicBottomBean.user_id = rowsBean.user_id;
+                mineLocationDynamicBottomBean.userInfo = rowsBean.userInfo;
+
+                mineLocationDynamicBottomBean.itemType = 3;
+                list.add(mineLocationDynamicBottomBean);
+            }
+
+            if (page > 1) {
+                adapter.addData(list);
+            } else {
+                adapter.setNewData(list);
+            }
+
+            adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
+                @Override
+                public void onItemDetailsReportClick(String anchor_id, String state_id) {
+                    showReportDialog(anchor_id, state_id);
+                }
+
+                @Override
+                public void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item) {
+                    mPresenter.getReviewList(state_id + "", item, 1, 1000);
+                }
+
+                @Override
+                public void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item) {
+                    mPresenter.stateLike(state_id + "", item);
+                }
+
+                @Override
+                public void onItemDetailsAttentClick(int anchor_id, MineLocationDynamicBean item) {
+                    mPresenter.attent(anchor_id + "", item);
+                }
+            });
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rv_dynamic, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_dynamic, false);
+            }
+        }
     }
 
     @Override
     public void getStateListFail() {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
     }
 

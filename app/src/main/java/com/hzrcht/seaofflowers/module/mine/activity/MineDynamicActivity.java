@@ -22,6 +22,10 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineDynamicViewer;
 import com.hzrcht.seaofflowers.module.mine.bean.MineLocationUserDynamicBean;
 import com.hzrcht.seaofflowers.module.mine.bean.MineUserDynamicBean;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 
@@ -30,7 +34,6 @@ import java.util.List;
 
 
 public class MineDynamicActivity extends BaseBarActivity implements MineDynamicViewer {
-    private List<MineLocationUserDynamicBean> list = new ArrayList<>();
     private RecyclerView mDynamic;
     private DialogUtils commentDialog, delDialog;
     private int page = 1;
@@ -38,6 +41,7 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
     @PresenterLifeCycle
     private MineDynamicPresenter mPresenter = new MineDynamicPresenter(this);
     private MineDynamicRvAdapter adapter;
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -53,8 +57,30 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
     protected void loadData() {
         setTitle("我的动态");
         mDynamic = bindView(R.id.rv_dynamic);
+        refreshLayout = bindView(R.id.refreshLayout);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new MineDynamicRvAdapter(getActivity());
+        mDynamic.setAdapter(adapter);
+
         mPresenter.getStateList(page, pageSize);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getStateList(page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getStateList(page, pageSize);
+        });
+
         bindView(R.id.action_back, view -> {
             setResult(1);
             finish();
@@ -72,96 +98,110 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
 
     @Override
     public void getStateListSuccess(MineUserDynamicBean mineUserDynamicBean) {
-        if (mineUserDynamicBean != null) {
-            if (mineUserDynamicBean.rows != null && mineUserDynamicBean.rows.size() != 0) {
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                }
-                for (int i = 0; i < mineUserDynamicBean.rows.size(); i++) {
-                    MineUserDynamicBean.RowsBean rowsBean = mineUserDynamicBean.rows.get(i);
-                    //title
-                    MineLocationUserDynamicBean mineLocationUserDynamicTitleBean = new MineLocationUserDynamicBean();
-                    mineLocationUserDynamicTitleBean.userInfo = rowsBean.userInfo;
-                    mineLocationUserDynamicTitleBean.title = rowsBean.title;
-                    mineLocationUserDynamicTitleBean.create_at = rowsBean.create_at;
-                    mineLocationUserDynamicTitleBean.itemType = 0;
-                    list.add(mineLocationUserDynamicTitleBean);
-
-                    if (rowsBean.is_video == 0) {
-                        //pic
-                        MineLocationUserDynamicBean mineLocationUserDynamicPicBean = new MineLocationUserDynamicBean();
-                        mineLocationUserDynamicPicBean.imgs = rowsBean.imgs;
-                        mineLocationUserDynamicPicBean.itemType = 1;
-                        list.add(mineLocationUserDynamicPicBean);
-                    } else {
-                        //video
-                        MineLocationUserDynamicBean mineLocationUserDynamicVideoBean = new MineLocationUserDynamicBean();
-                        mineLocationUserDynamicVideoBean.video_url = rowsBean.video_url;
-                        mineLocationUserDynamicVideoBean.itemType = 2;
-                        list.add(mineLocationUserDynamicVideoBean);
-                    }
-
-                    //bottom
-                    MineLocationUserDynamicBean mineLocationUserDynamicBottomBean = new MineLocationUserDynamicBean();
-                    mineLocationUserDynamicBottomBean.like = rowsBean.like;
-                    mineLocationUserDynamicBottomBean.review = rowsBean.review;
-                    mineLocationUserDynamicBottomBean.id = rowsBean.id;
-                    mineLocationUserDynamicBottomBean.is_like = rowsBean.is_like;
-                    mineLocationUserDynamicBottomBean.like_count = rowsBean.like_count;
-                    mineLocationUserDynamicBottomBean.review_count = rowsBean.review_count;
-                    mineLocationUserDynamicBottomBean.userInfo = rowsBean.userInfo;
-
-                    if (rowsBean.like != null && rowsBean.like.size() != 0) {
-                        final StringBuilder temp = new StringBuilder();
-
-                        for (int j = 0; j < rowsBean.like.size(); j++) {
-                            temp.append(rowsBean.like.get(j).userinfo.nick_name);
-                            if (j < rowsBean.like.size() - 1) {
-                                temp.append(",");
-                            }
-                        }
-
-                        mineLocationUserDynamicBottomBean.like_name = temp.toString().trim();
-                    } else {
-                        mineLocationUserDynamicBottomBean.like_name = "";
-                    }
-                    mineLocationUserDynamicBottomBean.itemType = 3;
-                    list.add(mineLocationUserDynamicBottomBean);
-                }
-                if (adapter == null) {
-                    adapter = new MineDynamicRvAdapter(list, getActivity());
-                    mDynamic.setAdapter(adapter);
-                } else {
-                    adapter.setNewData(list);
-                }
-
-                adapter.setOnItemDetailsDoCilckListener(new MineDynamicRvAdapter.OnItemDetailsDoCilckListener() {
-                    @Override
-                    public void onItemDetailsDelClick(int state_id, int position) {
-                        showDelDialog(state_id, position);
-                    }
-
-                    @Override
-                    public void onItemDetailsCommentClick(int state_id, MineLocationUserDynamicBean item) {
-                        mPresenter.getReviewList(state_id + "", item, 1, 1000);
-                    }
-
-                    @Override
-                    public void onItemDetailsLikeClick(int state_id, MineLocationUserDynamicBean item) {
-                        mPresenter.stateLike(state_id + "", item);
-                    }
-                });
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_dynamic, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
+                refreshLayout.finishRefresh();
+            }
+        }
 
+        if (mineUserDynamicBean != null && mineUserDynamicBean.rows != null && mineUserDynamicBean.rows.size() != 0) {
+            List<MineLocationUserDynamicBean> list = new ArrayList<>();
+
+            for (int i = 0; i < mineUserDynamicBean.rows.size(); i++) {
+                MineUserDynamicBean.RowsBean rowsBean = mineUserDynamicBean.rows.get(i);
+                //title
+                MineLocationUserDynamicBean mineLocationUserDynamicTitleBean = new MineLocationUserDynamicBean();
+                mineLocationUserDynamicTitleBean.userInfo = rowsBean.userInfo;
+                mineLocationUserDynamicTitleBean.title = rowsBean.title;
+                mineLocationUserDynamicTitleBean.create_at = rowsBean.create_at;
+                mineLocationUserDynamicTitleBean.itemType = 0;
+                list.add(mineLocationUserDynamicTitleBean);
+
+                if (rowsBean.is_video == 0) {
+                    //pic
+                    MineLocationUserDynamicBean mineLocationUserDynamicPicBean = new MineLocationUserDynamicBean();
+                    mineLocationUserDynamicPicBean.imgs = rowsBean.imgs;
+                    mineLocationUserDynamicPicBean.itemType = 1;
+                    list.add(mineLocationUserDynamicPicBean);
                 } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rv_dynamic, false);
+                    //video
+                    MineLocationUserDynamicBean mineLocationUserDynamicVideoBean = new MineLocationUserDynamicBean();
+                    mineLocationUserDynamicVideoBean.video_url = rowsBean.video_url;
+                    mineLocationUserDynamicVideoBean.itemType = 2;
+                    list.add(mineLocationUserDynamicVideoBean);
                 }
+
+                //bottom
+                MineLocationUserDynamicBean mineLocationUserDynamicBottomBean = new MineLocationUserDynamicBean();
+                mineLocationUserDynamicBottomBean.like = rowsBean.like;
+                mineLocationUserDynamicBottomBean.review = rowsBean.review;
+                mineLocationUserDynamicBottomBean.id = rowsBean.id;
+                mineLocationUserDynamicBottomBean.is_like = rowsBean.is_like;
+                mineLocationUserDynamicBottomBean.like_count = rowsBean.like_count;
+                mineLocationUserDynamicBottomBean.review_count = rowsBean.review_count;
+                mineLocationUserDynamicBottomBean.userInfo = rowsBean.userInfo;
+
+                if (rowsBean.like != null && rowsBean.like.size() != 0) {
+                    final StringBuilder temp = new StringBuilder();
+
+                    for (int j = 0; j < rowsBean.like.size(); j++) {
+                        temp.append(rowsBean.like.get(j).userinfo.nick_name);
+                        if (j < rowsBean.like.size() - 1) {
+                            temp.append(",");
+                        }
+                    }
+
+                    mineLocationUserDynamicBottomBean.like_name = temp.toString().trim();
+                } else {
+                    mineLocationUserDynamicBottomBean.like_name = "";
+                }
+                mineLocationUserDynamicBottomBean.itemType = 3;
+                list.add(mineLocationUserDynamicBottomBean);
+            }
+
+            if (page > 1) {
+                adapter.addData(list);
+            } else {
+                adapter.setNewData(list);
+            }
+
+            adapter.setOnItemDetailsDoCilckListener(new MineDynamicRvAdapter.OnItemDetailsDoCilckListener() {
+                @Override
+                public void onItemDetailsDelClick(int state_id, int position) {
+                    showDelDialog(state_id, position);
+                }
+
+                @Override
+                public void onItemDetailsCommentClick(int state_id, MineLocationUserDynamicBean item) {
+                    mPresenter.getReviewList(state_id + "", item, 1, 1000);
+                }
+
+                @Override
+                public void onItemDetailsLikeClick(int state_id, MineLocationUserDynamicBean item) {
+                    mPresenter.stateLike(state_id + "", item);
+                }
+            });
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rv_dynamic, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_dynamic, false);
+            }
+        }
+    }
+
+    @Override
+    public void getStateListFail() {
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
             }
         }
     }
@@ -189,8 +229,6 @@ public class MineDynamicActivity extends BaseBarActivity implements MineDynamicV
                 })
                 .build();
         delDialog.show();
-
-
     }
 
 

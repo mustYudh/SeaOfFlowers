@@ -1,7 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -11,13 +10,11 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.ui.CircleImageView;
 
-import java.util.List;
-
 public class MineAttentionRvAdapter extends BaseQuickAdapter<HomeAttentionBean.RowsBean, BaseViewHolder> {
     private Context context;
 
-    public MineAttentionRvAdapter(int layoutResId, @Nullable List<HomeAttentionBean.RowsBean> data, Context context) {
-        super(layoutResId, data);
+    public MineAttentionRvAdapter(int layoutResId, Context context) {
+        super(layoutResId);
         this.context = context;
     }
 

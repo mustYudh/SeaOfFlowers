@@ -18,9 +18,6 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class HomeAttentionFragment extends BaseFragment implements HomeAttentionViewer {
     private int page = 1;
@@ -28,7 +25,6 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
     @PresenterLifeCycle
     private HomeAttentionPresenter mPresenter = new HomeAttentionPresenter(this);
     private RecyclerView mAttention;
-    private List<HomeAttentionBean.RowsBean> list = new ArrayList<>();
     private HomeAttentionRvAdapter adapter;
     private SmartRefreshLayout refreshLayout;
 
@@ -56,6 +52,9 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
         refreshLayout = bindView(R.id.refreshLayout);
         mAttention = bindView(R.id.rv_home_attention);
         mAttention.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, getActivity());
+        mAttention.setAdapter(adapter);
+
         mPresenter.getAttentionList(page, pageSize);
 
         refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
@@ -79,40 +78,39 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
 
     @Override
     public void getAttentionListSuccess(HomeAttentionBean homeAttentionBean) {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
-        }
-        if (homeAttentionBean != null) {
-            if (homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                }
-                list.addAll(homeAttentionBean.rows);
-                adapter = new HomeAttentionRvAdapter(R.layout.item_home_attention, homeAttentionBean.rows, getActivity());
-                mAttention.setAdapter(adapter);
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_home_attention, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
-                    ToastUtils.show("没有更多了");
-                } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rv_home_attention, false);
-                }
+                refreshLayout.finishRefresh();
+            }
+        }
+        if (homeAttentionBean != null && homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
+            if (page > 1) {
+                adapter.addData(homeAttentionBean.rows);
+            } else {
+                adapter.setNewData(homeAttentionBean.rows);
+            }
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rv_home_attention, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_home_attention, false);
             }
         }
     }
 
     @Override
     public void getAttentionListFail() {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
     }
 }

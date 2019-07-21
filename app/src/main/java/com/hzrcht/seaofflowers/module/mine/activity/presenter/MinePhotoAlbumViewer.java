@@ -6,4 +6,6 @@ import com.yu.common.mvp.Viewer;
 
 public interface MinePhotoAlbumViewer extends Viewer {
     void getPhotoAlbumSuccess(PhotoAlbumBean photoAlbumBean);
+
+    void getPhotoAlbumFail();
 }
