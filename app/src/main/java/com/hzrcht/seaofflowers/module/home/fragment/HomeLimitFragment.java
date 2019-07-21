@@ -152,7 +152,6 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (mBanner != null) {
             mBanner.pause();//暂停轮播
         }
@@ -160,6 +159,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             subscribe.dispose();
             subscribe = null;
         }
+        super.onDestroy();
     }
 
     @Override

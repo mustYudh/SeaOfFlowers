@@ -254,12 +254,12 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
             subscribe = null;
         }
+        super.onDestroy();
     }
 
     @Override

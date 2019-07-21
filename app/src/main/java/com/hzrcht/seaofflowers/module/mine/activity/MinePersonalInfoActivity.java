@@ -905,9 +905,9 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (mBanner != null) {
             mBanner.pause();//暂停轮播
         }
+        super.onDestroy();
     }
 }

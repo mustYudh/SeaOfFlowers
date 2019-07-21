@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.hzrcht.seaofflowers.R;
-import com.hzrcht.seaofflowers.utils.PhotoUtils;
 import com.yu.common.glide.ImageLoader;
 
 import java.util.List;
@@ -58,16 +57,18 @@ public class MineRedactDataGvAdapter extends BaseAdapter {
 
             holder.ivDemo.setImageBitmap(BitmapFactory.decodeResource(
                     context.getResources(), R.drawable.ic_mine_pic_add));
-            holder.ivDemo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemChcekCheckListener != null){
-                        onItemChcekCheckListener.setOnItemChcekCheckClick();
-                    }
+            holder.ivDemo.setOnClickListener(v -> {
+                if (onItemChcekCheckListener != null) {
+                    onItemChcekCheckListener.setOnItemChcekCheckClick();
                 }
             });
         } else {
             ImageLoader.getInstance().displayImage(holder.ivDemo, list.get(position), R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+            holder.ivDemo.setOnClickListener(v -> {
+                if (onItemChcekCheckListener != null) {
+                    onItemChcekCheckListener.setOnItemChcekCheckDelClick(position);
+                }
+            });
         }
         return convertView;
     }
@@ -78,6 +79,8 @@ public class MineRedactDataGvAdapter extends BaseAdapter {
 
     public interface OnItemChcekCheckListener {
         void setOnItemChcekCheckClick();
+
+        void setOnItemChcekCheckDelClick(int position);
     }
 
     OnItemChcekCheckListener onItemChcekCheckListener;

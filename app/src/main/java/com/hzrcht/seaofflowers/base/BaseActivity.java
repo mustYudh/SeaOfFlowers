@@ -45,7 +45,7 @@ public abstract class BaseActivity extends BasicActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         UMShareAPI.get(this).release();
+        super.onDestroy();
     }
 }

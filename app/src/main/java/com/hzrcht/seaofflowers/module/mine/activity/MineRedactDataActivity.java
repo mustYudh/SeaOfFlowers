@@ -66,7 +66,7 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
     private MineRedactDataPresenter mPresenter = new MineRedactDataPresenter(this);
     private MyOneLineView view_work;
     private MyOneLineView view_mobile;
-    private DialogUtils dataDialog;
+    private DialogUtils dataDialog, photoDelDialog;
     private NoSlidingGridView gv_pic;
     private MyOneLineView view_height;
     private MyOneLineView view_nickname;
@@ -280,6 +280,11 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
             public void setOnItemChcekCheckClick() {
                 picType = 0;
                 PhotoUtils.changeAvatarOther(getActivity(), allLocationSelectedPicture, 4, "上传您的主播封面,以供主播页展示");
+            }
+
+            @Override
+            public void setOnItemChcekCheckDelClick(int position) {
+                showPhotoDelDialog(position);
             }
         });
         bindView(R.id.tv_commit, view -> {
@@ -604,6 +609,33 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
         }
     }
 
+    private void showPhotoDelDialog(int position) {
+        photoDelDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_normal)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .settext("请选择", R.id.tv_title)
+                .settext("删除", R.id.tv_bottom)
+                .addViewOnclick(R.id.tv_cancle, view -> {
+                    if (photoDelDialog.isShowing()) {
+                        photoDelDialog.dismiss();
+                    }
+                })
+                .addViewOnclick(R.id.tv_bottom, view -> {
+                    if (photoDelDialog.isShowing()) {
+                        photoDelDialog.dismiss();
+                    }
+                    allLocationSelectedPicture.remove(position);
+                    if (adapter != null) {
+                        gv_pic.setAdapter(adapter);
+                    }
+
+                })
+                .build();
+        photoDelDialog.show();
+        photoDelDialog.findViewById(R.id.tv_top).setVisibility(View.GONE);
+        photoDelDialog.findViewById(R.id.view_middle).setVisibility(View.GONE);
+    }
 
     @Override
     public void getSysLabelSuccess(SysLabelBean sysLabelBean) {
@@ -885,9 +917,9 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
         }
+        super.onDestroy();
     }
 }

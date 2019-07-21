@@ -1,9 +1,11 @@
 package com.hzrcht.seaofflowers.base;
 
 import android.view.View;
+
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 import com.yu.common.framework.BasicFragment;
+
 import java.util.Objects;
 
 public abstract class BaseFragment extends BasicFragment {
@@ -23,7 +25,7 @@ public abstract class BaseFragment extends BasicFragment {
     }
 
     @Override public void onDestroy() {
-        super.onDestroy();
         UMShareAPI.get(Objects.requireNonNull(getActivity())).release();
+        super.onDestroy();
     }
 }
