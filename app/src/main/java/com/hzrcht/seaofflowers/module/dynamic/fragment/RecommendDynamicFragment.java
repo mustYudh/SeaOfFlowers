@@ -22,6 +22,10 @@ import com.hzrcht.seaofflowers.module.home.activity.HomeReportActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.adapter.MineContentRvAdapter;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -31,7 +35,7 @@ import java.util.List;
 
 
 public class RecommendDynamicFragment extends BaseFragment implements RecommendDynamicViewer {
-    private int page = 0;
+    private int page = 1;
     private int pageSize = 10;
     private DynamicListRvAdapter adapter;
     private DialogUtils reportDialog, commentDialog;
@@ -39,6 +43,7 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
     private List<MineLocationDynamicBean> list = new ArrayList<>();
     @PresenterLifeCycle
     private RecommendDynamicPresenter mPresenter = new RecommendDynamicPresenter(this);
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected int getContentViewId() {
@@ -53,9 +58,27 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
     @Override
     protected void loadData() {
         mDynamic = bindView(R.id.rv_dynamic);
+        refreshLayout = bindView(R.id.refreshLayout);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mPresenter.getStateList("", page, pageSize);
+        mPresenter.getStateList(page, pageSize);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getStateList(page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getStateList(page, pageSize);
+        });
     }
 
     /**
@@ -127,6 +150,12 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
 
     @Override
     public void getStateListSuccess(MineDynamicBean mineDynamicBean) {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
+        }
+
         if (mineDynamicBean != null) {
             if (mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
                 mDynamic.setVisibility(View.VISIBLE);
@@ -166,6 +195,7 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
                     mineLocationDynamicBottomBean.review_count = rowsBean.review_count;
                     mineLocationDynamicBottomBean.is_attent = rowsBean.is_attent;
                     mineLocationDynamicBottomBean.id = rowsBean.id;
+                    mineLocationDynamicBottomBean.user_id = rowsBean.user_id;
                     mineLocationDynamicBottomBean.userInfo = rowsBean.userInfo;
 
                     mineLocationDynamicBottomBean.itemType = 3;
@@ -194,17 +224,33 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
                     public void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item) {
                         mPresenter.stateLike(state_id + "", item);
                     }
+
+                    @Override
+                    public void onItemDetailsAttentClick(int anchor_id, MineLocationDynamicBean item) {
+                        mPresenter.attent(anchor_id + "", item);
+                    }
                 });
                 bindView(R.id.ll_empty, false);
                 bindView(R.id.rv_dynamic, true);
             } else {
-                if (page == 1) {
+                if (page > 1) {
+                    ToastUtils.show("没有更多了");
+                } else {
                     bindView(R.id.ll_empty, true);
                     bindView(R.id.rv_dynamic, false);
                 }
             }
         }
 
+    }
+
+    @Override
+    public void getStateListFail() {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
+        }
     }
 
     @Override
@@ -234,6 +280,18 @@ public class RecommendDynamicFragment extends BaseFragment implements RecommendD
 
         item.review_count = item.review_count + 1;
         ToastUtils.show("评论成功，等待审核");
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void attentSuccess(MineLocationDynamicBean item) {
+        if (item.is_attent == 0) {
+            ToastUtils.show("关注成功");
+            item.is_attent = 1;
+        } else {
+            ToastUtils.show("取消关注成功");
+            item.is_attent = 0;
+        }
         adapter.notifyDataSetChanged();
     }
 }

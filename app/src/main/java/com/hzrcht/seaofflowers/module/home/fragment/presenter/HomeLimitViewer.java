@@ -8,6 +8,8 @@ import com.yu.common.mvp.Viewer;
 public interface HomeLimitViewer extends Viewer {
     void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean);
 
+    void getAnchorListFail();
+
     void getBannerListSuccess(HomeBannerBean homeBannerBean);
 
 }

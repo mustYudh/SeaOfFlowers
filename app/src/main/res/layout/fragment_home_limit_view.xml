@@ -1,59 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:overScrollMode="never"
-            android:scrollbars="none"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:id="@+id/refreshLayout"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+
     >
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
 
-        <com.zhouwei.mzbanner.MZBannerView
-            android:id="@+id/banner"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            app:canLoop="true"
-            app:indicatorAlign="center"
-            app:indicatorPaddingLeft="10dp"
-            app:open_mz_mode="false"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            >
-
-
-            <RelativeLayout
-                android:id="@+id/rl_home"
+            <com.zhouwei.mzbanner.MZBannerView
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants">
+                android:layout_height="120dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                app:canLoop="true"
+                app:indicatorAlign="center"
+                app:indicatorPaddingLeft="10dp"
+                app:open_mz_mode="false"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_home"
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/rl_home"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:nestedScrollingEnabled="false"/>
+                    android:descendantFocusability="blocksDescendants">
 
-            </RelativeLayout>
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:nestedScrollingEnabled="false"/>
+
+                </RelativeLayout>
 
 
-            <include layout="@layout/layout_empty"/>
-        </FrameLayout>
-    </LinearLayout>
+                <include layout="@layout/layout_empty"/>
+            </FrameLayout>
+        </LinearLayout>
 
+    </ScrollView>
 
-</ScrollView>
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>

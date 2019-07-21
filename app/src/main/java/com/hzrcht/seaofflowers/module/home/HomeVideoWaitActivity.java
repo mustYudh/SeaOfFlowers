@@ -67,7 +67,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
             //拒绝视频邀请
             bindView(R.id.iv_close, view -> {
                 loadDialog.show();
-                mPresenter.liveEnd(split,0);
+                mPresenter.liveEnd(split, 0);
             });
 
             //加入视频聊天

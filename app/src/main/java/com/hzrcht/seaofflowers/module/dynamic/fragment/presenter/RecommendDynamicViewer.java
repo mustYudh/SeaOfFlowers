@@ -9,9 +9,13 @@ import com.yu.common.mvp.Viewer;
 public interface RecommendDynamicViewer extends Viewer {
     void getStateListSuccess(MineDynamicBean mineDynamicBean);
 
+    void getStateListFail();
+
     void stateLikeSuccess(MineLocationDynamicBean item);
 
     void getReviewListSuccess(ReviewListBean reviewListBean, MineLocationDynamicBean item, String state_id);
 
     void stateReviewSuccess(MineLocationDynamicBean item);
+
+    void attentSuccess(MineLocationDynamicBean item);
 }

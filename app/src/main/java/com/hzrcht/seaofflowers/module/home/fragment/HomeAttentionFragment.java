@@ -11,7 +11,12 @@ import com.hzrcht.seaofflowers.module.home.adapter.HomeAttentionRvAdapter;
 import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeAttentionViewer;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +30,7 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
     private RecyclerView mAttention;
     private List<HomeAttentionBean.RowsBean> list = new ArrayList<>();
     private HomeAttentionRvAdapter adapter;
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected int getContentViewId() {
@@ -47,17 +53,37 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
 
     @Override
     protected void loadData() {
-
+        refreshLayout = bindView(R.id.refreshLayout);
         mAttention = bindView(R.id.rv_home_attention);
         mAttention.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
         mPresenter.getAttentionList(page, pageSize);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getAttentionList(page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getAttentionList(page, pageSize);
+        });
     }
 
 
     @Override
     public void getAttentionListSuccess(HomeAttentionBean homeAttentionBean) {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
+        }
         if (homeAttentionBean != null) {
             if (homeAttentionBean.rows != null && homeAttentionBean.rows.size() != 0) {
                 if (page > 1) {
@@ -72,12 +98,21 @@ public class HomeAttentionFragment extends BaseFragment implements HomeAttention
                 bindView(R.id.rv_home_attention, true);
             } else {
                 if (page > 1) {
-
+                    ToastUtils.show("没有更多了");
                 } else {
                     bindView(R.id.ll_empty, true);
                     bindView(R.id.rv_home_attention, false);
                 }
             }
+        }
+    }
+
+    @Override
+    public void getAttentionListFail() {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
         }
     }
 }
