@@ -13,13 +13,11 @@ import com.yu.common.glide.ImageLoader;
 import com.yu.common.ui.CircleImageView;
 import com.yu.common.ui.NoSlidingGridView;
 
-import java.util.List;
-
 public class MineDynamicRvAdapter extends BaseMultiItemQuickAdapter<MineLocationUserDynamicBean, BaseViewHolder> {
     private Context context;
 
-    public MineDynamicRvAdapter(List<MineLocationUserDynamicBean> data, Context context) {
-        super(data);
+    public MineDynamicRvAdapter(Context context) {
+        super(null);
         addItemType(0, R.layout.item_dynamic_title);
         addItemType(1, R.layout.item_dynamic_pic);
         addItemType(2, R.layout.item_dynamic_video);

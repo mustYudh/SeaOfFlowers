@@ -18,6 +18,7 @@ public class HomeFansFragment extends BaseFragment implements HomeFansViewer {
     @PresenterLifeCycle
     private HomeFansPresenter mPresenter = new HomeFansPresenter(this);
     private RecyclerView rv_home_fans;
+    private HomeFansRvAdapter adapter;
 
     @Override
     protected int getContentViewId() {
@@ -41,20 +42,22 @@ public class HomeFansFragment extends BaseFragment implements HomeFansViewer {
     protected void loadData() {
         rv_home_fans = bindView(R.id.rv_home_fans);
         rv_home_fans.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        adapter = new HomeFansRvAdapter(R.layout.item_home_fans, getActivity());
+        rv_home_fans.setAdapter(adapter);
         mPresenter.getFansList();
     }
 
     @Override
     public void getFansListSuccess(HomeFansBean homeFansBean) {
         if (homeFansBean != null && homeFansBean.row != null && homeFansBean.row.size() != 0) {
-            HomeFansRvAdapter adapter = new HomeFansRvAdapter(R.layout.item_home_fans, homeFansBean.row, getActivity());
-            rv_home_fans.setAdapter(adapter);
-            bindView(R.id.rv_home_fans,true);
-            bindView(R.id.ll_empty,false);
-        }else {
-            bindView(R.id.rv_home_fans,false);
-            bindView(R.id.ll_empty,true);
+
+            adapter.setNewData(homeFansBean.row);
+            
+            bindView(R.id.rv_home_fans, true);
+            bindView(R.id.ll_empty, false);
+        } else {
+            bindView(R.id.rv_home_fans, false);
+            bindView(R.id.ll_empty, true);
         }
     }
 }

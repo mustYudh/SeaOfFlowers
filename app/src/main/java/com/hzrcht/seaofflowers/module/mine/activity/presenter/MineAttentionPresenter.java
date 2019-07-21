@@ -31,8 +31,8 @@ public class MineAttentionPresenter extends BaseViewPresenter<MineAttentionViewe
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().getAttentionListFail();
                     }
                 });
     }

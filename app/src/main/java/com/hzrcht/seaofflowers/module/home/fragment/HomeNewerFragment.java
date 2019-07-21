@@ -19,9 +19,6 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
     private int page = 1;
@@ -30,7 +27,6 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
     @PresenterLifeCycle
     private HomeNewrPresenter mPresenter = new HomeNewrPresenter(this);
     private HomeNewerRvAdapter adapter;
-    private List<HomeAnchorListBean.RowsBean> list = new ArrayList<>();
     private SmartRefreshLayout refreshLayout;
 
     @Override
@@ -49,6 +45,9 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
         refreshLayout = bindView(R.id.refreshLayout);
         mAnchor.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
+
+        adapter = new HomeNewerRvAdapter(R.layout.item_home_limit, getActivity());
+        mAnchor.setAdapter(adapter);
 
         mPresenter.getAnchorList("2", page, pageSize);
 
@@ -72,41 +71,41 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
 
     @Override
     public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
-        }
-        if (homeAnchorListBean != null) {
-            if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
-                if (page > 1) {
-
-                } else {
-                    list.clear();
-                }
-                list.addAll(homeAnchorListBean.rows);
-
-                adapter = new HomeNewerRvAdapter(R.layout.item_home_limit, list, getActivity());
-                mAnchor.setAdapter(adapter);
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_home, true);
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
             } else {
-                if (page > 1) {
-                    ToastUtils.show("没有更多了");
-                } else {
-                    bindView(R.id.ll_empty, true);
-                    bindView(R.id.rv_home, false);
-                }
+                refreshLayout.finishRefresh();
+            }
+        }
+        if (homeAnchorListBean != null && homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
+
+            if (page > 1) {
+                adapter.addData(homeAnchorListBean.rows);
+            } else {
+                adapter.setNewData(homeAnchorListBean.rows);
+            }
+
+            bindView(R.id.ll_empty, false);
+            bindView(R.id.rv_home, true);
+        } else {
+            if (page > 1) {
+                ToastUtils.show("没有更多了");
+            } else {
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_home, false);
             }
         }
     }
 
     @Override
     public void getAnchorListFail() {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
     }
 }

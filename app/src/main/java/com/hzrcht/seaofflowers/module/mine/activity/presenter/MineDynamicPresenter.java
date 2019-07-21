@@ -34,8 +34,8 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().getStateListFail();
                     }
                 });
     }
@@ -51,12 +51,6 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                         assert getViewer() != null;
                         getViewer().stateLikeSuccess(item);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -70,12 +64,6 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().stateDelSuccess(position);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
                     }
                 });
     }
@@ -93,12 +81,6 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                         assert getViewer() != null;
                         getViewer().getReviewListSuccess(reviewListBean, item, state_id);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
-                    }
                 });
     }
 
@@ -113,12 +95,6 @@ public class MineDynamicPresenter extends BaseViewPresenter<MineDynamicViewer> {
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().stateReviewSuccess(item);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
                     }
                 });
     }

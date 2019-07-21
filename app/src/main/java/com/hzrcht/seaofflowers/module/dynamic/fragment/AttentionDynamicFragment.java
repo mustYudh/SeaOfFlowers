@@ -40,7 +40,6 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
     private DynamicListRvAdapter adapter;
     private DialogUtils reportDialog, commentDialog;
     private RecyclerView mDynamic;
-    private List<MineLocationDynamicBean> list = new ArrayList<>();
     @PresenterLifeCycle
     private AttentionDynamicPresenter mPresenter = new AttentionDynamicPresenter(this);
     private SmartRefreshLayout refreshLayout;
@@ -59,6 +58,8 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
     protected void loadData() {
         mDynamic = bindView(R.id.rv_dynamic);
         mDynamic.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new DynamicListRvAdapter(getActivity());
+        mDynamic.setAdapter(adapter);
 
         mPresenter.getStateList(page, pageSize);
         refreshLayout = bindView(R.id.refreshLayout);
@@ -149,22 +150,19 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
 
     @Override
     public void getStateListSuccess(MineDynamicBean mineDynamicBean) {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
-
 
         if (mineDynamicBean != null) {
             if (mineDynamicBean.rows != null && mineDynamicBean.rows.size() != 0) {
                 mDynamic.setVisibility(View.VISIBLE);
-                if (page > 1) {
 
-                } else {
-                    list.clear();
-                }
+                List<MineLocationDynamicBean> list = new ArrayList<>();
                 for (int i = 0; i < mineDynamicBean.rows.size(); i++) {
                     MineDynamicBean.RowsBean rowsBean = mineDynamicBean.rows.get(i);
                     //title
@@ -202,12 +200,13 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
                     mineLocationDynamicBottomBean.itemType = 3;
                     list.add(mineLocationDynamicBottomBean);
                 }
-                if (adapter == null) {
-                    adapter = new DynamicListRvAdapter(list, getActivity());
-                    mDynamic.setAdapter(adapter);
+
+                if (page > 1) {
+                    adapter.addData(list);
                 } else {
                     adapter.setNewData(list);
                 }
+
                 adapter.setOnItemDetailsDoCilckListener(new DynamicListRvAdapter.OnItemDetailsDoCilckListener() {
                     @Override
                     public void onItemDetailsReportClick(String anchor_id, String state_id) {
@@ -246,11 +245,12 @@ public class AttentionDynamicFragment extends BaseFragment implements AttentionD
 
     @Override
     public void getStateListFail() {
-        if (page > 1) {
-            refreshLayout.finishLoadMore();
-
-        } else {
-            refreshLayout.finishRefresh();
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
         }
     }
 

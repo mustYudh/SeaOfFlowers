@@ -16,8 +16,8 @@ import java.util.List;
 public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocationDynamicBean, BaseViewHolder> {
     private Context context;
 
-    public DynamicListRvAdapter(List<MineLocationDynamicBean> data, Context context) {
-        super(data);
+    public DynamicListRvAdapter(Context context) {
+        super(null);
         addItemType(0, R.layout.item_dynamic_title);
         addItemType(1, R.layout.item_dynamic_pic);
         addItemType(2, R.layout.item_dynamic_video);

@@ -19,8 +19,8 @@ import java.util.List;
 public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAnchorBean, BaseViewHolder> {
     private Activity context;
 
-    public HomeLimitRvAdapter(List<MineLocationAnchorBean> data, Activity context) {
-        super(data);
+    public HomeLimitRvAdapter(Activity context) {
+        super(null);
         addItemType(0, R.layout.item_home_limit_top);
         addItemType(1, R.layout.item_home_limit);
 

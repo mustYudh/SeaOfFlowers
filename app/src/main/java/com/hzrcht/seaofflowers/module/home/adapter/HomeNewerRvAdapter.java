@@ -2,7 +2,6 @@ package com.hzrcht.seaofflowers.module.home.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -14,16 +13,13 @@ import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 
-import java.util.List;
-
 public class HomeNewerRvAdapter extends BaseQuickAdapter<HomeAnchorListBean.RowsBean, BaseViewHolder> {
     private Context context;
 
-    public HomeNewerRvAdapter(int layoutResId, @Nullable List<HomeAnchorListBean.RowsBean> data, Context context) {
-        super(layoutResId, data);
+    public HomeNewerRvAdapter(int layoutResId, Context context) {
+        super(layoutResId);
         this.context = context;
     }
-
 
     @Override
     protected void convert(BaseViewHolder helper, HomeAnchorListBean.RowsBean item) {
