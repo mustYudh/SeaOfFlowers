@@ -222,9 +222,9 @@ public class ReleaseDynamicActivity extends BaseBarActivity implements ReleaseDy
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (handler != null) {
             handler.removeCallbacksAndMessages(null);
         }
+        super.onDestroy();
     }
 }

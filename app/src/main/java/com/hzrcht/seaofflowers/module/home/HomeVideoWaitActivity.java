@@ -1,7 +1,12 @@
 package com.hzrcht.seaofflowers.module.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
@@ -18,6 +23,9 @@ import com.hzrcht.seaofflowers.module.im.CustomMessageData;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.TRTCMainActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
+import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
+import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
+import com.tbruyelle.rxpermissions2.Permission;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -33,6 +41,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWaitViewer {
 
@@ -44,6 +55,8 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
     private String is_attent = "0";
     private CircleImageView iv_headimg;
     private ImageView iv_bottom;
+    private MediaPlayer mMediaPlayer;
+    private final static int REQ_PERMISSION_CODE = 0x1000;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -58,6 +71,18 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
         iv_bottom = bindView(R.id.iv_bottom);
         //注册EventBus
         EventBus.getDefault().register(this);
+
+        //播放背景音乐
+        mMediaPlayer = MediaPlayer.create(this, R.raw.receive);
+        mMediaPlayer.start();
+        //对MediaPlayer对象添加事件监听，当播放完成时重新开始音乐播放
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                play();
+            }
+        });
+
 
         Bundle bundle = getIntent().getExtras();
         String content = bundle.getString("CONTENT");
@@ -88,10 +113,27 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
 
     }
 
+    //播放音乐的方法
+    private void play() {
+        try {
+            mMediaPlayer.reset();//从新设置要播放的音乐
+            mMediaPlayer = MediaPlayer.create(this, R.raw.receive);
+            mMediaPlayer.start();//播放音乐
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        super.onDestroy();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
@@ -211,5 +253,72 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
     @Override
     public void onBackPressed() {
 
+    }
+
+    /**
+     * 检查权限
+     */
+    private boolean checkPermission() {
+        //检测权限
+        PermissionManager.getInstance(this).checkMorePermission(new MorePermissionsCallBack() {
+                                                                    @Override
+                                                                    protected void permissionGranted(Permission permission) {
+                                                                        // 用户已经同意该权限
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void permissionShouldShowRequestPermissionRationale(Permission permission) {
+                                                                        // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时，还会提示请求权限的对话框
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void permissionRejected(Permission permission) {
+
+                                                                    }
+                                                                },
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.RECORD_AUDIO
+        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<String> permissions = new ArrayList<>();
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO)) {
+                permissions.add(Manifest.permission.RECORD_AUDIO);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+            if (permissions.size() != 0) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        (String[]) permissions.toArray(new String[0]),
+                        REQ_PERMISSION_CODE);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQ_PERMISSION_CODE:
+                for (int ret : grantResults) {
+                    if (PackageManager.PERMISSION_GRANTED != ret) {
+                        ToastUtils.show("用户没有允许需要的权限，使用可能会受到限制！");
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

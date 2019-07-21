@@ -197,9 +197,9 @@ public class LoginActivity extends BaseBarActivity implements LoginViewer {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (loadDialog != null && loadDialog.isShowing()) {
             loadDialog.dismiss();
         }
+        super.onDestroy();
     }
 }

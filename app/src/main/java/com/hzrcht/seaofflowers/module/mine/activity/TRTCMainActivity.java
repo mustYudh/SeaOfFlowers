@@ -2,6 +2,7 @@ package com.hzrcht.seaofflowers.module.mine.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -112,6 +113,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private String is_attent;
     private int rechargeCode = 0;
     private static Disposable subscribe;
+    private MediaPlayer mMediaPlayer;
 
     @Override
     public void liveEndSuccess() {
@@ -249,6 +251,17 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         trtcCloud.setListener(trtcListener);
 
         if ("1".equals(type_in)) {
+            //播放背景音乐
+            mMediaPlayer = MediaPlayer.create(this, R.raw.start);
+            mMediaPlayer.start();
+            //对MediaPlayer对象添加事件监听，当播放完成时重新开始音乐播放
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    play();
+                }
+            });
+
             TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
             CustomMessageData customMessageData = new CustomMessageData();
             customMessageData.type = "1";
@@ -302,6 +315,17 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     }
 
+    //播放音乐的方法
+    private void play() {
+        try {
+            mMediaPlayer.reset();//从新设置要播放的音乐
+            mMediaPlayer = MediaPlayer.create(this, R.raw.start);
+            mMediaPlayer.start();//播放音乐
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return;
+    }
 
     /**
      * 退出弹窗提示
@@ -339,7 +363,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         trtcCloud.setListener(null);
         TRTCCloud.destroySharedInstance();
         EventBus.getDefault().unregister(this);
@@ -347,6 +370,12 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             subscribe.dispose();
             subscribe = null;
         }
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        super.onDestroy();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
@@ -829,6 +858,13 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                         })
                         .subscribe();
             }
+
+            if (activity.mMediaPlayer != null && activity.mMediaPlayer.isPlaying()) {
+                activity.mMediaPlayer.stop();
+                activity.mMediaPlayer.release();
+                activity.mMediaPlayer = null;
+            }
+
         }
 
         /**
@@ -1281,10 +1317,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private void enableAudioVolumeEvaluation(boolean bEnable) {
         if (bEnable) {
             trtcCloud.enableAudioVolumeEvaluation(300);
-            mVideoViewLayout.showAllAudioVolumeProgressBar();
+//            mVideoViewLayout.showAllAudioVolumeProgressBar();
         } else {
             trtcCloud.enableAudioVolumeEvaluation(0);
-            mVideoViewLayout.hideAllAudioVolumeProgressBar();
+//            mVideoViewLayout.hideAllAudioVolumeProgressBar();
         }
     }
 

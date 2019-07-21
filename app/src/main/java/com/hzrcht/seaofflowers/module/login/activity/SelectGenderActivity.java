@@ -124,9 +124,9 @@ public class SelectGenderActivity extends BaseBarActivity implements SelectGende
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (loadDialog != null && loadDialog.isShowing()) {
             loadDialog.dismiss();
         }
+        super.onDestroy();
     }
 }
