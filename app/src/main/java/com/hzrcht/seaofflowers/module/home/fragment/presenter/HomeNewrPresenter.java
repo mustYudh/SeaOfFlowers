@@ -32,8 +32,8 @@ public class HomeNewrPresenter extends BaseViewPresenter<HomeNewrViewer> {
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().getAnchorListFail();
                     }
                 });
     }

@@ -33,8 +33,8 @@ public class HomeLimitPresenter extends BaseViewPresenter<HomeLimitViewer> {
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().getAnchorListFail();
                     }
                 });
     }

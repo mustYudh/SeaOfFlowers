@@ -6,6 +6,7 @@ import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.NoTipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.bean.HomeAttentionBean;
 import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -26,6 +27,12 @@ public class HomeAttentionPresenter extends BaseViewPresenter<HomeAttentionViewe
                     protected void onSuccess(HomeAttentionBean homeAttentionBean) {
                         assert getViewer() != null;
                         getViewer().getAttentionListSuccess(homeAttentionBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getAttentionListFail();
                     }
                 });
     }

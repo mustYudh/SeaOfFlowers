@@ -1,7 +1,6 @@
 package com.hzrcht.seaofflowers.module.dynamic.fragment.presenter;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
@@ -11,7 +10,6 @@ import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
-import com.xuexiang.xhttp2.request.PostRequest;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -22,14 +20,8 @@ public class RecommendDynamicPresenter extends BaseViewPresenter<RecommendDynami
     }
 
 
-    public void getStateList(String user_id, int page, int pageSize) {
-        PostRequest post = XHttp.post(ApiServices.STATELIST);
-
-        if (!TextUtils.isEmpty(user_id)) {
-            post.params("user_id", user_id);
-        }
-
-        post.accessToken(true)
+    public void getStateList(int page, int pageSize) {
+        XHttp.post(ApiServices.STATELIST).accessToken(true)
                 .params("page", page + "")
                 .params("pageSize", pageSize + "")
                 .execute(MineDynamicBean.class)
@@ -42,8 +34,8 @@ public class RecommendDynamicPresenter extends BaseViewPresenter<RecommendDynami
 
                     @Override
                     protected void onError(ApiException apiException) {
-                        super.onError(apiException);
-
+                        assert getViewer() != null;
+                        getViewer().getStateListFail();
                     }
                 });
     }
@@ -107,6 +99,20 @@ public class RecommendDynamicPresenter extends BaseViewPresenter<RecommendDynami
                     protected void onError(ApiException apiException) {
                         super.onError(apiException);
 
+                    }
+                });
+    }
+
+    public void attent(String anchor_id, MineLocationDynamicBean item) {
+        XHttp.post(ApiServices.ATTENTCLICK)
+                .accessToken(true)
+                .params("anchor_id", anchor_id)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().attentSuccess(item);
                     }
                 });
     }

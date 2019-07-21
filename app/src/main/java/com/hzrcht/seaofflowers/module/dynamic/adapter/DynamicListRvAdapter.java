@@ -72,6 +72,12 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                     assert onItemDetailsDoCilckListener != null;
                     onItemDetailsDoCilckListener.onItemDetailsLikeClick(item.id, item);
                 });
+
+                helper.getView(R.id.tv_attention).setOnClickListener(view -> {
+                    //关注
+                    assert onItemDetailsDoCilckListener != null;
+                    onItemDetailsDoCilckListener.onItemDetailsAttentClick(item.user_id, item);
+                });
                 break;
         }
     }
@@ -82,6 +88,8 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
         void onItemDetailsCommentClick(int state_id, MineLocationDynamicBean item);
 
         void onItemDetailsLikeClick(int state_id, MineLocationDynamicBean item);
+
+        void onItemDetailsAttentClick(int anchor_id, MineLocationDynamicBean item);
     }
 
     OnItemDetailsDoCilckListener onItemDetailsDoCilckListener;

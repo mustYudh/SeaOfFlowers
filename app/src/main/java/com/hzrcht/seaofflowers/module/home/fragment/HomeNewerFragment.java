@@ -12,7 +12,12 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeAnchorListBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeNewrPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeNewrViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +31,7 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
     private HomeNewrPresenter mPresenter = new HomeNewrPresenter(this);
     private HomeNewerRvAdapter adapter;
     private List<HomeAnchorListBean.RowsBean> list = new ArrayList<>();
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected int getContentViewId() {
@@ -40,14 +46,37 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
     @Override
     protected void loadData() {
         mAnchor = bindView(R.id.rv_home);
+        refreshLayout = bindView(R.id.refreshLayout);
         mAnchor.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
 
         mPresenter.getAnchorList("2", page, pageSize);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getAnchorList("2", page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getAnchorList("2", page, pageSize);
+        });
     }
 
     @Override
     public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
+        }
         if (homeAnchorListBean != null) {
             if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
                 if (page > 1) {
@@ -63,12 +92,21 @@ public class HomeNewerFragment extends BaseFragment implements HomeNewrViewer {
                 bindView(R.id.rv_home, true);
             } else {
                 if (page > 1) {
-
+                    ToastUtils.show("没有更多了");
                 } else {
                     bindView(R.id.ll_empty, true);
                     bindView(R.id.rv_home, false);
                 }
             }
+        }
+    }
+
+    @Override
+    public void getAnchorListFail() {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
         }
     }
 }

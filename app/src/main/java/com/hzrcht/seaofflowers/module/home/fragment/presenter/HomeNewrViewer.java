@@ -6,4 +6,6 @@ import com.yu.common.mvp.Viewer;
 
 public interface HomeNewrViewer extends Viewer {
     void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean);
+
+    void getAnchorListFail();
 }

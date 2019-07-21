@@ -17,8 +17,13 @@ import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -43,6 +48,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private List<MineLocationAnchorBean> list = new ArrayList<>();
     private HomeLimitRvAdapter adapter;
     private Disposable subscribe;
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected int getContentViewId() {
@@ -71,6 +77,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
         mAnchor = bindView(R.id.rv_home);
         mBanner = bindView(R.id.banner);
+        refreshLayout = bindView(R.id.refreshLayout);
         mAnchor.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mAnchor.addItemDecoration(new ScreenSpaceItemDecoration(getActivity(), 5, 2));
 
@@ -82,6 +89,23 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         }
 
         mPresenter.getAnchorList(home_type + "", page, pageSize);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getAnchorList(home_type + "", page, pageSize);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getAnchorList(home_type + "", page, pageSize);
+        });
     }
 
 
@@ -139,6 +163,11 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
 
     @Override
     public void getAnchorListSuccess(HomeAnchorListBean homeAnchorListBean) {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
+        }
         if (homeAnchorListBean != null) {
             if (homeAnchorListBean.rows != null && homeAnchorListBean.rows.size() != 0) {
                 if (page > 1) {
@@ -181,12 +210,21 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
                 bindView(R.id.rl_home, true);
             } else {
                 if (page > 1) {
-
+                    ToastUtils.show("没有更多了");
                 } else {
                     bindView(R.id.ll_empty, true);
                     bindView(R.id.rl_home, false);
                 }
             }
+        }
+    }
+
+    @Override
+    public void getAnchorListFail() {
+        if (page > 1) {
+            refreshLayout.finishLoadMore();
+        } else {
+            refreshLayout.finishRefresh();
         }
     }
 

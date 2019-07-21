@@ -1,7 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.bean.PayInfo;
@@ -16,10 +15,8 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
-import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
-import com.xuexiang.xhttp2.request.PostRequest;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -59,12 +56,8 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
     }
 
     public void getStateList(String user_id) {
-        PostRequest post = XHttp.post(ApiServices.STATELIST);
-
-        if (!TextUtils.isEmpty(user_id)) {
-            post.params("user_id", user_id);
-        }
-        post.accessToken(true)
+        XHttp.post(ApiServices.STATELIST).params("user_id", user_id)
+                .accessToken(true)
                 .execute(MineDynamicBean.class)
                 .subscribeWith(new TipRequestSubscriber<MineDynamicBean>() {
                     @Override
@@ -148,7 +141,7 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                 });
     }
 
-    public void lookPhone(String anchor_id,AnchorUserInfoBean anchorUserInfoBean) {
+    public void lookPhone(String anchor_id, AnchorUserInfoBean anchorUserInfoBean) {
         XHttp.post(ApiServices.LOOKPHONE)
                 .params("anchor_id", anchor_id)
                 .accessToken(true)
@@ -163,7 +156,7 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                     @Override
                     protected void onError(ApiException apiException) {
                         assert getViewer() != null;
-                        getViewer().lookPhoneFail(apiException.getCode(),apiException.getDisplayMessage());
+                        getViewer().lookPhoneFail(apiException.getCode(), apiException.getDisplayMessage());
                     }
                 });
     }
@@ -212,7 +205,7 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
 
     public void liveStart(String anchor_id) {
         XHttp.post(ApiServices.LIVESTART)
-                .params("anchor_id",anchor_id)
+                .params("anchor_id", anchor_id)
                 .accessToken(true)
                 .execute(LiveStartBean.class)
                 .subscribeWith(new TipRequestSubscriber<LiveStartBean>() {
@@ -238,7 +231,7 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
     }
 
 
-    public void sendGift(String anchor_id, String gift_id,SysGiftBean.ResultBean resultBean) {
+    public void sendGift(String anchor_id, String gift_id, SysGiftBean.ResultBean resultBean) {
         XHttp.post(ApiServices.GIFTGIVE)
                 .params("anchor_id", anchor_id)
                 .params("gift_id", gift_id)

@@ -6,23 +6,32 @@
               android:orientation="vertical"
     >
 
-    <FrameLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:id="@+id/refreshLayout"
         >
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_home"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            />
+            >
 
-        <include layout="@layout/layout_empty"/>
-    </FrameLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                />
+
+            <include layout="@layout/layout_empty"/>
+        </FrameLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 </LinearLayout>
