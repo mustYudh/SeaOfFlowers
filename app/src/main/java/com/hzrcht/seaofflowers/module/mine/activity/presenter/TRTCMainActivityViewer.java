@@ -9,6 +9,8 @@ public interface TRTCMainActivityViewer extends Viewer {
 
     void liveEndFail(String msg);
 
+    void attentSuccess(String type);
+
     void livePayCoinSuccess(HomePayCoinBean homePayCoinBean);
 
     void livePayCoinFail(int code, String msg);
