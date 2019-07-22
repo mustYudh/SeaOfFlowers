@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import com.tencent.qcloud.tim.uikit.component.TitleBarLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.tencent.qcloud.tim.uikit.modules.chat.base.ChatInfo;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayout;
-import com.tencent.qcloud.tim.uikit.modules.chat.layout.input.InputLayoutUI;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.MessageLayout;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfoUtil;
@@ -48,6 +46,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     private NoticeLayout mNoticeLayout;
     private InputLayout inputLayout;
     private String lang_amount;
+    private ChatLayout mChatLayout;
 
 
     @Override
@@ -62,13 +61,10 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         String im_name = bundle.getString("IM_NAME");
         lang_amount = bundle.getString("LANG_AMOUNT");
         //从布局文件中获取聊天面板组件
-        ChatLayout mChatLayout = bindView(R.id.chat_layout);
+        mChatLayout = bindView(R.id.chat_layout);
 
         //单聊组件的默认UI和交互初始化
         mChatLayout.initDefault();
-
-        // TODO 通过api设置ChatLayout各种属性的样例
-//        ChatLayoutHelper.customizeChatLayout(getActivity(), mChatLayout);
 
         /*
          * 需要聊天的基本信息
@@ -93,29 +89,19 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
 
         //输入模块
         inputLayout = mChatLayout.getInputLayout();
-        inputLayout.disableEmojiInput(true);
+//        inputLayout.disableEmojiInput(true);
         inputLayout.disableAudioInput(true);
         inputLayout.disableMoreInput(true);
 
 
         //送礼
-        inputLayout.setOnPresentClickListener(new InputLayoutUI.OnPresentClickListener() {
-            @Override
-            public void onPresentClick(View view) {
-                mPresenter.getSysGift(mChatLayout);
-            }
-        });
+        inputLayout.setOnPresentClickListener(view -> mPresenter.getSysGift(mChatLayout));
 
         //视频
-        inputLayout.setOnVideoClickListener(new InputLayoutUI.OnVideoClickListener() {
-            @Override
-            public void onVideoClick(View view) {
-                ToastUtils.show("点击了视频");
-            }
-        });
+        inputLayout.setOnVideoClickListener(view -> ToastUtils.show("点击了视频"));
+
 
         //渲染自定义消息
-//        MessageInfo info = MessageInfoUtil.buildCustomMessage("{\"text\": \"这是一个带链接的测试消息，可点击查看\",\"url\": \"https://cloud.tencent.com\"}");
         MessageLayout messageLayout = mChatLayout.getMessageLayout();
         // 设置自定义的消息渲染时的回调
         messageLayout.setOnCustomMessageDrawListener(new CustomMessageDraw());
@@ -124,14 +110,17 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
             @Override
             public void onMessageLongClick(View view, int position, MessageInfo messageInfo) {
                 //长按消息    messageInfo消息载体
-                Log.e("======>", "长按了消息");
+                mChatLayout.getMessageLayout().showItemPopMenu(position - 1, messageInfo, view);
             }
 
             @Override
             public void onUserIconClick(View view, int position, MessageInfo messageInfo) {
-                Log.e("======>", "点击了用户");
+
             }
         });
+        messageLayout.setLoadMoreMessageHandler(() -> mChatLayout.loadMessages());
+
+        messageLayout.setEmptySpaceClickListener(() -> inputLayout.hideSoftInput());
     }
 
     private SysGiftBean.ResultBean item = null;
@@ -281,7 +270,6 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     @Override
     public void chatStartSuccess() {
         if (inputLayout.mMessageHandler != null) {
-            Log.e("aaaa", "消息发送");
             inputLayout.mMessageHandler.sendMessage(MessageInfoUtil.buildTextMessage(inputLayout.mTextInput.getText().toString().trim()));
         }
         inputLayout.mTextInput.setText("");
@@ -298,5 +286,11 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         MessageInfo info = MessageInfoUtil.buildCustomMessage(toJson);
         mChatLayout.sendMessage(info, false);
         item = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mChatLayout.exitChat();
     }
 }

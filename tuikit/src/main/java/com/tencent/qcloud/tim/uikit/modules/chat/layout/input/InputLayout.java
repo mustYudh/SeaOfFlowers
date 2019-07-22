@@ -315,8 +315,8 @@ public class InputLayout extends InputLayoutUI implements View.OnClickListener, 
                 showFaceViewGroup();
             }
         } else if (view.getId() == R.id.more_btn) {//若点击右边的“+”号按钮
-            if (mMoreInputEvent instanceof View.OnClickListener) {
-                ((View.OnClickListener) mMoreInputEvent).onClick(view);
+            if (mMoreInputEvent instanceof OnClickListener) {
+                ((OnClickListener) mMoreInputEvent).onClick(view);
             } else if (mMoreInputEvent instanceof BaseInputFragment) {
                 showCustomInputMoreFragment();
             } else {

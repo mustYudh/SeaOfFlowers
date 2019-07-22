@@ -74,6 +74,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
 
         //播放背景音乐
         mMediaPlayer = MediaPlayer.create(this, R.raw.receive);
+        mMediaPlayer.setLooping(true);
         mMediaPlayer.start();
         //对MediaPlayer对象添加事件监听，当播放完成时重新开始音乐播放
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
