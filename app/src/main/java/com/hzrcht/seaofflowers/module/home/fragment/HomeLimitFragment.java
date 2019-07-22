@@ -208,7 +208,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
             adapter.setOnItemDetailsDoCilckListener((pair, imageView) -> subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .doOnNext(aLong -> {
-                        getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size())))));
+                        getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size()))), R.drawable.ic_placeholder, R.drawable.ic_placeholder_error));
                     })
                     .subscribe());
             bindView(R.id.ll_empty, false);
@@ -239,7 +239,6 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
         if (homeBannerBean != null) {
             if (homeBannerBean.rows != null && homeBannerBean.rows.size() != 0) {
                 initBanner(homeBannerBean.rows);
-
             }
         }
     }

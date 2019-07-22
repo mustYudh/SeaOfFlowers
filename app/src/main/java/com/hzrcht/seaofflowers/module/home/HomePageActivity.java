@@ -48,6 +48,7 @@ import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.chat.GroupChatManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
+import com.tencent.qcloud.tim.uikit.utils.FileUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
@@ -89,6 +90,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
     @Override
     protected void loadData() {
         setCustomConfig();
+        FileUtil.initPath();
         EventBus.getDefault().register(this);
         mBottomNavigationView = bindView(R.id.bottom_navigation_view);
         List<TabItem> items = new ArrayList<>();
@@ -155,7 +157,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
                     e.printStackTrace();
                 }
                 //消息的内容解析请参考消息收发文档中的消息解析说明
-                return true; //返回true将终止回调链，不再调用下一个新消息监听器
+                return false; //返回true将终止回调链，不再调用下一个新消息监听器
             }
         });
 
