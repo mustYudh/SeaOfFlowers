@@ -56,4 +56,18 @@ public class TRTCMainActivityPresenter extends BaseViewPresenter<TRTCMainActivit
                     }
                 });
     }
+
+    public void attent(String anchor_id, String type) {
+        XHttp.post(ApiServices.ATTENTCLICK)
+                .accessToken(true)
+                .params("anchor_id", anchor_id)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().attentSuccess(type);
+                    }
+                });
+    }
 }

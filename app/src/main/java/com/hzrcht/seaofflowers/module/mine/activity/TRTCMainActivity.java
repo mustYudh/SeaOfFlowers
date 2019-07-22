@@ -178,6 +178,19 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     }
 
     @Override
+    public void attentSuccess(String type) {
+        if ("0".equals(type)) {
+            ToastUtils.show("关注成功");
+            is_attent = "1";
+        } else {
+            ToastUtils.show("取消关注成功");
+            is_attent = "0";
+        }
+        bindText(R.id.tv_attention, "0".equals(is_attent) ? "关注" : "已关注");
+        bindView(R.id.tv_attention).setBackgroundResource("0".equals(is_attent) ? R.drawable.shape_dynamic_attention_normal : R.drawable.shape_dynamic_attention_select);
+    }
+
+    @Override
     public void livePayCoinSuccess(HomePayCoinBean homePayCoinBean) {
 
     }
@@ -420,6 +433,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         bindText(R.id.tv_age, user_age);
         bindText(R.id.tv_attention, "0".equals(is_attent) ? "关注" : "已关注");
         bindView(R.id.tv_attention).setBackgroundResource("0".equals(is_attent) ? R.drawable.shape_dynamic_attention_normal : R.drawable.shape_dynamic_attention_select);
+        bindView(R.id.tv_attention, view -> {
+            mPresenter.attent(user_id, is_attent);
+        });
+
         etRoomId = (EditText) findViewById(R.id.edit_room_id);
         etUserId = (EditText) findViewById(R.id.edit_user_id);
         ll_top = (LinearLayout) findViewById(R.id.ll_top);
