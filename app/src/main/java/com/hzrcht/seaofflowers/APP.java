@@ -11,6 +11,7 @@ import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
 import com.tencent.imsdk.TIMLogLevel;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
+import com.tencent.imsdk.session.SessionWrapper;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.config.CustomFaceConfig;
 import com.tencent.qcloud.tim.uikit.config.GeneralConfig;
@@ -55,7 +56,36 @@ public class APP extends BaseApp {
         configs.setCustomFaceConfig(new CustomFaceConfig());
         configs.setGeneralConfig(new GeneralConfig());
 
-        TUIKit.init(this, ApiServices.SDKAPPID, configs);
+        //判断是否是在主线程
+        if (SessionWrapper.isMainProcess(this)) {
+            /**
+             * TUIKit的初始化函数
+             *
+             * @param context  应用的上下文，一般为对应应用的ApplicationContext
+             * @param sdkAppID 您在腾讯云注册应用时分配的sdkAppID
+             * @param configs  TUIKit的相关配置项，一般使用默认即可，需特殊配置参考API文档
+             */
+            TUIKit.init(this, ApiServices.SDKAPPID, configs);
+//            if(IMFunc.isBrandXiaoMi()){
+//                // 小米离线推送
+//                MiPushClient.registerPush(this, Constants.XM_PUSH_APPID, Constants.XM_PUSH_APPKEY);
+//            }
+//            if(IMFunc.isBrandHuawei()){
+//                // 华为离线推送
+//                HMSAgent.init(this);
+//            }
+//            if(MzSystemUtils.isBrandMeizu(this)){
+//                // 魅族离线推送
+//                PushManager.register(this, Constants.MZ_PUSH_APPID, Constants.MZ_PUSH_APPKEY);
+//            }
+//            if(IMFunc.isBrandVivo()){
+//                // vivo离线推送
+//                PushClient.getInstance(getApplicationContext()).initialize();
+//            }
+
+//            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+        }
+
     }
 
     private void initHttp() {

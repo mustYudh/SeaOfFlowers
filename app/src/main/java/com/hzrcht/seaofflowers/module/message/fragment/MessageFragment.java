@@ -52,11 +52,6 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         ll_mine_call.setOnClickListener(this);
         ll_system_message.setOnClickListener(this);
 
-//        RecyclerView rv_msg = bindView(R.id.rv_msg);
-//        rv_msg.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        MessageRvAdapter adapter = new MessageRvAdapter(R.layout.item_mine_message, list, getActivity());
-//        rv_msg.setAdapter(adapter);
-
         // 从布局文件中获取会话列表面板
         ConversationLayout conversationLayout = (ConversationLayout) findViewById(R.id.conversation_layout);
         // 会话列表面板的默认UI和交互初始化
@@ -65,12 +60,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         conversationLayout.getTitleBar().setVisibility(View.GONE);
         ConversationListLayout conversationList = conversationLayout.getConversationList();
         conversationList.enableItemRoundIcon(false);
-        conversationList.setOnItemClickListener(new ConversationListLayout.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, ConversationInfo messageInfo) {
-                mPresenter.getUserCharge(messageInfo.getId(), messageInfo);
-            }
-        });
+        conversationList.setOnItemClickListener((view, position, messageInfo) -> mPresenter.getUserCharge(messageInfo.getId(), messageInfo));
 
         tv_clean.setOnClickListener(view -> {
             showCleanDialog();

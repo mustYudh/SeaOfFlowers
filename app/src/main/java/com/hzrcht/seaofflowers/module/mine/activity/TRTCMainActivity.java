@@ -266,6 +266,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         if ("1".equals(type_in)) {
             //播放背景音乐
             mMediaPlayer = MediaPlayer.create(this, R.raw.start);
+            mMediaPlayer.setLooping(true);
             mMediaPlayer.start();
             //对MediaPlayer对象添加事件监听，当播放完成时重新开始音乐播放
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

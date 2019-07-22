@@ -527,7 +527,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                     mFlexboxSelf.addView(view);
                 }
             } else {
-                mLabel.setVisibility(View.GONE);
+                mLabel.setVisibility(View.VISIBLE);
             }
 
             //banner
@@ -571,7 +571,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 }
                 mPresentRoot.setVisibility(View.VISIBLE);
             } else {
-                mPresentRoot.setVisibility(View.GONE);
+                mPresentRoot.setVisibility(View.VISIBLE);
             }
 
             //与我亲密
@@ -585,7 +585,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
                 }
                 mIntimacyRoot.setVisibility(View.VISIBLE);
             } else {
-                mIntimacyRoot.setVisibility(View.GONE);
+                mIntimacyRoot.setVisibility(View.VISIBLE);
             }
 
 

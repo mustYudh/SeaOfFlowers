@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.denghao.control.TabItem;
 import com.denghao.control.TabView;
@@ -44,10 +46,13 @@ import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
+import com.tencent.qcloud.tim.uikit.modules.chat.GroupChatManagerKit;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
+import com.yu.common.utils.DensityUtils;
 import com.yu.common.utils.PressHandle;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,8 +71,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author yudenghao
  */
-public class HomePageActivity extends BaseActivity implements HomePageViewer {
-    private int num = 0;
+public class HomePageActivity extends BaseActivity implements HomePageViewer, ConversationManagerKit.MessageUnreadWatcher {
     private PressHandle pressHandle = new PressHandle(this);
     private final static int REQ_PERMISSION_CODE = 0x1000;
     @PresenterLifeCycle
@@ -75,6 +79,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     private BottomNavigationView mBottomNavigationView;
     private Disposable subscribe;
     private HomeCenterPopUpWindow mHomePopUpWindow;
+    private FrameLayout.LayoutParams linearParams;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -98,6 +103,13 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                 mHomePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
                 mHomePopUpWindow.showPopupWindow();
             }
+
+            if (position == 3) {
+//                num = 0;
+//                if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+//                    mBottomNavigationView.mControl.badge_view.setVisibility(View.GONE);
+//                }
+            }
         });
 
         checkPermission();
@@ -106,16 +118,14 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
             //用户
             userOnline();
         }
+        //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
+        linearParams = (FrameLayout.LayoutParams) mBottomNavigationView.mControl.badge_view.getLayoutParams();
 
         //设置消息监听器，收到新消息时，通过此监听器回调
         TIMManager.getInstance().addMessageListener(new TIMMessageListener() {//消息监听器
             @Override
             public boolean onNewMessages(List<TIMMessage> msgs) {//收到新消息
                 try {
-                    num++;
-                    if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
-                        mBottomNavigationView.mControl.badge_view.setText(num + "");
-                    }
                     for (int i = 0; i < msgs.size(); i++) {
                         TIMElem elemAll = msgs.get(i).getElement(i);
                         if (elemAll.getType() == TIMElemType.Custom) {
@@ -141,8 +151,6 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                             }
                         }
                     }
-
-
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -152,16 +160,18 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         });
 
         TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
-//开启离线推送
+        //开启离线推送
         settings.setEnabled(true);
-//设置收到 C2C 离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
-//        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-//设置收到群离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
-//        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
-
+        //设置收到 C2C 离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
+        //settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+        //设置收到群离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
+        //settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
         TIMManager.getInstance().setOfflinePushSettings(settings);
-    }
 
+        // 未读消息监视器
+        ConversationManagerKit.getInstance().addUnreadWatcher(this);
+        GroupChatManagerKit.getInstance();
+    }
 
     /**
      * 检查权限
@@ -230,7 +240,6 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (mHomePopUpWindow != null && mHomePopUpWindow.isShowing()) {
@@ -242,13 +251,11 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         }
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HomeDataRefreshEvent event) {
         ToastUtils.show(event.showCenterTab.toString());
         bindView(R.id.center_tab, event.showCenterTab);
     }
-
 
     private void setCustomConfig() {
         //注册IM事件回调，这里示例为用户被踢的回调，更多事件注册参考文档
@@ -268,7 +275,6 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
             }
         });
     }
-
 
     @Override
     protected void onDestroy() {
@@ -311,5 +317,37 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         }
         String timestamp = String.valueOf(date.getTime() / 1000);
         return Integer.valueOf(timestamp);
+    }
+
+    @Override
+    public void updateUnread(int count) {
+        if (count == 0) {
+            mBottomNavigationView.mControl.badge_view.setVisibility(View.GONE);
+        } else {
+            mBottomNavigationView.mControl.badge_view.setVisibility(View.VISIBLE);
+            if (count > 99) {
+                if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+                    linearParams.width = DensityUtils.dp2px(getActivity(), 35);
+                    linearParams.height = DensityUtils.dp2px(getActivity(), 18);
+                    mBottomNavigationView.mControl.badge_view.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                    mBottomNavigationView.mControl.badge_view.setText("99+");
+                }
+
+            } else {
+                if (count < 10) {
+                    if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+                        linearParams.width = DensityUtils.dp2px(getActivity(), 18);
+                        linearParams.height = DensityUtils.dp2px(getActivity(), 18);
+                    }
+                } else {
+                    if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
+                        linearParams.width = DensityUtils.dp2px(getActivity(), 27);
+                        linearParams.height = DensityUtils.dp2px(getActivity(), 18);
+                    }
+                }
+                mBottomNavigationView.mControl.badge_view.setLayoutParams(linearParams); //使设置好的布局参数应用到控件
+                mBottomNavigationView.mControl.badge_view.setText(count + "");
+            }
+        }
     }
 }

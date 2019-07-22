@@ -289,11 +289,11 @@ public abstract class AbsChatLayout extends ChatLayoutUI implements IChatLayout 
         }
     }
 
-    protected void deleteMessage(int position, MessageInfo msg) {
+    public void deleteMessage(int position, MessageInfo msg) {
         getChatManager().deleteMessage(position, msg);
     }
 
-    protected void revokeMessage(int position, MessageInfo msg) {
+    public void revokeMessage(int position, MessageInfo msg) {
         getChatManager().revokeMessage(position, msg);
     }
 
