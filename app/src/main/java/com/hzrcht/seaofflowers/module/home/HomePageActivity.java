@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.denghao.control.TabItem;
@@ -37,9 +36,12 @@ import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
 import com.nhbs.fenxiao.module.center.HomeCenterPopUpWindow;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tencent.imsdk.TIMCustomElem;
+import com.tencent.imsdk.TIMElem;
+import com.tencent.imsdk.TIMElemType;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMMessageListener;
+import com.tencent.imsdk.TIMOfflinePushSettings;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
@@ -113,32 +115,33 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                     if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
                         mBottomNavigationView.mControl.badge_view.setText(num + "");
                     }
-                    TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
-                    Gson gson = new Gson();
-                    CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
+                    for (int i = 0; i < msgs.size(); i++) {
+                        TIMElem elemAll = msgs.get(i).getElement(i);
+                        if (elemAll.getType() == TIMElemType.Custom) {
+                            TIMCustomElem elem = (TIMCustomElem) msgs.get(i).getElement(i);
+                            Gson gson = new Gson();
+                            CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
 
-                    switch (messageData.type) {
-                        case "1":
-                            long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(0).timestamp();
-                            if (time < 30) {
-                                //发起视频
-                                Log.e("视频选项", "发起");
-                                Bundle bundle = new Bundle();
-                                bundle.putString("CONTENT", messageData.content);
-                                getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
-                            } else {
-                                Log.e("视频选项", "超时" + time + "..." + getSecondTimestamp(new Date(System.currentTimeMillis())) + "..." + (msgs.get(0).timestamp() * 1000));
+                            switch (messageData.type) {
+                                case "1":
+                                    long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(i).timestamp();
+                                    if (time < 30) {
+                                        //发起视频
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("CONTENT", messageData.content);
+                                        getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
+                                    }
+                                    break;
+                                case "2":
+                                    //拒绝视频
+                                    EventBus.getDefault().post(new DataSynVideoWaitEvent());
+                                    EventBus.getDefault().post(new DataSynVideoEvent());
+                                    break;
                             }
-                            Log.e("视频选项", "正常" + time + "..." + getSecondTimestamp(new Date(System.currentTimeMillis())) + "..." + (msgs.get(0).timestamp() * 1000));
-                            break;
-                        case "2":
-                            //拒绝视频
-                            Log.e("视频选项", "拒绝");
-                            EventBus.getDefault().post(new DataSynVideoWaitEvent());
-                            EventBus.getDefault().post(new DataSynVideoEvent());
-                            break;
+                        }
                     }
-                    Log.e("aaaa", messageData.content + "...." + messageData.type);
+
+
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -146,6 +149,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
                 return true; //返回true将终止回调链，不再调用下一个新消息监听器
             }
         });
+
+        TIMOfflinePushSettings settings = new TIMOfflinePushSettings();
+//开启离线推送
+        settings.setEnabled(true);
+//设置收到 C2C 离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
+//        settings.setC2cMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+//设置收到群离线消息时的提示声音，以把声音文件放在 res/raw 文件夹下为例
+//        settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
+
+        TIMManager.getInstance().setOfflinePushSettings(settings);
     }
 
 
