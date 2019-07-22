@@ -47,7 +47,7 @@ android {
                                 BAIDU_LOCATION: rootProject.ext.baidu]
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+            abiFilters "armeabi-v7a"
         }
         renderscriptTargetApi 25
         renderscriptSupportModeEnabled true
@@ -74,12 +74,12 @@ android {
         abi {
             reset()
             universalApk false
-            //            include "armeabi-v7a"
+                        include "armeabi-v7a"
         }
     }
 
     productFlavors {
-        fenxiao {
+        huahai {
             applicationId rootProject.ext.applicationId
             manifestPlaceholders = [PACKAGE_NAME  : rootProject.ext.applicationId,
                                     APP_NAME      : appNameStr,
@@ -93,7 +93,7 @@ android {
         abi {
             reset()
             universalApk false
-            //            include "armeabi-v7a"
+                        include "armeabi-v7a"
         }
     }
 
@@ -105,7 +105,7 @@ android {
         }
 
         variant.outputs.all { output ->
-            //            def versionCodes = ["armeabi-v7a": 1]
+                        def versionCodes = ["armeabi-v7a": 1]
             def abi = output.getFilter(com.android.build.OutputFile.ABI)
             if (abi != null) {
                 output.versionCodeOverride = versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
@@ -130,7 +130,8 @@ android {
         }
 
         release {
-            productFlavors.fenxiao.signingConfig signingConfigs.release
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            productFlavors.huahai.signingConfig signingConfigs.release
             debuggable false
             minifyEnabled true
             zipAlignEnabled true

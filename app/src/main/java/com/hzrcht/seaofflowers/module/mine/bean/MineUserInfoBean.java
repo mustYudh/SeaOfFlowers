@@ -21,6 +21,7 @@ public class MineUserInfoBean {
     public int state;
     public int attent;
     public int friend;
+    public int is_auth;
     public boolean disturb;
 
     public static class UserInfoBean {

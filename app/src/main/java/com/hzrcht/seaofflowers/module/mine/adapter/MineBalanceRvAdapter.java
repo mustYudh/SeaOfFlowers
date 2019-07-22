@@ -2,7 +2,6 @@ package com.hzrcht.seaofflowers.module.mine.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -10,13 +9,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserBillListBean;
 
-import java.util.List;
-
 public class MineBalanceRvAdapter extends BaseQuickAdapter<UserBillListBean.RowsBean, BaseViewHolder> {
     private Context context;
 
-    public MineBalanceRvAdapter(int layoutResId, @Nullable List<UserBillListBean.RowsBean> data, Context context) {
-        super(layoutResId, data);
+    public MineBalanceRvAdapter(int layoutResId, Context context) {
+        super(layoutResId);
         this.context = context;
     }
 

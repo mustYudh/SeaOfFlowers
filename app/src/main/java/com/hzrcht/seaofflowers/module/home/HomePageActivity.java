@@ -74,6 +74,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
     HomePagePresenter mPresenter = new HomePagePresenter(this);
     private BottomNavigationView mBottomNavigationView;
     private Disposable subscribe;
+    private HomeCenterPopUpWindow mHomePopUpWindow;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -94,8 +95,8 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
         mBottomNavigationView.initControl(this).setPagerView(items, 0);
         mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
             if (position == 2) {
-                HomeCenterPopUpWindow homePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
-                homePopUpWindow.showPopupWindow();
+                mHomePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
+                mHomePopUpWindow.showPopupWindow();
             }
         });
 
@@ -232,8 +233,12 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer {
 
     @Override
     public void onBackPressed() {
-        if (!pressHandle.handlePress(KeyEvent.KEYCODE_BACK)) {
-            super.onBackPressed();
+        if (mHomePopUpWindow != null && mHomePopUpWindow.isShowing()) {
+            mHomePopUpWindow.dismiss();
+        } else {
+            if (!pressHandle.handlePress(KeyEvent.KEYCODE_BACK)) {
+                super.onBackPressed();
+            }
         }
     }
 

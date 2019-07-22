@@ -6,6 +6,7 @@ import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserBillListBean;
 import com.xuexiang.xhttp2.XHttp;
+import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -28,6 +29,12 @@ public class MineBalancePresenter extends BaseViewPresenter<MineBalanceViewer> {
                     protected void onSuccess(UserBillListBean userBillListBean) {
                         assert getViewer() != null;
                         getViewer().getUserBillSuccess(userBillListBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getUserBillFail();
                     }
                 });
     }

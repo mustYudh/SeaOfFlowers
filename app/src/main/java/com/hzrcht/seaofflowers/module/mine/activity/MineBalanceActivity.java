@@ -20,30 +20,33 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.UserBillListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineBalancePresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineBalanceViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineBalanceRvAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickTextView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 账号余额
  */
 public class MineBalanceActivity extends BaseBarActivity implements MineBalanceViewer {
-    private int type = 1;
+    private int type = 2;
     private int page = 1;
     private int pageSize = 10;
     @PresenterLifeCycle
     private MineBalancePresenter mPresenter = new MineBalancePresenter(this);
     private MineBalanceRvAdapter adapter;
     private RecyclerView mBalance;
-    private List<UserBillListBean.RowsBean> list = new ArrayList<>();
     private TimePickerView pvCustomTime;
     private TextView tv_year;
     private TextView tv_month;
+    private SmartRefreshLayout refreshLayout;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -55,18 +58,40 @@ public class MineBalanceActivity extends BaseBarActivity implements MineBalanceV
         setTitle("账号余额明细");
         mBalance = bindView(R.id.rv_balance);
         mBalance.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        refreshLayout = bindView(R.id.refreshLayout);
 
         Calendar calendar = Calendar.getInstance();
         bindText(R.id.tv_year, calendar.get(Calendar.YEAR) + "");
         bindText(R.id.tv_month, (calendar.get(Calendar.MONTH) + 1) + "");
         tv_year = bindView(R.id.tv_year);
         tv_month = bindView(R.id.tv_month);
+
+        adapter = new MineBalanceRvAdapter(R.layout.item_mine_balance, getActivity());
+        mBalance.setAdapter(adapter);
+
         mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
+
+        refreshLayout.setEnableLoadMoreWhenContentNotFull(false);
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getActivity()).setSpinnerStyle(SpinnerStyle.Translate));
+        refreshLayout.setEnableOverScrollBounce(false);
+        refreshLayout.setEnableAutoLoadMore(false);
+
+        refreshLayout.setOnLoadMoreListener(refreshLayout1 -> {
+            int i = 1;
+            page += i;
+            mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
+
+        });
+        refreshLayout.setOnRefreshListener(refreshLayout12 -> {
+            page = 1;
+            mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
+        });
+
 
         bindView(R.id.ll_left, view -> {
             page = 1;
-            type = 1;
+            type = 2;
             bindView(R.id.view_left, true);
             bindView(R.id.view_right, false);
             mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
@@ -74,7 +99,7 @@ public class MineBalanceActivity extends BaseBarActivity implements MineBalanceV
 
         bindView(R.id.ll_right, view -> {
             page = 1;
-            type = 2;
+            type = 1;
             bindView(R.id.view_left, false);
             bindView(R.id.view_right, true);
             mPresenter.getUserBill(page + "", pageSize + "", tv_year.getText().toString().trim() + (tv_month.getText().toString().trim().length() == 1 ? ("0" + tv_month.getText().toString().trim()) : tv_month.getText().toString().trim()), type);
@@ -101,33 +126,46 @@ public class MineBalanceActivity extends BaseBarActivity implements MineBalanceV
 
     @Override
     public void getUserBillSuccess(UserBillListBean userBillListBean) {
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
+            }
+        }
+
         if (userBillListBean != null) {
             bindText(R.id.tv_all, userBillListBean.all + "");
             bindText(R.id.tv_expend, userBillListBean.expend + "");
             bindText(R.id.tv_income, userBillListBean.income + "");
             if (userBillListBean.rows != null && userBillListBean.rows.size() != 0) {
-                if (page > 1) {
 
+                if (page > 1) {
+                    adapter.addData(userBillListBean.rows);
                 } else {
-                    list.clear();
-                }
-                list.addAll(userBillListBean.rows);
-                if (adapter == null) {
-                    adapter = new MineBalanceRvAdapter(R.layout.item_mine_balance, userBillListBean.rows, getActivity());
-                    mBalance.setAdapter(adapter);
-                } else {
-                    adapter.setNewData(list);
+                    adapter.setNewData(userBillListBean.rows);
                 }
                 bindView(R.id.ll_empty, false);
                 bindView(R.id.rv_balance, true);
             } else {
                 if (page > 1) {
-
+                    ToastUtils.show("没有更多了");
                 } else {
                     //空页面
                     bindView(R.id.ll_empty, true);
                     bindView(R.id.rv_balance, false);
                 }
+            }
+        }
+    }
+
+    @Override
+    public void getUserBillFail() {
+        if (refreshLayout != null) {
+            if (page > 1) {
+                refreshLayout.finishLoadMore();
+            } else {
+                refreshLayout.finishRefresh();
             }
         }
     }
