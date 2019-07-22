@@ -1,15 +1,12 @@
 package com.hzrcht.seaofflowers;
 
 import android.os.Build;
-import android.os.Environment;
 
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomExpiredInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
 import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
-import com.tencent.imsdk.TIMLogLevel;
-import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.session.SessionWrapper;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -39,16 +36,16 @@ public class APP extends BaseApp {
         CommonInit.init(this);
         ShareAuthSDK.init(this, DEBUG);
         initHttp();
-        //初始化 SDK 基本配置
-        TIMSdkConfig config = new TIMSdkConfig(ApiServices.SDKAPPID)
-                // .setAccoutType(accountType)     // 该接口已废弃
-                .enableLogPrint(true)              // 是否在控制台打印Log?
-                .setLogLevel(TIMLogLevel.DEBUG)    // Log输出级别（debug级别会很多）
-                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/");
-        // Log文件存放在哪里？
-
-        //初始化 SDK
-        TIMManager.getInstance().init(this, config);
+//        //初始化 SDK 基本配置
+//        TIMSdkConfig config = new TIMSdkConfig(ApiServices.SDKAPPID)
+//                // .setAccoutType(accountType)     // 该接口已废弃
+//                .enableLogPrint(true)              // 是否在控制台打印Log?
+//                .setLogLevel(TIMLogLevel.DEBUG)    // Log输出级别（debug级别会很多）
+//                .setLogPath(Environment.getExternalStorageDirectory().getPath() + "/justfortest/");
+//        // Log文件存放在哪里？
+//
+//        //初始化 SDK
+//        TIMManager.getInstance().init(this, config);
 
         // 配置一些Config，按需配置
         TUIKitConfigs configs = TUIKit.getConfigs();

@@ -92,6 +92,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
 //        inputLayout.disableEmojiInput(true);
         inputLayout.disableAudioInput(true);
         inputLayout.disableMoreInput(true);
+        inputLayout.hideSoftInput();
 
 
         //送礼
