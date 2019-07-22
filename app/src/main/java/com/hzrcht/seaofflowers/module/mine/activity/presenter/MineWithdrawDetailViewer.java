@@ -6,4 +6,6 @@ import com.yu.common.mvp.Viewer;
 
 public interface MineWithdrawDetailViewer extends Viewer {
     void getUserBillSuccess(UserBillListBean userBillListBean);
+
+    void getUserBillFail();
 }

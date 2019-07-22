@@ -544,14 +544,14 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             //在线状态
             switch (anchorUserInfoBean.online_type) {
                 case 1:
-                    //离线
-                    bindText(R.id.tv_online, "离线");
-                    mLOnline.setBackgroundResource(R.drawable.shape_info_online_off);
-                    break;
-                case 2:
                     //在线
                     bindText(R.id.tv_online, "在线");
                     mLOnline.setBackgroundResource(R.drawable.shape_info_online_on);
+                    break;
+                case 2:
+                    //离线
+                    bindText(R.id.tv_online, "离线");
+                    mLOnline.setBackgroundResource(R.drawable.shape_info_online_off);
                     break;
                 case 3:
                     //通话中

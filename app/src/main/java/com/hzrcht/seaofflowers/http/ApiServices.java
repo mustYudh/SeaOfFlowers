@@ -3,7 +3,7 @@ package com.hzrcht.seaofflowers.http;
 public class ApiServices {
     public static final int SDKAPPID = 1400224024;
 
-    public static final String BASEURL = "http://huahai.hzrcht.com";
+    public static final String BASEURL = "https://huahai.hzrcht.com";
 
     //验证码登录
     public static final String CODELOGIN = BASEURL + "/api/login/login";
