@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
@@ -71,6 +72,20 @@ public class MineChatPresenter extends BaseViewPresenter<MineChatViewer> {
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().chatStartSuccess();
+                    }
+                });
+    }
+
+    public void liveStart(String anchor_id,UserIsAnchorBean userIsAnchorBean) {
+        XHttp.post(ApiServices.LIVESTART)
+                .params("anchor_id", anchor_id)
+                .accessToken(true)
+                .execute(LiveStartBean.class)
+                .subscribeWith(new TipRequestSubscriber<LiveStartBean>() {
+                    @Override
+                    protected void onSuccess(LiveStartBean liveStartBean) {
+                        assert getViewer() != null;
+                        getViewer().liveStartSuccess(liveStartBean,userIsAnchorBean);
                     }
                 });
     }

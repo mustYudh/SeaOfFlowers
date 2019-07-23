@@ -56,7 +56,8 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
     }
 
     public void getStateList(String user_id) {
-        XHttp.post(ApiServices.STATELIST).params("user_id", user_id)
+        XHttp.post(ApiServices.STATELIST)
+                .params("user_id", user_id)
                 .accessToken(true)
                 .execute(MineDynamicBean.class)
                 .subscribeWith(new TipRequestSubscriber<MineDynamicBean>() {

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -600,10 +601,12 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
             case 0:
                 //昵称
                 tv_title.setText("编辑昵称");
+                et_content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 break;
             case 1:
                 //个人签名
                 tv_title.setText("编辑个人签名");
+                et_content.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
                 break;
             default:
         }
@@ -647,16 +650,16 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
     @Override
     public void getUserDetailSuccess(UserDetailBean userDetailBean) {
         if (userDetailBean != null) {
-            view_nickname.setTextRight(userDetailBean.nick_name);
-            view_work.setTextRight(userDetailBean.work);
-            view_mobile.setTextRight(userDetailBean.phone);
-            view_height.setTextRight(userDetailBean.hight + "CM");
-            view_age.setTextRight(userDetailBean.age + "岁");
-            view_weight.setTextRight(userDetailBean.kg + "kg");
-            view_constellation.setTextRight(userDetailBean.star);
-            view_city.setTextRight(userDetailBean.city);
-            view_signature.setTextRight(TextUtils.isEmpty(userDetailBean.sign) ? "请输入个人签名(选填)" : userDetailBean.sign);
-            ImageLoader.getInstance().displayImage(iv_headimg, userDetailBean.head_img);
+            view_nickname.setTextRight((userDetailBean.nick_name != null && !TextUtils.isEmpty(userDetailBean.nick_name)) ? userDetailBean.nick_name : "请设置昵称");
+            view_work.setTextRight((userDetailBean.work != null && !TextUtils.isEmpty(userDetailBean.work)) ? userDetailBean.work : "请设置职业");
+            view_mobile.setTextRight((userDetailBean.phone != null && !TextUtils.isEmpty(userDetailBean.phone)) ? userDetailBean.phone : "请设置手机号");
+            view_height.setTextRight((userDetailBean.hight != null && !TextUtils.isEmpty(userDetailBean.hight)) ? userDetailBean.hight + "CM" : "请设置身高");
+            view_age.setTextRight((userDetailBean.age != null && !TextUtils.isEmpty(userDetailBean.age)) ? userDetailBean.age + "岁" : "请设置年龄");
+            view_weight.setTextRight((userDetailBean.kg != null && !TextUtils.isEmpty(userDetailBean.kg)) ? userDetailBean.kg + "kg" : "请设置体重");
+            view_constellation.setTextRight((userDetailBean.star != null && !TextUtils.isEmpty(userDetailBean.star)) ? userDetailBean.star : "请设置星座");
+            view_city.setTextRight((userDetailBean.city != null && !TextUtils.isEmpty(userDetailBean.city)) ? userDetailBean.city : "请设置城市");
+            view_signature.setTextRight((userDetailBean.sign != null && !TextUtils.isEmpty(userDetailBean.sign)) ? userDetailBean.sign : "请输入个人签名(选填)");
+            ImageLoader.getInstance().displayImage(iv_headimg, userDetailBean.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
             final StringBuilder label = new StringBuilder();
             if (userDetailBean.lable != null && userDetailBean.lable.size() != 0) {
                 for (int i = 0; i < userDetailBean.lable.size(); i++) {

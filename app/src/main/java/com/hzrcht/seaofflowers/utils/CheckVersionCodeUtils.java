@@ -48,5 +48,4 @@ public class CheckVersionCodeUtils {
         }
         return verName;
     }
-
 }

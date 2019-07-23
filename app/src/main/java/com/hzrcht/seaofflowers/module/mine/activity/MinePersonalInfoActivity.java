@@ -724,7 +724,6 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         if (commentDialog.isShowing()) {
             commentDialog.dismiss();
         }
-
         item.review_count = item.review_count + 1;
         ToastUtils.show("评论成功，等待审核");
         adapter.notifyDataSetChanged();
@@ -752,13 +751,11 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             loadDialog.dismiss();
         }
         tv_check_mobile.setVisibility(View.GONE);
-
         mMobile.setText("手机号：" + anchorUserInfoBean.phone);
     }
 
     @Override
     public void lookPhoneFail(int code, String msg) {
-
         if (loadDialog.isShowing()) {
             loadDialog.dismiss();
         }

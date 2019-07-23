@@ -8,6 +8,7 @@ import com.hzrcht.seaofflowers.utils.PayUtils;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.yu.common.toast.ToastUtils;
 
 import static com.hzrcht.seaofflowers.utils.PayUtils.PAY_TYPE;
 import static com.hzrcht.seaofflowers.utils.PayUtils.WX_PAY_INFO;
@@ -20,6 +21,7 @@ import static com.hzrcht.seaofflowers.utils.PayUtils.WX_PAY_INFO;
 public class WXPayEntryActivity extends WXEntryActivity implements IWXAPIEventHandler {
 
     private PayInfo info = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,29 +36,29 @@ public class WXPayEntryActivity extends WXEntryActivity implements IWXAPIEventHa
         if (baseResp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             switch (baseResp.errCode) {
                 case BaseResp.ErrCode.ERR_OK:
-//          Toast.makeText(this, "微信支付成功", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show("微信支付成功");
                     PayUtils.getInstance().checkPaySuccess(type, info, wxPayCallBack);
                     break;
                 case BaseResp.ErrCode.ERR_COMM:
-//          ToastUtils.show("微信支付失败");
+                    ToastUtils.show("微信支付失败");
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL:
                     if (wxPayCallBack != null) {
                         wxPayCallBack.onFailed(type);
                     }
-//          ToastUtils.show("未支付");
+                    ToastUtils.show("未支付");
                     break;
                 case BaseResp.ErrCode.ERR_AUTH_DENIED:
                     if (wxPayCallBack != null) {
                         wxPayCallBack.onFailed(type);
                     }
-//          ToastUtils.show("微信支付无权限");
+                    ToastUtils.show("微信支付无权限");
                     break;
                 default:
                     if (wxPayCallBack != null) {
                         wxPayCallBack.onFailed(type);
                     }
-//          ToastUtils.show("微信支付出错");
+                    ToastUtils.show("微信支付出错");
                     break;
             }
             PayUtils.getInstance().getPayResult(null);

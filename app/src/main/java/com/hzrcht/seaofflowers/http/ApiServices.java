@@ -158,4 +158,10 @@ public class ApiServices {
     //视频扣费
     public static final String LIVEPAYCOIN = BASEURL + "/api/live/payCoin";
 
+    //获取微信用户信息
+    public static final String WECHATINFO = "https://api.weixin.qq.com/sns/userinfo";
+
+    //三方登录
+    public static final String LOGINTHIRD = BASEURL + "/api/login/third";
+
 }

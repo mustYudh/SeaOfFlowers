@@ -24,7 +24,7 @@ public class ShareAuthSDK {
     MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.MANUAL);
     MobclickAgent.setCatchUncaughtExceptions(true);
     UMConfigure.setLogEnabled(debug);
-    PlatformConfig.setWeixin(Key.WX_APP_ID, Key.WX_APP_KEY);
+    PlatformConfig.setWeixin(Key.WX_APP_PAY_ID, Key.WX_APP_PAY_KEY);
     PlatformConfig.setQQZone(Key.QQ_APPID, Key.QQ_APP_KEY);
     PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad",
         "http://sns.whalecloud.com");

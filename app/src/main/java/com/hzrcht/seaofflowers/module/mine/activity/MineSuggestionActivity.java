@@ -3,12 +3,12 @@ package com.hzrcht.seaofflowers.module.mine.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.widget.EditText;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineSuggestionPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineSuggestionViewer;
-import com.hzrcht.seaofflowers.module.view.ClearEditText;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 
@@ -26,13 +26,13 @@ public class MineSuggestionActivity extends BaseBarActivity implements MineSugge
     @Override
     protected void loadData() {
         setTitle("意见反馈");
-        ClearEditText et_suggestion = bindView(R.id.et_suggestion);
+        EditText et_suggestion = bindView(R.id.et_suggestion);
         bindView(R.id.tv_commit, view -> {
             if (TextUtils.isEmpty(et_suggestion.getText().toString())) {
-                ToastUtils.show("请留下您的宝贵意见和建议，我们将努力改进！");
+                ToastUtils.show("您的宝贵意见和建议不能为空!");
                 return;
             }
-            
+
         });
     }
 }

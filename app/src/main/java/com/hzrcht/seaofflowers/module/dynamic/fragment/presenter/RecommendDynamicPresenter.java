@@ -21,7 +21,9 @@ public class RecommendDynamicPresenter extends BaseViewPresenter<RecommendDynami
 
 
     public void getStateList(int page, int pageSize) {
-        XHttp.post(ApiServices.STATELIST).accessToken(true)
+        XHttp.post(ApiServices.STATELIST)
+                .accessToken(true)
+                .params("user_id", "0")
                 .params("page", page + "")
                 .params("pageSize", pageSize + "")
                 .execute(MineDynamicBean.class)

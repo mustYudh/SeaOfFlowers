@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
@@ -19,7 +20,7 @@ import com.yu.common.ui.NoSlidingGridView;
 
 
 public class DredgeVipFragment extends BaseFragment implements DredgeVipViewer {
-    private int type = -1;
+    private int type = 2;
     private String type_id = "";
     @PresenterLifeCycle
     private DredgeVipPresenter mPresenter = new DredgeVipPresenter(this);
@@ -38,15 +39,17 @@ public class DredgeVipFragment extends BaseFragment implements DredgeVipViewer {
     @Override
     protected void loadData() {
         gv_type = bindView(R.id.gv_type);
+        ImageView iv_ali = bindView(R.id.iv_ali);
+        ImageView iv_wx = bindView(R.id.iv_wx);
         bindView(R.id.rl_ali, view -> {
-            bindView(R.id.iv_ali).setBackgroundResource(R.drawable.ic_circle_select);
-            bindView(R.id.iv_wx).setBackgroundResource(R.drawable.ic_circle_normal);
+            iv_ali.setImageResource(R.drawable.ic_circle_select);
+            iv_wx.setImageResource(R.drawable.ic_circle_normal);
             type = 2;
         });
 
         bindView(R.id.rl_wx, view -> {
-            bindView(R.id.iv_wx).setBackgroundResource(R.drawable.ic_circle_select);
-            bindView(R.id.iv_ali).setBackgroundResource(R.drawable.ic_circle_normal);
+            iv_wx.setImageResource(R.drawable.ic_circle_select);
+            iv_ali.setImageResource(R.drawable.ic_circle_normal);
             type = 1;
         });
 

@@ -66,6 +66,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -114,6 +115,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private int rechargeCode = 0;
     private static Disposable subscribe;
     private MediaPlayer mMediaPlayer;
+    private static Disposable mMediaPlayerSubscribe;
 
     @Override
     public void liveEndSuccess() {
@@ -306,6 +308,25 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                     enterRoom();
                 }
             });
+
+            //30s后未接通调用关闭
+
+
+            mMediaPlayerSubscribe = Observable.interval(30, 30, TimeUnit.SECONDS)
+                    .take(30)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(aLong -> {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadDialog.show();
+                            }
+                        });
+                        mPresenter.liveEnd(location_live_id);
+                        Log.e("dddd", "doOnNext");
+                    })
+                    .subscribe();
         } else {
             isBegin = true;
             ll_close.setVisibility(View.GONE);
@@ -384,6 +405,13 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             subscribe.dispose();
             subscribe = null;
         }
+
+        if (mMediaPlayerSubscribe != null && !mMediaPlayerSubscribe.isDisposed()) {
+            mMediaPlayerSubscribe.dispose();
+            mMediaPlayerSubscribe = null;
+        }
+
+
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
             mMediaPlayer.release();
@@ -881,6 +909,11 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                 activity.mMediaPlayer.stop();
                 activity.mMediaPlayer.release();
                 activity.mMediaPlayer = null;
+            }
+
+            if (activity.mMediaPlayerSubscribe != null && !activity.mMediaPlayerSubscribe.isDisposed()) {
+                activity.mMediaPlayerSubscribe.dispose();
+                activity.mMediaPlayerSubscribe = null;
             }
 
         }
