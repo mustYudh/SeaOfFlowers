@@ -21,8 +21,8 @@ public class WXPayUtils {
   }
 
   private static void init(Context context) {
-    api = WXAPIFactory.createWXAPI(context, Key.WX_APP_ID, true);
-    api.registerApp(Key.WX_APP_ID);
+    api = WXAPIFactory.createWXAPI(context, Key.WX_APP_PAY_ID, true);
+    api.registerApp(Key.WX_APP_PAY_ID);
   }
 
   private WXPayUtils() {

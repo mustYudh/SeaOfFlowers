@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity.presenter;
 
+import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
@@ -14,4 +15,6 @@ public interface MineChatViewer extends Viewer {
     void chatStartSuccess();
 
     void sendGiftSuccess(ChatLayout mChatLayout,SysGiftBean.ResultBean resultBean);
+
+    void liveStartSuccess(LiveStartBean liveStartBean,UserIsAnchorBean userIsAnchorBean);
 }

@@ -58,7 +58,7 @@ public class HomeFansRvAdapter extends BaseQuickAdapter<HomeFansBean.RowBean, Ba
 
         }
         helper.setText(R.id.tv_name, item.nick_name);
-        ImageLoader.getInstance().displayImage(iv_headimg, item.nick_name, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        ImageLoader.getInstance().displayImage(iv_headimg, item.head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         switch (item.online_type) {
             case 1:
                 //在线
@@ -75,13 +75,25 @@ public class HomeFansRvAdapter extends BaseQuickAdapter<HomeFansBean.RowBean, Ba
         helper.getView(R.id.iv_chat).setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("IM_ID", item.id + "");
-            bundle.putString("IM_NAME", item.nick_name);
+            bundle.putString("IM_NAME", item.nick_name + "");
             bundle.putString("LANG_AMOUNT", "0");
-            LauncherHelper.from(context).startActivity(MineChatActivity.class);
+            LauncherHelper.from(context).startActivity(MineChatActivity.class, bundle);
         });
 
         helper.getView(R.id.iv_video).setOnClickListener(view -> {
-
+            if (onItemVideoListener != null) {
+                onItemVideoListener.onItemVideoClick(item);
+            }
         });
+    }
+
+    public interface OnItemVideoListener {
+        void onItemVideoClick(HomeFansBean.RowBean item);
+    }
+
+    OnItemVideoListener onItemVideoListener;
+
+    public void setOnItemVideoListener(OnItemVideoListener onItemVideoListener) {
+        this.onItemVideoListener = onItemVideoListener;
     }
 }

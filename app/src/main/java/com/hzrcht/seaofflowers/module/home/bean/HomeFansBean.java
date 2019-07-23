@@ -4,7 +4,7 @@ import java.util.List;
 
 public class HomeFansBean {
 
-    public List<HomeFansBean.RowBean> row;
+    public List<HomeFansBean.RowBean> rows;
 
     public static class RowBean {
         /**
@@ -21,6 +21,7 @@ public class HomeFansBean {
 
         public int id;
         public int recharge;
+        public String age;
         public String nick_name;
         public String head_img;
         public boolean is_vip;

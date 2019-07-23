@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -128,16 +129,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
             @Override
             public boolean onNewMessages(List<TIMMessage> msgs) {//收到新消息
                 try {
-                    for (int i = 0; i < msgs.size(); i++) {
-                        TIMElem elemAll = msgs.get(i).getElement(i);
+                    if (msgs != null && msgs.size() != 0) {
+                        TIMElem elemAll = msgs.get(0).getElement(0);
                         if (elemAll.getType() == TIMElemType.Custom) {
-                            TIMCustomElem elem = (TIMCustomElem) msgs.get(i).getElement(i);
+                            TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
                             Gson gson = new Gson();
                             CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
-
+                            Log.e("视频信息", messageData.content + "....." + messageData.type);
                             switch (messageData.type) {
                                 case "1":
-                                    long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(i).timestamp();
+                                    long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(0).timestamp();
                                     if (time < 30) {
                                         //发起视频
                                         Bundle bundle = new Bundle();
