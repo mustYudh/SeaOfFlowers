@@ -250,7 +250,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
                 if (rechargeCode == 10000) {
                     //充值
                     Bundle bundleVip = new Bundle();
-                    bundleVip.putInt("TYPE", 1);
+                    bundleVip.putInt("TYPE", 0);
                     getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
                 }
                 finish();
@@ -265,7 +265,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
                 if (rechargeCode == 10000) {
                     //充值
                     Bundle bundleVip = new Bundle();
-                    bundleVip.putInt("TYPE", 1);
+                    bundleVip.putInt("TYPE", 0);
                     getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
                 }
                 finish();
@@ -283,7 +283,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
         if (rechargeCode == 10000) {
             //充值
             Bundle bundleVip = new Bundle();
-            bundleVip.putInt("TYPE", 1);
+            bundleVip.putInt("TYPE", 0);
             getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
         }
         finish();

@@ -66,6 +66,15 @@ public class CustomMessageDraw implements IOnCustomMessageDrawListener {
                         TextView tv_name_video_other = view.findViewById(R.id.tv_name);
                         tv_name_video_other.setText(info.isSelf() ? "您取消了视频聊天" : "对方拒绝了您的视频聊天");
                         break;
+                    case "3":
+                        //视频结束
+                        view = LayoutInflater.from(APP.getInstance()).inflate(R.layout.item_chat_video, null, false);
+                        // 把自定义消息view添加到TUIKit内部的父容器里
+                        parent.addMessageContentView(view);
+                        // 自定义消息view的实现，这里仅仅展示文本信息，并且实现超链接跳转
+                        TextView tv_name_video_end = view.findViewById(R.id.tv_name);
+                        tv_name_video_end.setText(info.isSelf() ? "您结束了视频聊天" : "对方结束了视频聊天");
+                        break;
                 }
 
             } catch (Exception e) {

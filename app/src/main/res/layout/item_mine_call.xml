@@ -11,6 +11,7 @@
         android:gravity="center_vertical">
 
         <com.yu.common.ui.CircleImageView
+            android:id="@+id/iv_headimg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_woman_normal"/>
@@ -25,26 +26,15 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="玻璃心"
-                    android:textColor="@color/color_333333"
-                    android:textSize="14sp"
-                    />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="17dp"
-                    android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_mine_attention"/>
-            </LinearLayout>
+                android:includeFontPadding="false"
+                android:text="@string/text_null"
+                android:textColor="@color/color_333333"
+                android:textSize="14sp"
+                />
 
 
             <LinearLayout
@@ -55,12 +45,14 @@
 
 
                 <ImageView
+                    android:id="@+id/iv_click"
                     android:layout_width="17dp"
                     android:layout_height="15dp"
                     android:src="@drawable/ic_call_fail"/>
 
 
                 <TextView
+                    android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
@@ -76,12 +68,13 @@
 
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="19dp"
             android:includeFontPadding="false"
-            android:text="2019-06-21 00:21:23"
+            android:text="@string/text_null"
             android:textColor="@color/color_999999"
             android:textSize="11sp"
             />
