@@ -167,4 +167,10 @@ public class ApiServices {
     //意见反馈
     public static final String USERFEEDBACK = BASEURL + "/api/user/feedback";
 
+    //审核中二维码
+    public static final String SYSWECHAT = BASEURL + "/api/sys/wechat";
+
+    //我的通话记录
+    public static final String GETLIVELIST = BASEURL + "/api/live/liveList";
+
 }

@@ -121,10 +121,46 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     public void liveEndSuccess() {
         if (isBegin) {
             //接通视频
-            if (loadDialog.isShowing()) {
-                loadDialog.dismiss();
+            TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
+            CustomMessageData customMessageData = new CustomMessageData();
+            customMessageData.type = "3";
+            customMessageData.content = "end";
+            Gson gson = new Gson();
+            String toJson = gson.toJson(customMessageData);
+
+            //构造一条消息
+            TIMMessage msg = new TIMMessage();
+
+            //向 TIMMessage 中添加自定义内容
+            TIMCustomElem elem = new TIMCustomElem();
+            elem.setData(toJson.getBytes());      //自定义 byte[]
+
+            //将 elem 添加到消息
+            if (msg.addElement(elem) != 0) {
+                return;
             }
-            exitRoom();
+
+            //发送消息
+            conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {
+                @Override
+                public void onError(int code, String desc) {//发送消息失败
+                    //错误码 code 和错误描述 desc，可用于定位请求失败原因
+                    Log.e("自定义消息发送", "send message failed. code: " + code + " errmsg: " + desc + "..." + toJson);
+                    if (loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    exitRoom();
+                }
+
+                @Override
+                public void onSuccess(TIMMessage msg) {//发送消息成功
+                    Log.e("自定义消息发送", "SendMsg ok....." + toJson);
+                    if (loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    exitRoom();
+                }
+            });
         } else {
             //未接通视频
             TIMConversation conversation = TIMManager.getInstance().getConversation(TIMConversationType.C2C, user_id);//会话类型：单聊
@@ -593,7 +629,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         if (rechargeCode == 10000) {
             //充值
             Bundle bundleVip = new Bundle();
-            bundleVip.putInt("TYPE", 1);
+            bundleVip.putInt("TYPE", 0);
             getLaunchHelper().startActivityForResult(MineRechargeActivity.class, bundleVip, 1);
         }
         finish();
