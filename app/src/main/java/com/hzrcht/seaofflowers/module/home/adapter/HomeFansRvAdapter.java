@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.home.bean.HomeFansBean;
 import com.hzrcht.seaofflowers.module.mine.activity.MineChatActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.ui.CircleImageView;
@@ -84,6 +85,12 @@ public class HomeFansRvAdapter extends BaseQuickAdapter<HomeFansBean.RowBean, Ba
             if (onItemVideoListener != null) {
                 onItemVideoListener.onItemVideoClick(item);
             }
+        });
+
+        helper.getView(R.id.ll_root).setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("USER_ID", item.id + "");
+            LauncherHelper.from(context).startActivity(MinePersonalInfoActivity.class, bundle);
         });
     }
 

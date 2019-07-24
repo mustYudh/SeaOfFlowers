@@ -1,10 +1,14 @@
 package com.hzrcht.seaofflowers.module.home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.ContentObserver;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
@@ -57,6 +61,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
     private ImageView iv_bottom;
     private MediaPlayer mMediaPlayer;
     private final static int REQ_PERMISSION_CODE = 0x1000;
+    private SettingsContentObserver mSettingsContentObserver;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -85,8 +90,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
         });
 
 
-        Bundle bundle = getIntent().getExtras();
-        String content = bundle.getString("CONTENT");
+        String content = getIntent().getStringExtra("CONTENT");
         if (content != null && !TextUtils.isEmpty(content)) {
             String[] split = content.split(",");
 
@@ -111,8 +115,41 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
                 finish();
             });
         }
-
+        registerVolumeChangeReceiver();
     }
+
+    private void registerVolumeChangeReceiver() {
+        mSettingsContentObserver = new SettingsContentObserver(getActivity(), new Handler());
+        getContentResolver().registerContentObserver(android.provider.Settings.System.CONTENT_URI, true, mSettingsContentObserver);
+    }
+
+    private void unregisterVolumeChangeReceiver() {
+        getContentResolver().unregisterContentObserver(mSettingsContentObserver);
+    }
+
+    public class SettingsContentObserver extends ContentObserver {
+        Context context;
+
+        public SettingsContentObserver(Context c, Handler handler) {
+            super(handler);
+            context = c;
+        }
+
+        @Override
+        public boolean deliverSelfNotifications() {
+            return super.deliverSelfNotifications();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            Log.d("音量", "音量：" + currentVolume);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_PLAY_SOUND);
+        }
+    }
+
 
     //播放音乐的方法
     private void play() {
@@ -134,6 +171,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        unregisterVolumeChangeReceiver();
         super.onDestroy();
     }
 

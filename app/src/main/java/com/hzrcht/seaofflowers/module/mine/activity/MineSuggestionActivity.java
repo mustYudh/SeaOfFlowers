@@ -16,7 +16,7 @@ import com.yu.common.toast.ToastUtils;
 public class MineSuggestionActivity extends BaseBarActivity implements MineSuggestionViewer {
 
     @PresenterLifeCycle
-    private MineSuggestionPresenter presenter = new MineSuggestionPresenter(this);
+    private MineSuggestionPresenter mPresenter = new MineSuggestionPresenter(this);
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -32,7 +32,25 @@ public class MineSuggestionActivity extends BaseBarActivity implements MineSugge
                 ToastUtils.show("您的宝贵意见和建议不能为空!");
                 return;
             }
-
+            loadDialog.show();
+            mPresenter.userFeedback(et_suggestion.getText().toString().trim());
         });
+    }
+
+    @Override
+    public void userFeedbackSuccess() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("提交成功");
+        finish();
+    }
+
+    @Override
+    public void userFeedbackFail(String msg) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show(msg);
     }
 }

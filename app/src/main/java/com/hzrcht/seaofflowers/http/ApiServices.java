@@ -164,4 +164,7 @@ public class ApiServices {
     //三方登录
     public static final String LOGINTHIRD = BASEURL + "/api/login/third";
 
+    //意见反馈
+    public static final String USERFEEDBACK = BASEURL + "/api/user/feedback";
+
 }

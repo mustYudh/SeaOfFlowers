@@ -16,6 +16,7 @@
         android:cursorVisible="true"
         android:gravity="top"
         android:hint="请留下您的宝贵意见和建议，我们将努力改进！"
+        android:maxLength="255"
         android:paddingLeft="11dp"
         android:paddingTop="11dp"
         android:textColor="@color/color_333333"
@@ -23,7 +24,7 @@
         android:textSize="14sp"/>
 
 
-    <TextView
+    <com.yu.common.ui.DelayClickTextView
         android:id="@+id/tv_commit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
