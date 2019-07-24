@@ -16,11 +16,13 @@ import com.hzrcht.seaofflowers.module.home.bean.HomeBannerBean;
 import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitPresenter;
 import com.hzrcht.seaofflowers.module.home.fragment.presenter.HomeLimitViewer;
+import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.hzrcht.seaofflowers.module.view.ScreenSpaceItemDecoration;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.shehuan.niv.NiceImageView;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -48,6 +50,7 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
     private HomeLimitRvAdapter adapter;
     private Disposable subscribe;
     private SmartRefreshLayout refreshLayout;
+    private int count = 0;
 
     @Override
     protected int getContentViewId() {
@@ -205,12 +208,27 @@ public class HomeLimitFragment extends BaseFragment implements HomeLimitViewer {
                 adapter.setNewData(list);
             }
 
-            adapter.setOnItemDetailsDoCilckListener((pair, imageView) -> subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .doOnNext(aLong -> {
-                        getActivity().runOnUiThread(() -> ImageLoader.getInstance().displayImage(imageView, pair.get((int) (Math.random() * (pair.size()))), R.drawable.ic_placeholder, R.drawable.ic_placeholder_error));
-                    })
-                    .subscribe());
+            adapter.setOnItemDetailsDoCilckListener(new HomeLimitRvAdapter.OnItemRandomListener() {
+                @Override
+                public void onItemDetailsClickClick(List<HomeAnchorListBean.PairBean> pair, NiceImageView imageView) {
+                    subscribe = Observable.interval(0, 10, TimeUnit.SECONDS)
+                            .subscribeOn(Schedulers.io())
+                            .doOnNext(aLong -> {
+                                getActivity().runOnUiThread(() -> {
+                                    count = (int) (Math.random() * (pair.size()));
+                                    ImageLoader.getInstance().displayImage(imageView, pair.get(count).cover, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+                                });
+                            })
+                            .subscribe();
+                }
+
+                @Override
+                public void onItemDetailsLookClick(List<HomeAnchorListBean.PairBean> pair) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("USER_ID", pair.get(count).id + "");
+                    getLaunchHelper().startActivity(MinePersonalInfoActivity.class, bundle);
+                }
+            });
             bindView(R.id.ll_empty, false);
             bindView(R.id.rl_home, true);
         } else {

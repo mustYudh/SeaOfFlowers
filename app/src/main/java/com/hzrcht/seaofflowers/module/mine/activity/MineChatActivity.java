@@ -46,10 +46,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     private String im_id;
     private NoticeLayout mNoticeLayout;
     private InputLayout inputLayout;
-    private String lang_amount;
     private ChatLayout mChatLayout;
-
-    private String im_name;
 
 
     @Override
@@ -61,8 +58,6 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
     protected void loadData() {
         Bundle bundle = getIntent().getExtras();
         im_id = bundle.getString("IM_ID");
-        im_name = bundle.getString("IM_NAME");
-        lang_amount = bundle.getString("LANG_AMOUNT");
         //从布局文件中获取聊天面板组件
         mChatLayout = bindView(R.id.chat_layout);
 
@@ -75,13 +70,12 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         ChatInfo chatInfo = new ChatInfo();
         chatInfo.setType(TIMConversationType.C2C);
         chatInfo.setId(im_id);
-        chatInfo.setChatName(im_name);
+        chatInfo.setChatName(im_id);
         mChatLayout.setChatInfo(chatInfo);
 
         //获取单聊面板的标题栏
         TitleBarLayout mTitleBar = mChatLayout.getTitleBar();
         mTitleBar.setVisibility(View.GONE);
-        setTitle(im_name);
 
         //顶部通知
         mNoticeLayout = mChatLayout.getNoticeLayout();
@@ -191,6 +185,9 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
         if (userIsAnchorBean != null) {
             //视频
             inputLayout.setOnVideoClickListener(view -> mPresenter.liveStart(im_id + "", userIsAnchorBean));
+
+            setTitle(userIsAnchorBean.nick_name);
+
         }
 
 
@@ -214,7 +211,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
                         //对方是主播
                         mNoticeLayout.alwaysShow(true);
                         // 设置通知主题
-                        mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
+                        mNoticeLayout.getContent().setText("私聊每条扣" + userIsAnchorBean.lang_amount + "金币");
                         // 设置通知提醒文字
                         TextView contentExtra = mNoticeLayout.getContentExtra();
                         contentExtra.setTextColor(getResources().getColor(R.color.red));
@@ -249,7 +246,7 @@ public class MineChatActivity extends BaseBarActivity implements MineChatViewer 
                         //对方是主播
                         mNoticeLayout.alwaysShow(true);
                         // 设置通知主题
-                        mNoticeLayout.getContent().setText("私聊每条扣" + lang_amount + "金币");
+                        mNoticeLayout.getContent().setText("私聊每条扣" + userIsAnchorBean.lang_amount + "金币");
                         // 设置通知提醒文字
                         TextView contentExtra = mNoticeLayout.getContentExtra();
                         contentExtra.setTextColor(getResources().getColor(R.color.red));

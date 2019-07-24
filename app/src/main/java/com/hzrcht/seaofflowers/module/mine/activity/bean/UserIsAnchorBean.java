@@ -1,5 +1,7 @@
 package com.hzrcht.seaofflowers.module.mine.activity.bean;
 
+import java.math.BigDecimal;
+
 public class UserIsAnchorBean {
 
 
@@ -22,4 +24,7 @@ public class UserIsAnchorBean {
     public int is_anchor;
     public boolean is_vip;
     public int is_attent;
+    public BigDecimal video_amount;
+    public BigDecimal lang_amount;
+    public BigDecimal look_amount;
 }

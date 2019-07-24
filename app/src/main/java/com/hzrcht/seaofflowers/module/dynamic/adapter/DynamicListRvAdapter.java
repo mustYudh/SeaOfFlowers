@@ -1,17 +1,19 @@
 package com.hzrcht.seaofflowers.module.dynamic.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
+import com.hzrcht.seaofflowers.module.mine.activity.MineChatActivity;
+import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.yu.common.glide.ImageLoader;
+import com.yu.common.launche.LauncherHelper;
 import com.yu.common.ui.CircleImageView;
 import com.yu.common.ui.NoSlidingGridView;
-
-import java.util.List;
 
 public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocationDynamicBean, BaseViewHolder> {
     private Context context;
@@ -37,6 +39,18 @@ public class DynamicListRvAdapter extends BaseMultiItemQuickAdapter<MineLocation
                 ImageView iv_sex = helper.getView(R.id.iv_sex);
                 iv_sex.setImageResource(item.userInfo.sex == 1 ? R.drawable.ic_man_logo : R.drawable.ic_woman_logo);
                 helper.getView(R.id.ll_age).setBackgroundResource(item.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
+
+                helper.getView(R.id.iv_headimg).setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("USER_ID", item.userInfo.id + "");
+                    LauncherHelper.from(context).startActivity(MinePersonalInfoActivity.class, bundle);
+                });
+
+                helper.getView(R.id.tv_talk).setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("IM_ID", item.userInfo.id+"");
+                    LauncherHelper.from(context).startActivity(MineChatActivity.class, bundle);
+                });
                 break;
             case 1:
                 NoSlidingGridView gv_pic = helper.getView(R.id.gv_pic);

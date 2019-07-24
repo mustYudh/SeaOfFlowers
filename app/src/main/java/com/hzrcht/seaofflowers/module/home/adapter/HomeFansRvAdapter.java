@@ -76,8 +76,6 @@ public class HomeFansRvAdapter extends BaseQuickAdapter<HomeFansBean.RowBean, Ba
         helper.getView(R.id.iv_chat).setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("IM_ID", item.id + "");
-            bundle.putString("IM_NAME", item.nick_name + "");
-            bundle.putString("LANG_AMOUNT", "0");
             LauncherHelper.from(context).startActivity(MineChatActivity.class, bundle);
         });
 

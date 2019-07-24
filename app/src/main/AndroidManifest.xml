@@ -15,11 +15,43 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/> <!-- 多媒体 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+
+    <!-- ********华为推送权限设置******** -->
+    <permission
+        android:name="com.hzrcht.seaofflowers.permission.PROCESS_PUSH_MSG"
+        android:protectionLevel="signatureOrSystem"/>
+
+    <uses-permission android:name="com.hzrcht.seaofflowers.tuikit.permission.PROCESS_PUSH_MSG"/>
+
+    <!-- ********小米推送权限设置******** -->
+    <permission
+        android:name="com.hzrcht.seaofflowers.permission.MIPUSH_RECEIVE"
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="com.hzrcht.seaofflowers.permission.MIPUSH_RECEIVE"/>
+
+
+    <!-- ********魅族推送权限设置 start******** -->
+    <!-- 兼容 flyme5.0 以下版本，魅族内部集成 pushSDK 必填，不然无法收到消息-->
+    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE"></uses-permission>
+    <permission
+        android:name="com.hzrcht.seaofflowers.push.permission.MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="com.hzrcht.seaofflowers.push.permission.MESSAGE"></uses-permission>
+
+    <!--  兼容 flyme3.0 配置权限-->
+    <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE"/>
+    <permission
+        android:name="com.hzrcht.seaofflowers.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"></permission>
+    <uses-permission android:name="com.hzrcht.seaofflowers.permission.C2D_MESSAGE"/>
+    <!-- ********魅族推送权限设置 end******** -->
+
 
     <application
         android:name=".APP"
@@ -176,6 +208,116 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!-- ********vivo 推送设置 start******** -->
+        <service
+            android:name="com.vivo.push.sdk.service.CommandClientService"
+            android:exported="true"/>
+        <activity
+            android:name="com.vivo.push.sdk.LinkProxyClientActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <meta-data
+            android:name="com.vivo.push.api_key"
+            android:value="3c041c75-d595-41d4-8c4e-85426c09611f"/>
+        <meta-data
+            android:name="com.vivo.push.app_id"
+            android:value="13892"/>
+
+        <receiver android:name=".push.VIVOPushMessageReceiverImpl">
+            <intent-filter>
+                <!-- 接收 push 消息 -->
+                <action android:name="com.vivo.pushclient.action.RECEIVE"/>
+            </intent-filter>
+        </receiver>
+        <!-- ********xiaomi 推送设置 end******** -->
+
+        <!-- ********huawei 推送设置 start******** -->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=100961031"/> <!--这里的 appid 值修改为您的华为推送 App ID-->
+        <provider
+            android:name="com.huawei.hms.update.provider.UpdateProvider"
+            android:authorities="com.hzrcht.seaofflowers.hms.update.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"/>
+        <provider
+            android:name="com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider"
+            android:authorities="com.hzrcht.seaofflowers.updateSdk.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        </provider>
+
+        <activity
+            android:name="com.huawei.android.hms.agent.common.HMSAgentActivity"
+            android:configChanges="orientation|locale|screenSize|layoutDirection|fontScale"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent">
+            <meta-data
+                android:name="hwc-theme"
+                android:value="androidhwext:style/Theme.Emui.Translucent"/>
+        </activity>
+        <activity
+            android:name="com.huawei.hms.activity.BridgeActivity"
+            android:configChanges="orientation|locale|screenSize|layoutDirection|fontScale"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent">
+            <meta-data
+                android:name="hwc-theme"
+                android:value="androidhwext:style/Theme.Emui.Translucent"/>
+        </activity>
+
+        <service
+            android:name="com.huawei.hms.support.api.push.service.HmsMsgService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":pushservice">
+            <intent-filter>
+                <action android:name="com.huawei.push.msg.NOTIFY_MSG"/>
+                <action android:name="com.huawei.push.msg.PASSBY_MSG"/>
+            </intent-filter>
+        </service>
+
+        <!--这里的 com.tencent.qcloud.uipojo.thirdpush.HUAWEIPushReceiver 修改成您 App 中的完整类名-->
+        <receiver
+            android:name=".push.HUAWEIPushReceiver"
+            android:permission="com.hzrcht.seaofflowers.permission.PROCESS_PUSH_MSG">
+            <intent-filter>
+                <!-- 必须,用于接收 token -->
+                <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
+                <!-- 必须, 用于接收透传消息 -->
+                <action android:name="com.huawei.android.push.intent.RECEIVE"/>
+                <!-- 必须, 用于接收通知栏消息点击事件 此事件不需要开发者处理，只需注册就可以-->
+                <action android:name="com.huawei.intent.action.PUSH_DELAY_NOTIFY"/>
+            </intent-filter>
+        </receiver>
+        <!-- ********huawei 推送设置 end******** -->
+
+        <!-- ********meizu 推送设置 end******** -->
+        <!--这里的 com.tencent.qcloud.uipojo.thirdpush.MEIZUPushReceiver 修改成您 App 中的完整类名-->
+        <receiver android:name=".push.MEIZUPushReceiver">
+            <intent-filter>
+                <!-- 接收 push 消息 -->
+                <action android:name="com.meizu.flyme.push.intent.MESSAGE"/>
+                <!-- 接收 register 消息 -->
+                <action android:name="com.meizu.flyme.push.intent.REGISTER.FEEDBACK"/>
+                <!-- 接收 unregister 消息-->
+                <action android:name="com.meizu.flyme.push.intent.UNREGISTER.FEEDBACK"/>
+                <!-- 兼容低版本 Flyme3 推送服务配置 -->
+                <action android:name="com.meizu.c2dm.intent.REGISTRATION"/>
+                <action android:name="com.meizu.c2dm.intent.RECEIVE"/>
+
+                <category android:name="com.tencent.qcloud.uipojo.thirdpush"></category>
+            </intent-filter>
+        </receiver>
+        <!-- ********meizu 推送设置 end******** -->
+
     </application>
 
 </manifest>

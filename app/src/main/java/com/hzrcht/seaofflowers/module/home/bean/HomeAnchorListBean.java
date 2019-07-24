@@ -7,17 +7,41 @@ public class HomeAnchorListBean {
 
 
     public List<RowsBean> rows;
-    public List<String> pair;
+    public List<PairBean> pair;
 
     public static class RowsBean {
         /**
-         * id : 51
-         * nick_name : 球球
-         * cover : https://mumaren233.oss-cn-hangzhou.aliyuncs.com/ceshi/timg%20%285%29.jpeg
-         * sex : 1
-         * age : 18
-         * sign : 空虚寂寞冷
-         * work : 沙雕王
+         * id : 87
+         * nick_name :
+         * cover : https://mumaren233.oss-cn-hangzhou.aliyuncs.com/WechatIMG205.jpeg
+         * sex : 2
+         * age : 0
+         * sign :
+         * work :
+         * video_amount : 20
+         * online_type : 1
+         */
+
+        public int id;
+        public String nick_name;
+        public String cover;
+        public int sex;
+        public int age;
+        public String sign;
+        public String work;
+        public BigDecimal video_amount;
+        public int online_type;
+    }
+
+    public static class PairBean {
+        /**
+         * id : 87
+         * nick_name :
+         * cover : https://mumaren233.oss-cn-hangzhou.aliyuncs.com/WechatIMG205.jpeg
+         * sex : 2
+         * age : 0
+         * sign :
+         * work :
          * video_amount : 20
          * online_type : 1
          */

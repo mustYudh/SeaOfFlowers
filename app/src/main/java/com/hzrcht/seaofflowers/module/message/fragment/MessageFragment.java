@@ -126,8 +126,6 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         if (userChargeBean != null) {
             Bundle bundle = new Bundle();
             bundle.putString("IM_ID", messageInfo.getId());
-            bundle.putString("IM_NAME", messageInfo.getId());
-            bundle.putString("LANG_AMOUNT", userChargeBean.lang_amount + "");
             getLaunchHelper().startActivity(MineChatActivity.class, bundle);
         }
     }

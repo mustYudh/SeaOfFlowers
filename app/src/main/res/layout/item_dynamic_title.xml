@@ -69,7 +69,7 @@
             </LinearLayout>
 
 
-            <TextView
+            <com.yu.common.ui.DelayClickTextView
                 android:id="@+id/tv_talk"
                 android:layout_width="55dp"
                 android:layout_height="25dp"

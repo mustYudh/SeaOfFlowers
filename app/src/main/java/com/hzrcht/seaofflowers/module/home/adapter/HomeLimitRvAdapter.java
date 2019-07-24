@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzrcht.seaofflowers.R;
+import com.hzrcht.seaofflowers.module.home.bean.HomeAnchorListBean;
 import com.hzrcht.seaofflowers.module.home.bean.MineLocationAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.activity.MinePersonalInfoActivity;
 import com.shehuan.niv.NiceImageView;
@@ -35,9 +36,15 @@ public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAn
                 NiceImageView iv_pair = helper.getView(R.id.iv_pair);
                 if (item.pair != null && item.pair.size() != 0) {
                     if (onItemRandomListener != null) {
-                        onItemRandomListener.onItemDetailsDelClick(item.pair, iv_pair);
+                        onItemRandomListener.onItemDetailsClickClick(item.pair, iv_pair);
                     }
                 }
+
+                helper.getView(R.id.ll_root).setOnClickListener(view -> {
+                    if (onItemRandomListener != null) {
+                        onItemRandomListener.onItemDetailsLookClick(item.pair);
+                    }
+                });
                 break;
             case 1:
                 helper.setText(R.id.tv_nickname, item.nick_name);
@@ -74,7 +81,9 @@ public class HomeLimitRvAdapter extends BaseMultiItemQuickAdapter<MineLocationAn
     }
 
     public interface OnItemRandomListener {
-        void onItemDetailsDelClick(List<String> pair, NiceImageView imageView);
+        void onItemDetailsClickClick(List<HomeAnchorListBean.PairBean> pair, NiceImageView imageView);
+
+        void onItemDetailsLookClick(List<HomeAnchorListBean.PairBean> pair);
     }
 
     OnItemRandomListener onItemRandomListener;

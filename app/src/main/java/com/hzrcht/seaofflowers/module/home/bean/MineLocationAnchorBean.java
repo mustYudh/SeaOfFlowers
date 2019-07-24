@@ -24,6 +24,6 @@ public class MineLocationAnchorBean implements MultiItemEntity, Serializable {
     public String work;
     public BigDecimal video_amount;
     public int online_type;
-    public List<String> pair;
+    public List<HomeAnchorListBean.PairBean> pair;
 
 }

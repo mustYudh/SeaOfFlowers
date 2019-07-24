@@ -1,16 +1,12 @@
 package com.hzrcht.seaofflowers.module.home;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +17,9 @@ import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.huawei.android.hms.agent.HMSAgent;
+import com.huawei.android.hms.agent.common.handler.ConnectHandler;
+import com.huawei.android.hms.agent.push.handler.GetTokenHandler;
 import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
@@ -37,6 +36,7 @@ import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.message.fragment.MessageFragment;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
+import com.hzrcht.seaofflowers.push.ThirdPushTokenMgr;
 import com.hzrcht.seaofflowers.utils.ActivityManager;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
@@ -49,12 +49,16 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMMessageListener;
 import com.tencent.imsdk.TIMOfflinePushSettings;
+import com.tencent.imsdk.log.QLog;
+import com.tencent.imsdk.utils.IMFunc;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.chat.GroupChatManagerKit;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.qcloud.tim.uikit.utils.FileUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
+import com.vivo.push.IPushActionListener;
+import com.vivo.push.PushClient;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -101,23 +105,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
         List<TabItem> items = new ArrayList<>();
         items.add(new TabView(0, new HomeFragment()));
         items.add(new TabView(1, new DynamicFragment()));
-        items.add(new TabView(2, null));
-        items.add(new TabView(3, new MessageFragment()));
-        items.add(new TabView(4, new MineFragment()));
+//        items.add(new TabView(2, null));
+        items.add(new TabView(2, new MessageFragment()));
+        items.add(new TabView(3, new MineFragment()));
         mBottomNavigationView.initControl(this).setPagerView(items, 0);
-        mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
-            if (position == 2) {
-                mHomePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
-                mHomePopUpWindow.showPopupWindow();
-            }
-
-            if (position == 3) {
-//                num = 0;
-//                if (mBottomNavigationView != null && mBottomNavigationView.mControl != null && mBottomNavigationView.mControl.badge_view != null) {
-//                    mBottomNavigationView.mControl.badge_view.setVisibility(View.GONE);
-//                }
-            }
-        });
+//        mBottomNavigationView.getControl().setOnTabClickListener((position, view) -> {
+//            if (position == 2) {
+//                mHomePopUpWindow = new HomeCenterPopUpWindow(HomePageActivity.this);
+//                mHomePopUpWindow.showPopupWindow();
+//            }
+//        });
 
         checkPermission();
 
@@ -180,7 +177,48 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
         GroupChatManagerKit.getInstance();
 
+
+        //推送
+        if (IMFunc.isBrandVivo()) {
+            // vivo 离线推送
+            PushClient.getInstance(getApplicationContext()).turnOnPush(new IPushActionListener() {
+                @Override
+                public void onStateChanged(int state) {
+                    if (state == 0) {
+                        String regId = PushClient.getInstance(getApplicationContext()).getRegId();
+                        QLog.i("推送", "vivopush open vivo push success regId = " + regId);
+                        ThirdPushTokenMgr.getInstance().setThirdPushToken(regId);
+                        ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+                    } else {
+                        // 根据 vivo 推送文档说明，state = 101表示该 vivo 机型或者版本不支持 vivo 推送，详情请参考 vivo 推送常见问题汇总
+                        QLog.i("推送", "vivopush open vivo push fail state = " + state);
+                    }
+                }
+            });
+        }
+
+        if (IMFunc.isBrandHuawei()) {
+            // 华为离线推送
+            HMSAgent.connect(this, new ConnectHandler() {
+                @Override
+                public void onConnect(int rst) {
+                    QLog.i("推送", "huawei push HMS connect end:" + rst);
+                }
+            });
+            getHuaWeiPushToken();
+        }
+
     }
+
+    private void getHuaWeiPushToken() {
+        HMSAgent.Push.getToken(new GetTokenHandler() {
+            @Override
+            public void onResult(int rtnCode) {
+                Log.e("推送", "huawei push get token: end" + rtnCode);
+            }
+        });
+    }
+
 
     /**
      * 检查权限
@@ -234,7 +272,8 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQ_PERMISSION_CODE:
@@ -263,7 +302,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HomeDataRefreshEvent event) {
         ToastUtils.show(event.showCenterTab.toString());
-        bindView(R.id.center_tab, event.showCenterTab);
+//        bindView(R.id.center_tab, event.showCenterTab);
     }
 
     private void setCustomConfig() {

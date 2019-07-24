@@ -33,17 +33,12 @@ public class MineCallRvAdapter extends BaseQuickAdapter<MineCallBean.RowsBean, B
         ImageView iv_click = helper.getView(R.id.iv_click);
         switch (item.is_click) {
             case 0:
-                iv_click.setImageResource(R.drawable.ic_call_fail);
+                iv_click.setImageResource(item.is_call == 1 ? R.drawable.ic_call_fail_mine : R.drawable.ic_call_fail);
                 tv_status.setText("未接听");
                 tv_status.setTextColor(Color.parseColor("#FF0000"));
                 break;
             case 1:
-                iv_click.setImageResource(R.drawable.ic_call_success_mine);
-                tv_status.setText("通话时间" + item.stime + "分钟");
-                tv_status.setTextColor(Color.parseColor("#999999"));
-                break;
-            case 2:
-                iv_click.setImageResource(R.drawable.ic_call_success);
+                iv_click.setImageResource(item.is_call == 1 ? R.drawable.ic_call_success_mine : R.drawable.ic_call_success);
                 tv_status.setText("通话时间" + item.stime + "分钟");
                 tv_status.setTextColor(Color.parseColor("#999999"));
                 break;
