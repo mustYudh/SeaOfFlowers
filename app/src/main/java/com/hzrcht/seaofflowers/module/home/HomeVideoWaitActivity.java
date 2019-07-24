@@ -115,7 +115,7 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
                 finish();
             });
         }
-        registerVolumeChangeReceiver();
+        //registerVolumeChangeReceiver();
     }
 
     private void registerVolumeChangeReceiver() {
