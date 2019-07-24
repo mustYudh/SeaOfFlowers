@@ -87,8 +87,8 @@ public class MineCallActivity extends BaseBarActivity implements MineCallViewer 
             if (page > 1) {
                 ToastUtils.show("没有更多了");
             } else {
-                bindView(R.id.ll_empty, false);
-                bindView(R.id.rv_mine_call, true);
+                bindView(R.id.ll_empty, true);
+                bindView(R.id.rv_mine_call, false);
             }
         }
     }

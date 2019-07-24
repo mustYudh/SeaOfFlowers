@@ -1,12 +1,16 @@
 package com.hzrcht.seaofflowers.module.home;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -175,6 +179,7 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
         GroupChatManagerKit.getInstance();
+
     }
 
     /**

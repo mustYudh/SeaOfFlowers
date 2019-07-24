@@ -91,6 +91,7 @@
                 android:background="@drawable/shape_login_qq"
                 android:gravity="center"
                 android:text="QQ登录"
+                android:visibility="invisible"
                 android:textColor="#ffffffff"
                 android:textSize="17sp"
                 />

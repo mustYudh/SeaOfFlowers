@@ -61,8 +61,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -73,7 +76,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityViewer, TRTCVideoViewLayout.ITRTCVideoViewLayoutListener, View.OnClickListener, TRTCSettingDialog.ISettingListener, TRTCMoreDialog.IMoreListener, TRTCBeautySettingPanel.IOnBeautyParamsChangeListener {
     private final static String TAG = TRTCMainActivity.class.getSimpleName();
-
     private boolean bBeautyEnable = true, bEnableVideo = true, bEnableAudio = true, beingLinkMic = false;
     private int iDebugLevel = 0;
     private String mUserIdBeingLink = "";
@@ -114,8 +116,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private String is_attent;
     private int rechargeCode = 0;
     private static Disposable subscribe;
+    private static Disposable timer;
     private MediaPlayer mMediaPlayer;
     private static Disposable mMediaPlayerSubscribe;
+    private TextView tv_timer;
 
     @Override
     public void liveEndSuccess() {
@@ -360,7 +364,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                             }
                         });
                         mPresenter.liveEnd(location_live_id);
-                        Log.e("dddd", "doOnNext");
                     })
                     .subscribe();
         } else {
@@ -370,7 +373,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             ll_mine_camera.setVisibility(View.GONE);
             rl_bottom.setVisibility(View.VISIBLE);
             ll_info_top.setVisibility(View.VISIBLE);
-
             enterRoom();
         }
 
@@ -453,6 +455,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        if (timer != null && !timer.isDisposed()) {
+            timer.dispose();
+            timer = null;
+        }
         super.onDestroy();
     }
 
@@ -510,7 +516,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         CircleImageView iv_headimg = (CircleImageView) findViewById(R.id.iv_headimg);
         CircleImageView iv_info_top = (CircleImageView) findViewById(R.id.iv_info_top);
         rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
-
+        tv_timer = bindView(R.id.tv_timer);
         ImageLoader.getInstance().displayImage(iv_headimg, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         ImageLoader.getInstance().displayImage(iv_info_top, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
 
@@ -933,13 +939,26 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             //视频扣费
             if (UserProfile.getInstance().getAnchorType() == 0) {
                 //用户
-                subscribe = Observable.interval(0, 60, TimeUnit.SECONDS)
+                subscribe = Observable.interval(60, 60, TimeUnit.SECONDS)
                         .subscribeOn(Schedulers.io())
                         .doOnNext(aLong -> {
                             activity.mPresenter.livePayCoin(activity.location_live_id);
                         })
                         .subscribe();
             }
+
+            //视频计时
+            activity.tv_timer.setVisibility(View.VISIBLE);
+            timer = Observable.interval(1, TimeUnit.SECONDS)
+                    .subscribeOn(Schedulers.io())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(aLong -> {
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        format.setTimeZone(TimeZone.getTimeZone("GTM+0"));
+                        Log.e("======>2", format.format(new Date(aLong * 1000)) + "");
+                        activity.runOnUiThread(() -> activity.tv_timer.setText(format.format(new Date(aLong * 1000)) + ""));
+                    });
+
 
             if (activity.mMediaPlayer != null && activity.mMediaPlayer.isPlaying()) {
                 activity.mMediaPlayer.stop();
@@ -1678,5 +1697,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         }
 
     }
+
 
 }

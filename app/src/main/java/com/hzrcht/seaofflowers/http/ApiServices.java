@@ -173,4 +173,7 @@ public class ApiServices {
     //我的通话记录
     public static final String GETLIVELIST = BASEURL + "/api/live/liveList";
 
+    //用户系统消息
+    public static final String USERMESSAGE = BASEURL + "/api/user/message";
+
 }

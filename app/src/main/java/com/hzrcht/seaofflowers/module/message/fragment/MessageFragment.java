@@ -1,5 +1,7 @@
 package com.hzrcht.seaofflowers.module.message.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -20,6 +22,7 @@ import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationListLayout;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 
 
 public class MessageFragment extends BaseBarFragment implements MessageViewer, View.OnClickListener {
@@ -48,9 +51,11 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         TextView tv_clean = bindView(R.id.tv_clean);
         LinearLayout ll_mine_call = bindView(R.id.ll_mine_call);
         LinearLayout ll_system_message = bindView(R.id.ll_system_message);
+        LinearLayout ll_online_service = bindView(R.id.ll_online_service);
 
         ll_mine_call.setOnClickListener(this);
         ll_system_message.setOnClickListener(this);
+        ll_online_service.setOnClickListener(this);
 
         // 从布局文件中获取会话列表面板
         ConversationLayout conversationLayout = (ConversationLayout) findViewById(R.id.conversation_layout);
@@ -65,6 +70,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         tv_clean.setOnClickListener(view -> {
             showCleanDialog();
         });
+
     }
 
     /**
@@ -100,6 +106,16 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
                 break;
             case R.id.ll_system_message:
                 getLaunchHelper().startActivity(SystemMessageActivity.class);
+                break;
+            case R.id.ll_online_service:
+                try {
+                    //跳转到添加好友，如果qq号是好友了，直接聊天
+                    String url = "mqqwpa://im/chat?chat_type=wpa&uin=2592974828";//uin是发送过去的qq号码
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show("请检查是否安装QQ");
+                }
                 break;
         }
     }

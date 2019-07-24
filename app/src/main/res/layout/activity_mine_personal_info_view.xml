@@ -99,6 +99,7 @@
 
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/iv_share"
                     android:layout_width="19dp"
                     android:layout_height="16dp"
