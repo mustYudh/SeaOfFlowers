@@ -32,6 +32,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".module.home.HomeVideoWaitActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".module.mine.activity.TRTCMainActivity"

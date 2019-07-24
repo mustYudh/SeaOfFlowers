@@ -1,24 +1,28 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
-import com.hzrcht.seaofflowers.base.BaseActivity;
+import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.bean.PayInfo;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineDynamicBean;
 import com.hzrcht.seaofflowers.module.dynamic.bean.MineLocationDynamicBean;
@@ -48,6 +52,7 @@ import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
 import com.yu.common.ui.DelayClickTextView;
 import com.yu.common.ui.NoSlidingGridView;
+import com.yu.common.utils.DensityUtil;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -57,7 +62,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MinePersonalInfoActivity extends BaseActivity implements MinePersonalInfoViewer, View.OnClickListener {
+@RequiresApi(api = Build.VERSION_CODES.M)
+public class MinePersonalInfoActivity extends BaseBarActivity implements MinePersonalInfoViewer, View.OnClickListener,View.OnScrollChangeListener {
     private List<MineLocationDynamicBean> list = new ArrayList<>();
     private List<LinearLayout> llList = new ArrayList<>();
     private List<LinearLayout> llRootList = new ArrayList<>();
@@ -66,7 +72,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private MZBannerView mBanner;
     private LinearLayout ll_first, ll_second, ll_third, mIntimacy, mPresent;
     private DialogUtils reportDialog, shareDialog, checkDialog, rechargeDialog, commentDialog;
-
+    private final static int alphThtrshold = DensityUtil.dip2px(200);
     @PresenterLifeCycle
     private MinePersonalInfoPresenter mPresenter = new MinePersonalInfoPresenter(this);
     private TextView mMobile, mAge;
@@ -90,6 +96,8 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     private String age = "";
     private String is_attent = "0";
     private DialogUtils presentDialog;
+    private RelativeLayout action_bar;
+    private ScrollView scroll_view;
 
     @Override
     protected void setView(@Nullable Bundle savedInstanceState) {
@@ -97,10 +105,17 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
     }
 
     @Override
+    protected int getActionBarLayoutId() {
+        return R.layout.activity_mine_personal_info_view_bar;
+    }
+
+    @Override
     protected void loadData() {
         mPresenter.getIsAnchor();
         Bundle bundle = getIntent().getExtras();
         user_id = bundle.getString("USER_ID");
+        scroll_view = bindView(R.id.scroll_view);
+        action_bar = bindView(R.id.action_bar);
         mBanner = bindView(R.id.banner);
         LinearLayout ll_root_frist = bindView(R.id.ll_root_frist);
         LinearLayout ll_root_second = bindView(R.id.ll_root_second);
@@ -140,7 +155,7 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mPresentRoot.setOnClickListener(this);
         ll_video.setOnClickListener(this);
         ll_send_present.setOnClickListener(this);
-
+        scroll_view.setOnScrollChangeListener(this);
 
         llRootList.add(ll_root_frist);
         llRootList.add(ll_root_second);
@@ -167,6 +182,16 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
         mPresenter.getUserInfo(user_id);
         mPresenter.getStateList(user_id);
         mPresenter.getPhotoAlbum(user_id);
+
+
+
+
+
+    }
+
+    @Override
+    public boolean isImmersionBar() {
+        return true;
     }
 
     /**
@@ -495,20 +520,20 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             age = anchorUserInfoBean.age;
             is_attent = anchorUserInfoBean.is_attent + "";
             bindText(R.id.tv_nickname, anchorUserInfoBean.nick_name);
-            bindText(R.id.tv_sign, TextUtils.isEmpty(anchorUserInfoBean.sign) ? "我就是不一样的烟火" : anchorUserInfoBean.sign);
-            bindText(R.id.tv_fans_count, anchorUserInfoBean.fans + "");
+            bindText(R.id.tv_sign, (anchorUserInfoBean.sign != null && !TextUtils.isEmpty(anchorUserInfoBean.sign)) ? anchorUserInfoBean.sign : "我就是不一样的烟火");
+            bindText(R.id.tv_fans_count, (anchorUserInfoBean.fans != null) ? anchorUserInfoBean.fans + "" : "0");
             bindText(R.id.tv_video_amout, anchorUserInfoBean.video_amount + "");
-            bindText(R.id.tv_city, anchorUserInfoBean.city);
-            bindText(R.id.tv_star, anchorUserInfoBean.star);
-            bindText(R.id.tv_work, anchorUserInfoBean.work);
+            bindText(R.id.tv_city, (anchorUserInfoBean.city != null && !TextUtils.isEmpty(anchorUserInfoBean.city)) ? anchorUserInfoBean.city : "未知");
+            bindText(R.id.tv_star, (anchorUserInfoBean.star != null && !TextUtils.isEmpty(anchorUserInfoBean.star)) ? anchorUserInfoBean.star : "未知");
+            bindText(R.id.tv_work, (anchorUserInfoBean.work != null && !TextUtils.isEmpty(anchorUserInfoBean.work)) ? anchorUserInfoBean.work : "未知");
             bindText(R.id.tv_time, "最后登录:" + anchorUserInfoBean.last_login);
             bindText(R.id.tv_id, "ID:" + anchorUserInfoBean.id);
-            bindText(R.id.tv_weight, anchorUserInfoBean.kg + "kg");
-            bindText(R.id.tv_height, anchorUserInfoBean.hight + "cm");
+            bindText(R.id.tv_weight, (anchorUserInfoBean.kg != null && !TextUtils.isEmpty(anchorUserInfoBean.kg)) ? anchorUserInfoBean.kg + "kg" : "未知");
+            bindText(R.id.tv_height, (anchorUserInfoBean.hight != null && !TextUtils.isEmpty(anchorUserInfoBean.hight)) ? anchorUserInfoBean.hight + "cm" : "未知");
             bindText(R.id.tv_listen, anchorUserInfoBean.listen + "%");
             mAge.setBackgroundResource(anchorUserInfoBean.sex == 1 ? R.drawable.shape_age_blue : R.drawable.shape_age_red);
             bindText(R.id.tv_age, anchorUserInfoBean.age + "");
-            bindView(R.id.tv_age, !TextUtils.isEmpty(anchorUserInfoBean.age));
+            bindView(R.id.tv_age, (anchorUserInfoBean.age != null && !TextUtils.isEmpty(anchorUserInfoBean.age)));
             //聊天
             bindView(R.id.ll_chat, view -> {
                 Bundle bundle = new Bundle();
@@ -531,8 +556,13 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             }
 
             //banner
-            if (anchorUserInfoBean.cover != null) {
+            if (anchorUserInfoBean.cover != null && anchorUserInfoBean.cover.size() != 0) {
+                bindView(R.id.iv_banner, false);
+                bindView(R.id.banner, true);
                 initBanner(anchorUserInfoBean.cover);
+            } else {
+                bindView(R.id.iv_banner, true);
+                bindView(R.id.banner, false);
             }
 
             //是否关注
@@ -906,5 +936,15 @@ public class MinePersonalInfoActivity extends BaseActivity implements MinePerson
             mBanner.pause();//暂停轮播
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                float alpha = (i * 0.1f / alphThtrshold);
+                if (alpha > 1) {
+                    alpha = 1;
+                }
+        Log.e("======>alpha",alpha + "");
+
     }
 }

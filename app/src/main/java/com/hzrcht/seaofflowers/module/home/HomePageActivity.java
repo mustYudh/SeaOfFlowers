@@ -135,15 +135,16 @@ public class HomePageActivity extends BaseActivity implements HomePageViewer, Co
                             TIMCustomElem elem = (TIMCustomElem) msgs.get(0).getElement(0);
                             Gson gson = new Gson();
                             CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
-                            Log.e("视频信息", messageData.content + "....." + messageData.type);
+                            Log.e("视频信息", msgs.size() + "..." + messageData.content + "....." + messageData.type);
                             switch (messageData.type) {
                                 case "1":
                                     long time = getSecondTimestamp(new Date(System.currentTimeMillis())) - msgs.get(0).timestamp();
                                     if (time < 30) {
                                         //发起视频
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("CONTENT", messageData.content);
-                                        getLaunchHelper().startActivity(HomeVideoWaitActivity.class, bundle);
+                                        Intent intent = new Intent(getActivity(), HomeVideoWaitActivity.class);
+                                        intent.putExtra("CONTENT", messageData.content);
+//                                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                        startActivity(intent);
                                     }
                                     break;
                                 case "2":
