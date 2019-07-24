@@ -56,6 +56,7 @@ import com.tencent.imsdk.utils.IMFunc;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.base.IMEventListener;
 import com.tencent.qcloud.tim.uikit.modules.chat.GroupChatManagerKit;
+import com.tencent.qcloud.tim.uikit.modules.conversation.ConversationManagerKit;
 import com.tencent.qcloud.tim.uikit.utils.FileUtil;
 import com.tencent.qcloud.tim.uikit.utils.ToastUtil;
 import com.vivo.push.IPushActionListener;
@@ -80,7 +81,7 @@ import org.greenrobot.eventbus.ThreadMode;
  * @author yudenghao
  */
 public class HomePageActivity extends BaseActivity
-    implements HomePageViewer {
+    implements HomePageViewer, ConversationManagerKit.MessageUnreadWatcher {
   private PressHandle pressHandle = new PressHandle(this);
   private final static int REQ_PERMISSION_CODE = 0x1000;
   @PresenterLifeCycle HomePagePresenter mPresenter = new HomePagePresenter(this);
@@ -181,7 +182,8 @@ public class HomePageActivity extends BaseActivity
     //settings.setGroupMsgRemindSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.dudulu));
     TIMManager.getInstance().setOfflinePushSettings(settings);
 
-
+    // 未读消息监视器
+    ConversationManagerKit.getInstance().addUnreadWatcher(this);
     GroupChatManagerKit.getInstance();
 
     //推送
@@ -211,8 +213,8 @@ public class HomePageActivity extends BaseActivity
       });
       getHuaWeiPushToken();
     }
+
     List<TIMConversation> TIMConversations = TIMManagerExt.getInstance().getConversationList();
-    Log.e("======>测试数据",TIMConversations.size() + "");
     for (TIMConversation conversation : TIMConversations) {
       TIMConversationExt timConversationExt = new TIMConversationExt(conversation);
       mUnreadTotal += timConversationExt.getUnreadMessageNum();
@@ -364,7 +366,10 @@ public class HomePageActivity extends BaseActivity
     return Integer.valueOf(timestamp);
   }
 
-
+  @Override public void updateUnread(int count) {
+    Log.e("======>count",count + "");
+    showMessageCount(count);
+  }
 
   private void showMessageCount(int count) {
     if (count == 0) {
