@@ -29,6 +29,7 @@
             >
 
             <ImageView
+                android:id="@+id/back_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_back_arrow_black"
@@ -36,11 +37,12 @@
                 />
 
             <TextView
+                android:id="@+id/back_name"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_bar_height"
                 android:gravity="center"
                 android:text="返回"
-                android:textColor="@color/lb_cm_white"
+                android:textColor="@color/app_main_color"
                 />
 
 
@@ -60,6 +62,7 @@
 
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/action_bar_center_actions"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -94,6 +97,7 @@
         >
 
         <ImageView
+            android:id="@+id/ll_add_icon"
             android:layout_width="20dp"
             android:layout_height="5dp"
             android:src="@drawable/ic_more"/>

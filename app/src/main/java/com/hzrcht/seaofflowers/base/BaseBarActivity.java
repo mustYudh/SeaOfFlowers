@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.base;
 
+import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.text.TextUtils;
 import android.view.View;
@@ -54,6 +55,10 @@ public abstract class BaseBarActivity extends BaseActivity {
         title.setText(titleName);
       }
     }
+  }
+
+  public void sstActionBarBackgroundColor(@ColorInt int color) {
+    bindView(R.id.action_bar).setBackgroundColor(color);
   }
 
   public void showBack(boolean back) {
