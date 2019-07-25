@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.CustomMessageDraw;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.LiveStartBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;

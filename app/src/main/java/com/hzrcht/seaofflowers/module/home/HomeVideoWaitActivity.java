@@ -19,7 +19,7 @@ import com.hzrcht.seaofflowers.module.event.DataSynVideoWaitEvent;
 import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitPresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitViewer;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.TRTCMainActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;

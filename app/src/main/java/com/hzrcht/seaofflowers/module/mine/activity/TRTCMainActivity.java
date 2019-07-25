@@ -27,7 +27,7 @@ import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
 import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.TRTCBeautySettingPanel;
 import com.hzrcht.seaofflowers.module.im.TRTCMoreDialog;
 import com.hzrcht.seaofflowers.module.im.TRTCSettingDialog;

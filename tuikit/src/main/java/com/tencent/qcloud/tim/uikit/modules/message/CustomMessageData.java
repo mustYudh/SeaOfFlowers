@@ -1,4 +1,4 @@
-package com.hzrcht.seaofflowers.module.im;
+package com.tencent.qcloud.tim.uikit.modules.message;
 
 public class CustomMessageData {
 

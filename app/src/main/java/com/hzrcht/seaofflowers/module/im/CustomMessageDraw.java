@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.R;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.tencent.imsdk.TIMCustomElem;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.holder.ICustomMessageViewGroup;
 import com.tencent.qcloud.tim.uikit.modules.chat.layout.message.holder.IOnCustomMessageDrawListener;
@@ -32,7 +33,8 @@ public class CustomMessageDraw implements IOnCustomMessageDrawListener {
 
                 TIMCustomElem elem = (TIMCustomElem) info.getTIMMessage().getElement(i);
                 Gson gson = new Gson();
-                CustomMessageData customMessageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
+                CustomMessageData
+                    customMessageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
                 switch (customMessageData.type) {
                     case "0":
                         //礼物
