@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="38dp"
-                android:layout_marginTop="115dp"
+                android:layout_marginTop="165dp"
                 android:layout_marginRight="38dp"
                 android:background="@drawable/shape_login_mobile"
                 android:gravity="center"
@@ -91,15 +91,15 @@
                 android:background="@drawable/shape_login_qq"
                 android:gravity="center"
                 android:text="QQ登录"
-                android:visibility="invisible"
                 android:textColor="#ffffffff"
                 android:textSize="17sp"
+                android:visibility="gone"
                 />
 
 
-            <TextView
+            <com.yu.common.ui.DelayClickTextView
                 android:id="@+id/tv_agreement"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="45dp"
                 android:gravity="center"

@@ -68,7 +68,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         conversationList.setOnItemClickListener((view, position, messageInfo) -> mPresenter.getUserCharge(messageInfo.getId(), messageInfo));
 
         tv_clean.setOnClickListener(view -> {
-            showCleanDialog();
+            showCleanDialog(conversationLayout);
         });
 
     }
@@ -76,7 +76,7 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
     /**
      * 清空
      */
-    private void showCleanDialog() {
+    private void showCleanDialog(ConversationLayout conversationLayout) {
         cleanDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_layout)
                 .gravity(Gravity.CENTER)
                 .cancelTouchout(true)
@@ -89,6 +89,12 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
                 .addViewOnclick(R.id.down, view -> {
                     if (cleanDialog.isShowing()) {
                         cleanDialog.dismiss();
+                    }
+                    if (conversationLayout != null) {
+                        int itemCount = conversationLayout.getConversationList().getAdapter().getItemCount();
+                        for (int i = 0; i < itemCount; i++) {
+                            conversationLayout.deleteConversation(0, conversationLayout.getConversationList().getAdapter().getItem(0));
+                        }
                     }
 
                 })

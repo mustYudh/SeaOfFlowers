@@ -62,13 +62,13 @@
 
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/action_bar_center_actions"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="horizontal"
+        android:visibility="gone"
         >
 
         <com.yu.common.ui.DelayClickTextView
@@ -89,10 +89,10 @@
 
     <LinearLayout
         android:id="@+id/ll_add"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="4dp"
         android:gravity="center"
         >
 

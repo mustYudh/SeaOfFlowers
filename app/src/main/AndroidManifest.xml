@@ -19,7 +19,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
+    <!-- 浮动通知权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- ********华为推送权限设置******** -->
     <permission
@@ -226,7 +227,7 @@
             android:name="com.vivo.push.app_id"
             android:value="13892"/>
 
-        <receiver android:name=".push.VIVOPushMessageReceiverImpl">
+        <receiver android:name="com.hzrcht.seaofflowers.push.VIVOPushMessageReceiverImpl">
             <intent-filter>
                 <!-- 接收 push 消息 -->
                 <action android:name="com.vivo.pushclient.action.RECEIVE"/>

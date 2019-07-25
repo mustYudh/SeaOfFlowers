@@ -9,6 +9,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.UploadImgBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.xuexiang.xhttp2.lifecycle.RxLifecycle;
+import com.xuexiang.xhttp2.request.PostRequest;
 import com.xuexiang.xhttp2.subsciber.ProgressLoadingSubscriber;
 import com.yu.common.framework.BaseViewPresenter;
 
@@ -45,12 +46,16 @@ public class HomeReportPresenter extends BaseViewPresenter<HomeReportViewer> {
     }
 
 
-    public void report(String anchor_id, String state_id, String img_url, String title) {
-        XHttp.post(ApiServices.STATEREPORT)
-                .accessToken(true)
+    public void report(String type, String anchor_id, String state_id, String img_url, String title) {
+        PostRequest post = XHttp.post(ApiServices.STATEREPORT);
+        if ("0".equals(type)) {
+
+        } else {
+            post.params("state_id", state_id);
+        }
+        post.accessToken(true)
                 .params("anchor_id", anchor_id)
                 .params("img_url", img_url)
-                .params("state_id", state_id)
                 .params("title", title)
                 .execute(NoDataBean.class)
                 .subscribeWith(new TipRequestSubscriber<NoDataBean>() {

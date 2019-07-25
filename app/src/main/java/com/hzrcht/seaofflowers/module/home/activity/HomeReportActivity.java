@@ -77,7 +77,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
 
                 String substring = titleNo.toString().trim().substring(0, (titleNo.toString().length() - 1));
 
-                mPresenter.report(anchor_id, state_id, urlNo.toString(), substring);
+                mPresenter.report(type, anchor_id, state_id, urlNo.toString(), substring);
 
             } else if (msg.what == 1002) {
                 if (loadDialog.isShowing()) {
@@ -99,6 +99,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
     private ImageView iv3;
     private ImageView iv4;
     private ImageView iv5;
+    private String type;
 
 
     @Override
@@ -111,6 +112,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
     protected void loadData() {
         setTitle("举报");
         Bundle bundle = getIntent().getExtras();
+        type = bundle.getString("TYPE");
         anchor_id = bundle.getString("ANCHOR_ID");
         state_id = bundle.getString("STATE_ID");
         gvPhoto = bindView(R.id.gv_pic);
@@ -284,7 +286,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
             loadDialog.dismiss();
         }
         imageFiles.clear();
-        ToastUtils.show("投诉成功");
+        ToastUtils.show("举报成功");
         finish();
     }
 
@@ -294,7 +296,7 @@ public class HomeReportActivity extends BaseBarActivity implements HomeReportVie
             loadDialog.dismiss();
         }
         imageFiles.clear();
-        ToastUtils.show("投诉失败");
+        ToastUtils.show("举报失败");
     }
 
     @Override

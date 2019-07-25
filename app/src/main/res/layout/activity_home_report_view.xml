@@ -14,7 +14,7 @@
         android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:paddingLeft="15dp"
-        android:text="请告诉我们您想举报该直标的理由"
+        android:text="请告诉我们您想举报的理由"
         android:textColor="@color/color_333333"
         android:textSize="14sp"
         />
