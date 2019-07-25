@@ -84,8 +84,8 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
             }
         });
 
-
-        String content = getIntent().getStringExtra("CONTENT");
+        Bundle bundle = getIntent().getExtras();
+        String content = bundle.getString("CONTENT");
         if (content != null && !TextUtils.isEmpty(content)) {
             String[] split = content.split(",");
 

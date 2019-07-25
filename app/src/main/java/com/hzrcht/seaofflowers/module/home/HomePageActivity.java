@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.denghao.control.TabItem;
 import com.denghao.control.TabView;
 import com.denghao.control.view.BottomNavigationView;
@@ -74,17 +75,20 @@ import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.DensityUtils;
 import com.yu.common.utils.PressHandle;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author yudenghao
@@ -102,7 +106,7 @@ public class HomePageActivity extends BaseActivity
 
   private final static String BLACK_WAKE_ACTION = "com.wake.black";
 
-  @Override protected void setView(@Nullable Bundle savedInstanceState) {
+    @Override protected void setView(@Nullable Bundle savedInstanceState) {
     setContentView(R.layout.activity_home_page_view);
   }
 
@@ -165,10 +169,10 @@ public class HomePageActivity extends BaseActivity
                       .timestamp();
                   if (time < 30) {
                     //发起视频
-                    Intent intent = new Intent(getActivity(), HomeVideoWaitActivity.class);
-                    intent.putExtra("CONTENT", messageData.content);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("CONTENT", messageData.content);
                     //                                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
+                      getLaunchHelper().startActivity(HomeVideoWaitActivity.class,bundle);
                   }
                   break;
                 case "2":
@@ -410,23 +414,41 @@ public class HomePageActivity extends BaseActivity
           String userId = msg.getFromUser();
           if (extra != null && !TextUtils.isEmpty(userId)) {
             BigInteger b = new BigInteger(message.getMsgId());
-            showNotificationManager(context, extra.toString(), userId, b.intValue(), conversation);
+            showNotificationManager(message,context, extra.toString(), userId, b.intValue(), conversation);
           }
         }
       }
     }
   }
 
-  private void showNotificationManager(Context context, String content, String userId,
+  private void showNotificationManager(TIMMessage message,Context context, String content, String userId,
       int messageID, TIMConversation conversation) {
     TIMUserProfile profile =
         TIMFriendshipManager.getInstance().queryUserProfile(conversation.getPeer());
     String nickName = profile.getNickName();
     String header = profile.getFaceUrl();
-    Intent notificationIntent = new Intent(context, MineChatActivity.class);
+    Intent notificationIntent = null;
+      Bundle bundle = new Bundle();
+      //判断消息类型
+      TIMElemType elemType = message.getElement(0).getType();
+      if (elemType == TIMElemType.Custom){
+          //自定义消息
+          TIMCustomElem elem = (TIMCustomElem) message.getElement(0);
+          Gson gson = new Gson();
+          CustomMessageData messageData = gson.fromJson(new String(elem.getData()), CustomMessageData.class);
+          if ("1".equals(messageData.type)){
+              notificationIntent = new Intent(context, HomeVideoWaitActivity.class);
+              bundle.putString("CONTENT", messageData.content);
+          }else {
+              notificationIntent = new Intent(context, MineChatActivity.class);
+              bundle.putString("IM_ID", userId);
+          }
+      }else {
+          notificationIntent = new Intent(context, MineChatActivity.class);
+          bundle.putString("IM_ID", userId);
+      }
     notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    Bundle bundle = new Bundle();
-    bundle.putString("IM_ID", userId);
+
     notificationIntent.putExtras(bundle);
     NotificationManager mNotificationManager =
         (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
