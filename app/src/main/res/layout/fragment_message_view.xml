@@ -44,15 +44,7 @@
                     android:textSize="14sp"
                     />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:includeFontPadding="false"
-                    android:text="女人味邀请您进行视频聊天！"
-                    android:textColor="@color/color_999999"
-                    android:textSize="12sp"
-                    />
+
             </LinearLayout>
         </LinearLayout>
 

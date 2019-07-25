@@ -828,8 +828,8 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
 //                        options3Items.get(options1).get(options2).get(options3) : "";
 
                 String tx = opt1tx + opt2tx;
-                view_city.setTextRight(tx);
-                city = tx;
+                view_city.setTextRight(tx.replaceAll("省", "").replaceAll("市", ""));
+                city = tx.replaceAll("省", "").replaceAll("市", "");
             }
         })
 
