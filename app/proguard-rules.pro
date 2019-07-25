@@ -72,3 +72,9 @@
 
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 
+
+-dontwarn com.vivo.push.**
+-keep class com.vivo.push.**{*; }
+-keep class com.vivo.vms.**{*; }
+-keep class com.tencent.qcloud.uipojo.thirdpus.VIVOPushMessageReceiverImpl{*;}
+

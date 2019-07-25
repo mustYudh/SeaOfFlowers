@@ -1,16 +1,12 @@
 package com.hzrcht.seaofflowers;
 
 import android.os.Build;
-
-import com.huawei.android.hms.agent.HMSAgent;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomExpiredInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
-import com.hzrcht.seaofflowers.push.StatisticActivityLifecycleCallback;
+import com.hzrcht.seaofflowers.keep.other.KeepService;
 import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
-import com.meizu.cloud.pushsdk.PushManager;
-import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.session.SessionWrapper;
 import com.tencent.imsdk.utils.IMFunc;
@@ -42,6 +38,15 @@ public class APP extends BaseApp {
         CommonInit.init(this);
         ShareAuthSDK.init(this, DEBUG);
         initHttp();
+        try {
+            KeepService.startKeepService(this);
+            //if (LeakCanary.isInAnalyzerProcess(this)) {
+            //  return;
+            //}
+            //LeakCanary.install(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        //初始化 SDK 基本配置
 //        TIMSdkConfig config = new TIMSdkConfig(ApiServices.SDKAPPID)
 //                // .setAccoutType(accountType)     // 该接口已废弃
@@ -73,20 +78,20 @@ public class APP extends BaseApp {
 //                // 小米离线推送
 //                MiPushClient.registerPush(this, Constants.XM_PUSH_APPID, Constants.XM_PUSH_APPKEY);
 //            }
-            if (IMFunc.isBrandHuawei()) {
-                // 华为离线推送
-                HMSAgent.init(this);
-            }
-            if (MzSystemUtils.isBrandMeizu(this)) {
-                // 魅族离线推送
-                PushManager.register(this, ApiServices.MZ_PUSH_APPID, ApiServices.MZ_PUSH_APPKEY);
-            }
+//            if (IMFunc.isBrandHuawei()) {
+//                // 华为离线推送
+//                HMSAgent.init(this);
+//            }
+//            if (MzSystemUtils.isBrandMeizu(this)) {
+//                // 魅族离线推送
+//                PushManager.register(this, ApiServices.MZ_PUSH_APPID, ApiServices.MZ_PUSH_APPKEY);
+//            }
             if (IMFunc.isBrandVivo()) {
                 // vivo离线推送
                 PushClient.getInstance(this).initialize();
             }
 
-            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+//            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
         }
 
     }

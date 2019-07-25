@@ -19,7 +19,7 @@ import com.hzrcht.seaofflowers.module.event.DataSynVideoWaitEvent;
 import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitPresenter;
 import com.hzrcht.seaofflowers.module.home.presenter.HomeVideoWaitViewer;
-import com.hzrcht.seaofflowers.module.im.CustomMessageData;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.hzrcht.seaofflowers.module.mine.activity.MineRechargeActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.TRTCMainActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
@@ -84,8 +84,8 @@ public class HomeVideoWaitActivity extends BaseActivity implements HomeVideoWait
             }
         });
 
-
-        String content = getIntent().getStringExtra("CONTENT");
+        Bundle bundle = getIntent().getExtras();
+        String content = bundle.getString("CONTENT");
         if (content != null && !TextUtils.isEmpty(content)) {
             String[] split = content.split(",");
 

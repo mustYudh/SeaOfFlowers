@@ -386,4 +386,39 @@ public class MessageInfo {
         this.msgTime = msgTime;
     }
 
+    @Override public String toString() {
+        return "\"MessageInfo\": {"
+            + "\"id\": \""
+            + id
+            + '\"'
+            + ", \"fromUser\": \""
+            + fromUser
+            + '\"'
+            + ", \"msgType\": \""
+            + msgType
+            + ", \"status\": \""
+            + status
+            + ", \"self\": \""
+            + self
+            + ", \"read\": \""
+            + read
+            + ", \"group\": \""
+            + group
+            + ", \"dataUri\": \""
+            + dataUri
+            + ", \"dataPath\": \""
+            + dataPath
+            + '\"'
+            + ", \"extra\": \""
+            + extra
+            + ", \"msgTime\": \""
+            + msgTime
+            + ", \"imgWithd\": \""
+            + imgWithd
+            + ", \"imgHeight\": \""
+            + imgHeight
+            + ", \"TIMMessage\": \""
+            + TIMMessage
+            + '}';
+    }
 }
