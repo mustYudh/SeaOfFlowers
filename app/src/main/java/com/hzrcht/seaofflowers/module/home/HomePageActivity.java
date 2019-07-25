@@ -393,7 +393,8 @@ public class HomePageActivity extends BaseActivity
       int messageID, TIMConversation conversation) {
     TIMUserProfile profile =
         TIMFriendshipManager.getInstance().queryUserProfile(conversation.getPeer());
-    Log.e("======>用户信息",profile.toString());
+    String nickName = profile.getNickName();
+    String header = profile.getFaceUrl();
     Intent notificationIntent = new Intent(context, MineChatActivity.class);
     notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     Bundle bundle = new Bundle();
@@ -405,10 +406,10 @@ public class HomePageActivity extends BaseActivity
     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     PendingIntent pendingIntent = PendingIntent.getActivity(context, messageID, notificationIntent,
         PendingIntent.FLAG_UPDATE_CURRENT);
-    mBuilder.setContentTitle("新消息")
+    mBuilder.setContentTitle(nickName)
         .setContentText(content)
         .setContentIntent(pendingIntent)
-        .setTicker("新消息" + ":" + "新消息22")
+        .setTicker(nickName + ":" + context)
         .setWhen(System.currentTimeMillis())
         .setDefaults(Notification.DEFAULT_ALL)
         .setSmallIcon(R.mipmap.ic_launcher);
