@@ -443,7 +443,8 @@ public class HomePageActivity extends BaseActivity
         .setSmallIcon(R.mipmap.ic_launcher);
     Notification notify = mBuilder.build();
     notify.flags |= Notification.FLAG_AUTO_CANCEL;
-    if (!CurrentChatMember.getInstance().isOpenChat(userId)) {
+    Log.e("======>", CurrentChatMember.getInstance().gerUserId() + "=====" + userId);
+    if (!CurrentChatMember.getInstance().gerUserId().equals(userId)) {
       assert mNotificationManager != null;
       mNotificationManager.notify(messageID, notify);
     }

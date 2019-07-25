@@ -308,7 +308,7 @@ import java.util.List;
 
   @Override protected void onResume() {
     super.onResume();
-    if (TextUtils.isEmpty(im_id)) {
+    if (!TextUtils.isEmpty(im_id)) {
       CurrentChatMember.getInstance().setUserId(im_id);
     }
   }
