@@ -122,11 +122,11 @@ public class APP extends BaseApp {
 
     private String getBaseUrl() {
         if (APP.NET_TYPE == 1) {
-            return "http://huahai.hzrcht.com";
+            return "https://huahai.hzrcht.com";
         } else if (APP.NET_TYPE == 2) {
-            return "http://huahai.hzrcht.com";
+            return "https://huahai.hzrcht.com";
         } else {
-            return "http://huahai.hzrcht.com";
+            return "https://huahai.hzrcht.com";
         }
     }
 
