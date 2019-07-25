@@ -42,8 +42,6 @@ import com.hzrcht.seaofflowers.module.mine.activity.CurrentChatMember;
 import com.hzrcht.seaofflowers.module.mine.activity.MineChatActivity;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.MineFragment;
-import com.hzrcht.seaofflowers.offline.OffLinePushManager;
-import com.hzrcht.seaofflowers.offline.ThirdPushTokenMgr;
 import com.hzrcht.seaofflowers.utils.ActivityManager;
 import com.hzrcht.seaofflowers.utils.permissions.MorePermissionsCallBack;
 import com.hzrcht.seaofflowers.utils.permissions.PermissionManager;
@@ -204,9 +202,10 @@ public class HomePageActivity extends BaseActivity
 
     showMessageCount(mUnreadTotal);
     keepServices();
-    OffLinePushManager.getInstance(true);
-    ThirdPushTokenMgr.getInstance().setIsLogin(true);
-    ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
+
+//    OffLinePushManager.getInstance(true);
+//    ThirdPushTokenMgr.getInstance().setIsLogin(true);
+//    ThirdPushTokenMgr.getInstance().setPushTokenToTIM();
   }
 
   private void keepServices() {
