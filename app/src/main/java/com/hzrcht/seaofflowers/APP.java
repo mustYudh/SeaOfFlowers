@@ -2,23 +2,17 @@ package com.hzrcht.seaofflowers;
 
 import android.os.Build;
 
-import com.huawei.android.hms.agent.HMSAgent;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomExpiredInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
-import com.hzrcht.seaofflowers.push.StatisticActivityLifecycleCallback;
 import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
-import com.meizu.cloud.pushsdk.PushManager;
-import com.meizu.cloud.pushsdk.util.MzSystemUtils;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.session.SessionWrapper;
-import com.tencent.imsdk.utils.IMFunc;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.config.CustomFaceConfig;
 import com.tencent.qcloud.tim.uikit.config.GeneralConfig;
 import com.tencent.qcloud.tim.uikit.config.TUIKitConfigs;
-import com.vivo.push.PushClient;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xhttp2.model.HttpHeaders;
@@ -73,20 +67,20 @@ public class APP extends BaseApp {
 //                // 小米离线推送
 //                MiPushClient.registerPush(this, Constants.XM_PUSH_APPID, Constants.XM_PUSH_APPKEY);
 //            }
-            if (IMFunc.isBrandHuawei()) {
-                // 华为离线推送
-                HMSAgent.init(this);
-            }
-            if (MzSystemUtils.isBrandMeizu(this)) {
-                // 魅族离线推送
-                PushManager.register(this, ApiServices.MZ_PUSH_APPID, ApiServices.MZ_PUSH_APPKEY);
-            }
-            if (IMFunc.isBrandVivo()) {
-                // vivo离线推送
-                PushClient.getInstance(this).initialize();
-            }
+//            if (IMFunc.isBrandHuawei()) {
+//                // 华为离线推送
+//                HMSAgent.init(this);
+//            }
+//            if (MzSystemUtils.isBrandMeizu(this)) {
+//                // 魅族离线推送
+//                PushManager.register(this, ApiServices.MZ_PUSH_APPID, ApiServices.MZ_PUSH_APPKEY);
+//            }
+//            if (IMFunc.isBrandVivo()) {
+//                // vivo离线推送
+//                PushClient.getInstance(this).initialize();
+//            }
 
-            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
+//            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
         }
 
     }

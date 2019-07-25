@@ -18,8 +18,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        // 华为离线推送
-        maven {url 'http://developer.huawei.com/repo/'}
         maven { url "https://jitpack.io" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         flatDir {

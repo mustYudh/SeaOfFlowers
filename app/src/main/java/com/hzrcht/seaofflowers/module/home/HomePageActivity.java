@@ -176,38 +176,9 @@ public class HomePageActivity extends BaseActivity
             }
         });
 
-        //设置当前消息的离线推送配置
-        TIMMessageOfflinePushSettings settings = new TIMMessageOfflinePushSettings();
-        settings.setEnabled(true);
-        settings.setDescr("花海");
-        //设置离线推送扩展信息
-        JSONObject object = new JSONObject();
-        try {
-            object.put("level", 15);
-            object.put("task", "TASK15");
-            settings.setExt(object.toString().getBytes("utf-8"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        //设置在 Android 设备上收到消息时的离线配置
-        TIMMessageOfflinePushSettings.AndroidSettings androidSettings = new TIMMessageOfflinePushSettings.AndroidSettings();
-        //IM SDK 2.5.3之前的构造方式
-        //TIMMessageOfflinePushSettings.AndroidSettings androidSettings = settings.new AndroidSettings();
-        androidSettings.setTitle("I'm title");
-        //推送自定义通知栏消息，接收方收到消息后单击通知栏消息会给应用回调（针对小米、华为离线推送）
-        androidSettings.setNotifyMode(TIMMessageOfflinePushSettings.NotifyMode.Normal);
-        //设置 Android 设备收到消息时的提示音，声音文件需要放置到 raw 文件夹
-        androidSettings.setSound(null);
-        settings.setAndroidSettings(androidSettings);
-
         // 未读消息监视器
         ConversationManagerKit.getInstance().addUnreadWatcher(this);
         GroupChatManagerKit.getInstance();
-
-
 
         List<TIMConversation> TIMConversations = TIMManagerExt.getInstance().getConversationList();
         for (TIMConversation conversation : TIMConversations) {

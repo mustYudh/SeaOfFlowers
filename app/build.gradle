@@ -229,10 +229,4 @@ dependencies {
     implementation project(path: ':tuikit')
     implementation 'com.tencent.liteav:LiteAVSDK_TRTC:6.5.7272'
     //    implementation 'com.tencent.imsdk:tuikit:4.4.627'
-    implementation files('libs/pushsdk_v2.3.4.jar')
-    // HUAWEI push sdk
-    implementation 'com.huawei.android.hms:push:2.6.3.301'
-    implementation 'com.huawei.android.hms:base:2.6.3.301'
-    // MEIZU push sdk
-    implementation 'com.meizu.flyme.internet:push-internal:3.6.+@aar'
 }
