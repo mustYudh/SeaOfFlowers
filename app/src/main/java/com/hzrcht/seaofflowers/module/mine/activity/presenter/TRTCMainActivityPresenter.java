@@ -6,6 +6,7 @@ import com.hzrcht.seaofflowers.bean.NoDataBean;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
@@ -67,6 +68,34 @@ public class TRTCMainActivityPresenter extends BaseViewPresenter<TRTCMainActivit
                     protected void onSuccess(NoDataBean noDataBean) {
                         assert getViewer() != null;
                         getViewer().attentSuccess(type);
+                    }
+                });
+    }
+
+    public void getSysGift() {
+        XHttp.post(ApiServices.SYSGIFT)
+                .accessToken(true)
+                .execute(SysGiftBean.class)
+                .subscribeWith(new TipRequestSubscriber<SysGiftBean>() {
+                    @Override
+                    protected void onSuccess(SysGiftBean sysGiftBean) {
+                        assert getViewer() != null;
+                        getViewer().getSysGiftSuccess(sysGiftBean);
+                    }
+                });
+    }
+
+    public void sendGift(String anchor_id, String gift_id, SysGiftBean.ResultBean resultBean) {
+        XHttp.post(ApiServices.GIFTGIVE)
+                .params("anchor_id", anchor_id)
+                .params("gift_id", gift_id)
+                .accessToken(true)
+                .execute(NoDataBean.class)
+                .subscribeWith(new TipRequestSubscriber<NoDataBean>() {
+                    @Override
+                    protected void onSuccess(NoDataBean noDataBean) {
+                        assert getViewer() != null;
+                        getViewer().sendGiftSuccess(resultBean);
                     }
                 });
     }

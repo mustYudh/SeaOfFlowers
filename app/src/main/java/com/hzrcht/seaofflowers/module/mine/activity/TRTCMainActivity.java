@@ -5,6 +5,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,9 +36,12 @@ import com.hzrcht.seaofflowers.module.im.TRTCSettingDialog;
 import com.hzrcht.seaofflowers.module.im.TRTCVideoViewLayout;
 import com.hzrcht.seaofflowers.module.im.TestCustomVideo.TestRenderVideoFrame;
 import com.hzrcht.seaofflowers.module.im.TestCustomVideo.TestSendCustomVideoData;
+import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityPresenter;
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityViewer;
+import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftRvAdapter;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
+import com.hzrcht.seaofflowers.utils.MataDataUtils;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -53,18 +58,22 @@ import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.CircleImageView;
+import com.yu.common.ui.DelayClickTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -119,7 +128,12 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private static Disposable timer;
     private MediaPlayer mMediaPlayer;
     private static Disposable mMediaPlayerSubscribe;
+    private static Disposable persentSubscribe;
     private TextView tv_timer;
+    private DialogUtils presentDialog;
+    private ImageView iv_send_headimg;
+    private LinearLayout ll_send_present;
+    private TextView tv_send_persent;
 
     @Override
     public void liveEndSuccess() {
@@ -243,6 +257,50 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         loadDialog.show();
         mPresenter.liveEnd(location_live_id);
         rechargeCode = code;
+    }
+
+    @Override
+    public void getSysGiftSuccess(SysGiftBean sysGiftBean) {
+        if (sysGiftBean != null) {
+            if (sysGiftBean.rows != null && sysGiftBean.rows.size() != 0) {
+                showPresentDialog(sysGiftBean.user_amount, sysGiftBean.rows);
+            }
+        } else {
+            ToastUtils.show("获取礼物列表失败,请重试");
+        }
+    }
+
+    @Override
+    public void sendGiftSuccess(SysGiftBean.ResultBean resultBean) {
+        ToastUtils.show("打赏成功!");
+        try {
+            // 自定义消息命令字, 这里需要根据业务定制一套规则，这里以0x1代表发送文字广播消息为例
+            int cmdID = 0;
+            String persentImg = resultBean.img;
+            byte[] data = persentImg.getBytes("UTF-8");
+            // reliable 和 ordered 目前需要一致，这里以需要保证消息按发送顺序到达为例
+            trtcCloud.sendCustomCmdMsg(cmdID, data, true, true);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        ImageLoader.getInstance().displayImage(iv_send_headimg, resultBean.img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+        tv_send_persent.setText("您送出了一个");
+        ll_send_present.setVisibility(View.VISIBLE);
+        persentSubscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
+                .take(5)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ll_send_present.setVisibility(View.GONE);
+                        }
+                    });
+                })
+                .subscribe();
+        item = null;
     }
 
     private static class VideoStream {
@@ -385,8 +443,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             showExitDialog();
         });
 
-
+        String appMetaData = MataDataUtils.getAppMetaData(getActivity(), "");
     }
+
 
     //播放音乐的方法
     private void play() {
@@ -428,6 +487,56 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     }
 
+    private SysGiftBean.ResultBean item = null;
+
+    /**
+     * 礼物列表
+     */
+    private void showPresentDialog(BigDecimal user_amount, List<SysGiftBean.ResultBean> rows) {
+        presentDialog = new DialogUtils.Builder(getActivity()).view(R.layout.dialog_present)
+                .gravity(Gravity.BOTTOM)
+                .cancelTouchout(true)
+                .style(R.style.Dialog)
+                .build();
+        presentDialog.show();
+
+        RecyclerView rv_present = presentDialog.findViewById(R.id.rv_present);
+        rv_present.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+//        CommItemDecoration horizontal = CommItemDecoration.createHorizontal(getActivity(), Color.parseColor("#626262"), 2);
+//        CommItemDecoration vertical = CommItemDecoration.createVertical(getActivity(), Color.parseColor("#626262"), 2);
+//        rv_present.addItemDecoration(horizontal);
+//        rv_present.addItemDecoration(vertical);
+        TextView tv_coin = presentDialog.findViewById(R.id.tv_coin);
+        tv_coin.setText("可用金币：" + user_amount);
+        DelayClickTextView tv_commit = presentDialog.findViewById(R.id.tv_commit);
+        DelayClickTextView tv_recharge = presentDialog.findViewById(R.id.tv_recharge);
+        tv_recharge.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
+            //充值
+            Bundle bundle = new Bundle();
+            bundle.putInt("TYPE", 0);
+            getLaunchHelper().startActivity(MineRechargeActivity.class, bundle);
+        });
+        MineSysGiftRvAdapter adapter = new MineSysGiftRvAdapter(R.layout.item_sys_present, rows, getActivity());
+        rv_present.setAdapter(adapter);
+
+        adapter.setOnItemChcekCheckListener(resultBean -> {
+            adapter.notifyDataSetChanged();
+            item = resultBean;
+        });
+        tv_commit.setOnClickListener(view -> {
+            if (presentDialog.isShowing()) {
+                presentDialog.dismiss();
+            }
+
+            if (item != null) {
+                mPresenter.sendGift(user_id, item.id + "", item);
+            }
+        });
+
+    }
 
     @Override
     protected void onResume() {
@@ -449,6 +558,10 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             mMediaPlayerSubscribe = null;
         }
 
+        if (persentSubscribe != null && !persentSubscribe.isDisposed()) {
+            persentSubscribe.dispose();
+            persentSubscribe = null;
+        }
 
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
@@ -494,13 +607,16 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ivVoice = (ImageView) findViewById(R.id.iv_mic);
         ivCamera = (ImageView) findViewById(R.id.iv_mine_camera);
         ll_mine_camera = (LinearLayout) findViewById(R.id.ll_mine_camera);
+        ll_send_present = (LinearLayout) findViewById(R.id.ll_send_present);
         ImageView iv_change_bottom = (ImageView) findViewById(R.id.iv_change_bottom);
         ImageView iv_video_bottom = (ImageView) findViewById(R.id.iv_video_bottom);
         ImageView iv_voice_bottom = (ImageView) findViewById(R.id.iv_voice_bottom);
+        ImageView iv_present_bottom = (ImageView) findViewById(R.id.iv_present_bottom);
         ll_mine_camera.setOnClickListener(this);
         iv_change_bottom.setOnClickListener(this);
         iv_video_bottom.setOnClickListener(this);
         iv_voice_bottom.setOnClickListener(this);
+        iv_present_bottom.setOnClickListener(this);
         bindText(R.id.tv_age, user_age);
         bindText(R.id.tv_attention, "0".equals(is_attent) ? "关注" : "已关注");
         bindView(R.id.tv_attention).setBackgroundResource("0".equals(is_attent) ? R.drawable.shape_dynamic_attention_normal : R.drawable.shape_dynamic_attention_select);
@@ -515,6 +631,8 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ll_close = (LinearLayout) findViewById(R.id.ll_close);
         CircleImageView iv_headimg = (CircleImageView) findViewById(R.id.iv_headimg);
         CircleImageView iv_info_top = (CircleImageView) findViewById(R.id.iv_info_top);
+        iv_send_headimg = (ImageView) findViewById(R.id.iv_send_headimg);
+        tv_send_persent = (TextView) findViewById(R.id.tv_send_persent);
         rl_bottom = (RelativeLayout) findViewById(R.id.rl_bottom);
         tv_timer = bindView(R.id.tv_timer);
         ImageLoader.getInstance().displayImage(iv_headimg, head_img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
@@ -667,6 +785,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             startLinkMic();
         } else if (v.getId() == R.id.btn_cancel) {
             hideLinkMicLayout();
+        } else if (v.getId() == R.id.iv_present_bottom) {
+            //礼物
+            mPresenter.getSysGift();
         }
     }
 
@@ -768,6 +889,54 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             super();
             mContext = new WeakReference<>(activity);
             mCustomRender = new HashMap<>(10);
+        }
+
+        @Override
+        public void onRecvCustomCmdMsg(String userId, int cmdId, int seq, byte[] message) {
+            TRTCMainActivity activity = mContext.get();
+            if (activity == null) return;
+            // 接收到 userId 发送的消息
+            switch (cmdId)  // 发送方和接收方协商好的cmdId
+            {
+                case 0:
+                    // 处理cmdId = 0消息
+                    Log.e("自定义消息视频1", userId + "...." + new String(message));
+                    ImageLoader.getInstance().displayImage(activity.iv_send_headimg, new String(message), R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
+                    activity.tv_send_persent.setText("您收到一个");
+                    activity.ll_send_present.setVisibility(View.VISIBLE);
+                    persentSubscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
+                            .take(5)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnNext(aLong -> {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        activity.ll_send_present.setVisibility(View.GONE);
+                                    }
+                                });
+                            })
+                            .subscribe();
+                    break;
+                case 1:
+                    // 处理cmdId = 1消息
+                    break;
+                case 2:
+                    // 处理cmdId = 2消息
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        @Override
+        public void onMissCustomCmdMsg(String s, int i, int i1, int i2) {
+            Log.e("自定义消息视频2", s + "....");
+        }
+
+        @Override
+        public void onRecvSEIMsg(String s, byte[] bytes) {
+            Log.e("自定义消息视频3", s + "....");
         }
 
         /**

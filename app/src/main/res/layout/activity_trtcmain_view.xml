@@ -456,6 +456,7 @@
                 android:src="@drawable/ic_voice_bottom"/>
 
             <com.yu.common.ui.DelayClickImageView
+                android:id="@+id/iv_present_bottom"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
@@ -527,7 +528,6 @@
     </LinearLayout>
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -537,5 +537,35 @@
         android:text="00:00:00"
         android:textColor="@color/white"
         android:textSize="14sp"
+        android:visibility="gone"
         />
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_send_present"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="21dp"
+        android:layout_marginBottom="247dp"
+        android:background="#40000000"
+        android:gravity="center_vertical"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/tv_send_persent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textColor="@color/color_9897E7"
+            android:textSize="16sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_send_headimg"
+            android:layout_width="37dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="4dp"/>
+    </LinearLayout>
 </FrameLayout>
