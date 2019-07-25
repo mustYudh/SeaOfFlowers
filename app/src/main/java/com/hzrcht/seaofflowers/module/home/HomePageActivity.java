@@ -26,6 +26,8 @@ import com.hzrcht.seaofflowers.APP;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.keep.BackgroundService;
+import com.hzrcht.seaofflowers.keep.GrayService;
 import com.hzrcht.seaofflowers.module.dynamic.fragment.DynamicFragment;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoWaitEvent;
@@ -94,6 +96,8 @@ public class HomePageActivity extends BaseActivity
   private HomeCenterPopUpWindow mHomePopUpWindow;
   private FrameLayout.LayoutParams linearParams;
   private int mUnreadTotal = 0;
+
+  private final static String BLACK_WAKE_ACTION = "com.wake.black";
 
   @Override protected void setView(@Nullable Bundle savedInstanceState) {
     setContentView(R.layout.activity_home_page_view);
@@ -192,6 +196,23 @@ public class HomePageActivity extends BaseActivity
     }
 
     showMessageCount(mUnreadTotal);
+    keepServices();
+  }
+
+  private void keepServices() {
+    try {
+      //Intent whiteIntent = new Intent(getApplicationContext(), WhiteService.class);
+      //startService(whiteIntent);
+      Intent grayIntent = new Intent(getApplicationContext(), GrayService.class);
+      startService(grayIntent);
+      Intent blackIntent = new Intent();
+      blackIntent.setAction(BLACK_WAKE_ACTION);
+      sendBroadcast(blackIntent);
+      Intent bgIntent = new Intent(getApplicationContext(), BackgroundService.class);
+      startService(bgIntent);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**

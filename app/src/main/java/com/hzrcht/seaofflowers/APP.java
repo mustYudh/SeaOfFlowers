@@ -1,11 +1,11 @@
 package com.hzrcht.seaofflowers;
 
 import android.os.Build;
-
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.interceptor.CustomDynamicInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomExpiredInterceptor;
 import com.hzrcht.seaofflowers.http.interceptor.CustomLoggingInterceptor;
+import com.hzrcht.seaofflowers.keep.other.KeepService;
 import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.session.SessionWrapper;
@@ -36,6 +36,15 @@ public class APP extends BaseApp {
         CommonInit.init(this);
         ShareAuthSDK.init(this, DEBUG);
         initHttp();
+        try {
+            KeepService.startKeepService(this);
+            //if (LeakCanary.isInAnalyzerProcess(this)) {
+            //  return;
+            //}
+            //LeakCanary.install(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 //        //初始化 SDK 基本配置
 //        TIMSdkConfig config = new TIMSdkConfig(ApiServices.SDKAPPID)
 //                // .setAccoutType(accountType)     // 该接口已废弃
