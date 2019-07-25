@@ -45,7 +45,6 @@ import com.tencent.imsdk.TIMElemType;
 import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMMessageListener;
-import com.tencent.imsdk.TIMMessageOfflinePushSettings;
 import com.tencent.imsdk.ext.message.TIMConversationExt;
 import com.tencent.imsdk.ext.message.TIMManagerExt;
 import com.tencent.qcloud.tim.uikit.TUIKit;
@@ -63,10 +62,7 @@ import com.yu.common.utils.PressHandle;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
