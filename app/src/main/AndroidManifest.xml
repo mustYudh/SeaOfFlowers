@@ -20,14 +20,14 @@
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <!-- 浮动通知权限 -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- ********华为推送权限设置******** -->
     <permission
         android:name="com.hzrcht.seaofflowers.permission.PROCESS_PUSH_MSG"
         android:protectionLevel="signatureOrSystem"/>
 
-    <uses-permission android:name="com.hzrcht.seaofflowers.tuikit.permission.PROCESS_PUSH_MSG"/>
+    <uses-permission android:name="com.hzrcht.seaofflowers.permission.PROCESS_PUSH_MSG"/>
 
     <!-- ********小米推送权限设置******** -->
     <permission

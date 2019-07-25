@@ -31,6 +31,14 @@ public class ApiServices {
     public static final String VIVO_PUSH_APPKEY = "3c041c75-d595-41d4-8c4e-85426c09611f"; // 见清单文件
     /****** vivo离线推送参数end ******/
 
+
+    /****** oppo离线推送参数start ******/
+    public static final long OPPO_PUSH_BUZID = 6519;
+    // vivo开放平台分配的应用APPID及APPKEY
+    public static final String OPPO_PUSH_APPID = "30150078"; // 见清单文件
+    public static final String OPPO_PUSH_APPKEY = "55de220a41684b42ab7d8a79df254421"; // 见清单文件
+    /****** oppo离线推送参数end ******/
+
     public static final int SDKAPPID = 1400224024;
 
     public static final String BASEURL = "https://huahai.hzrcht.com";
