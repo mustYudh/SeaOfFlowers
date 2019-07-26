@@ -568,4 +568,9 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="4dp"/>
     </LinearLayout>
+
+    <com.yan.bsrgift.BSRGiftLayout
+        android:id="@+id/gift_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

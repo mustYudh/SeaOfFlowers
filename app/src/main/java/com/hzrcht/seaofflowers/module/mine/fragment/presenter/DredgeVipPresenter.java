@@ -7,7 +7,6 @@ import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
 import com.xuexiang.xhttp2.XHttp;
-import com.xuexiang.xhttp2.exception.ApiException;
 import com.yu.common.framework.BaseViewPresenter;
 
 @SuppressLint("CheckResult")
@@ -28,11 +27,6 @@ public class DredgeVipPresenter extends BaseViewPresenter<DredgeVipViewer> {
                         assert getViewer() != null;
                         getViewer().getSysMoneySuccess(sysMoneyBean);
                     }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
-                    }
                 });
     }
 
@@ -48,11 +42,6 @@ public class DredgeVipPresenter extends BaseViewPresenter<DredgeVipViewer> {
                     protected void onSuccess(PayInfo payInfo) {
                         assert getViewer() != null;
                         getViewer().orderAddSuccess(payInfo);
-                    }
-
-                    @Override
-                    protected void onError(ApiException apiException) {
-
                     }
                 });
     }

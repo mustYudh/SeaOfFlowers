@@ -82,6 +82,12 @@ public class TRTCMainActivityPresenter extends BaseViewPresenter<TRTCMainActivit
                         assert getViewer() != null;
                         getViewer().getSysGiftSuccess(sysGiftBean);
                     }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getSysGiftFail();
+                    }
                 });
     }
 

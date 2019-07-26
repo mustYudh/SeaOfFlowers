@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.denghao.control.view.utils.UpdataCurrentFragment;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseFragment;
 import com.hzrcht.seaofflowers.data.UserProfile;
@@ -34,7 +35,7 @@ import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
 
-public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener {
+public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener, UpdataCurrentFragment {
 
     @PresenterLifeCycle
     private MinePresenter mPresenter = new MinePresenter(this);
@@ -93,6 +94,8 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
         ll_redact.setOnClickListener(this);
         ll_attention.setOnClickListener(this);
         ll_balance.setOnClickListener(this);
+        view_invitation_code.setOnClickListener(this);
+        view_accept_apprentice.setOnClickListener(this);
         view_system_settings.setOnClickListener(this);
         ll_withdraw.setOnClickListener(this);
         ll_photo_album.setOnClickListener(this);
@@ -118,6 +121,14 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             case R.id.ll_balance:
                 //账号余额
                 getLaunchHelper().startActivityForResult(MineBalanceActivity.class, 1);
+                break;
+            case R.id.view_invitation_code:
+                //填写邀请码
+                ToastUtils.show("功能开发中!");
+                break;
+            case R.id.view_accept_apprentice:
+                //收徒
+                ToastUtils.show("功能开发中!");
                 break;
             case R.id.view_system_settings:
                 //系统设置
@@ -180,6 +191,10 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 mLAge.setBackgroundResource(mineUserInfoBean.userInfo.sex == 1 ? R.drawable.shape_mine_man : R.drawable.shape_mine_woman);
                 ImageLoader.getInstance().displayImage(mHeadimg, mineUserInfoBean.userInfo.head_img, mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal, mineUserInfoBean.userInfo.sex == 1 ? R.drawable.ic_man_normal : R.drawable.ic_woman_normal);
                 mAuthentication.setOnClickListener(view -> {
+                    if (UserProfile.getInstance().getUserSex() == 1) {
+                        ToastUtils.show("男性不能申请主播");
+                        return;
+                    }
                     if (mineUserInfoBean.userInfo.type == 0) {
                         //认证主播
                         if (mineUserInfoBean.is_auth == 0) {
@@ -223,5 +238,11 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                 mPresenter.userInfo();
                 break;
         }
+    }
+
+
+    @Override
+    public void update(Bundle bundle) {
+        mPresenter.userInfo();
     }
 }

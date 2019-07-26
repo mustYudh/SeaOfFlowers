@@ -132,10 +132,9 @@ public class HomePageActivity extends BaseActivity
 
         checkPermission();
 
-        if (UserProfile.getInstance().getAnchorType() == 0) {
-            //用户
-            userOnline();
-        }
+        //定时在线任务
+        userOnline();
+
         //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
         linearParams =
                 (FrameLayout.LayoutParams) mBottomNavigationView.mControl.badge_view.getLayoutParams();

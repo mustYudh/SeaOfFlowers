@@ -9,6 +9,7 @@ import com.hzrcht.seaofflowers.http.subscriber.TipRequestSubscriber;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.activity.SelectLoginActivity;
 import com.hzrcht.seaofflowers.module.login.bean.UserSigBean;
+import com.hzrcht.seaofflowers.module.login.bean.WxConfigBean;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMManager;
 import com.xuexiang.xhttp2.XHttp;
@@ -21,6 +22,7 @@ import com.yu.common.framework.BaseViewPresenter;
  * @author yudneghao
  * @date 2019-06-03
  */
+@SuppressLint("CheckResult")
 public class SplashPresenter extends BaseViewPresenter<SplashViewer> {
 
     private RxCountDown rxCountDown = new RxCountDown();
@@ -28,6 +30,26 @@ public class SplashPresenter extends BaseViewPresenter<SplashViewer> {
     public SplashPresenter(SplashViewer viewer) {
         super(viewer);
     }
+
+    public void getWxConfig() {
+        XHttp.post(ApiServices.WXSYSCONFIG)
+                .accessToken(false)
+                .execute(WxConfigBean.class)
+                .subscribeWith(new TipRequestSubscriber<WxConfigBean>() {
+                    @Override
+                    protected void onSuccess(WxConfigBean wxConfigBean) {
+                        assert getViewer() != null;
+                        getViewer().getWxConfigSuccess(wxConfigBean);
+                    }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().getWxConfigFail();
+                    }
+                });
+    }
+
 
     public void handleCountDown() {
         rxCountDown.start(3);

@@ -214,4 +214,7 @@ public class ApiServices {
     //用户系统消息
     public static final String USERMESSAGE = BASEURL + "/api/user/message";
 
+    //获取微信appid配置
+    public static final String WXSYSCONFIG = BASEURL + "/api/sys/config";
+
 }

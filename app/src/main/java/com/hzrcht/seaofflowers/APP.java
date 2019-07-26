@@ -20,7 +20,6 @@ import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xhttp2.model.HttpHeaders;
 import com.yu.common.CommonInit;
 import com.yu.common.base.BaseApp;
-import com.yu.share.ShareAuthSDK;
 
 /**
  * @author yudneghao
@@ -36,7 +35,6 @@ public class APP extends BaseApp {
         APP.instance = this;
         super.onCreate();
         CommonInit.init(this);
-        ShareAuthSDK.init(this, DEBUG);
         initHttp();
         try {
             KeepService.startKeepService(this);

@@ -18,5 +18,7 @@ public interface TRTCMainActivityViewer extends Viewer {
 
     void getSysGiftSuccess(SysGiftBean sysGiftBean);
 
+    void getSysGiftFail();
+
     void sendGiftSuccess(SysGiftBean.ResultBean resultBean);
 }

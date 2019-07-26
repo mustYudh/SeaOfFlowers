@@ -1,8 +1,10 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -19,6 +21,7 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.MineRechargeViewer
 import com.hzrcht.seaofflowers.module.mine.fragment.DredgeVipFragment;
 import com.hzrcht.seaofflowers.module.mine.fragment.RechargeCoinFragment;
 import com.yu.common.mvp.PresenterLifeCycle;
+import com.yu.common.toast.ToastUtils;
 import com.yu.common.utils.DensityUtils;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -66,7 +69,14 @@ public class MineRechargeActivity extends BaseBarActivity implements MineRecharg
 
         //客服
         bindView(R.id.tv_online_service, view -> {
-
+            try {
+                //跳转到添加好友，如果qq号是好友了，直接聊天
+                String url = "mqqwpa://im/chat?chat_type=wpa&uin=2592974828";//uin是发送过去的qq号码
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } catch (Exception e) {
+                e.printStackTrace();
+                ToastUtils.show("请检查是否安装QQ");
+            }
         });
         bindView(R.id.action_back, view -> {
             setResult(1);

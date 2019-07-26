@@ -1,5 +1,6 @@
 package com.hzrcht.seaofflowers.module.mine.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
@@ -14,6 +15,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,7 +31,6 @@ import com.hzrcht.seaofflowers.data.UserProfile;
 import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.module.event.DataSynVideoEvent;
 import com.hzrcht.seaofflowers.module.home.bean.HomePayCoinBean;
-import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.hzrcht.seaofflowers.module.im.TRTCBeautySettingPanel;
 import com.hzrcht.seaofflowers.module.im.TRTCMoreDialog;
 import com.hzrcht.seaofflowers.module.im.TRTCSettingDialog;
@@ -41,7 +42,6 @@ import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityPr
 import com.hzrcht.seaofflowers.module.mine.activity.presenter.TRTCMainActivityViewer;
 import com.hzrcht.seaofflowers.module.mine.adapter.MineSysGiftRvAdapter;
 import com.hzrcht.seaofflowers.utils.DialogUtils;
-import com.hzrcht.seaofflowers.utils.MataDataUtils;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
 import com.tencent.imsdk.TIMCustomElem;
@@ -49,11 +49,18 @@ import com.tencent.imsdk.TIMManager;
 import com.tencent.imsdk.TIMMessage;
 import com.tencent.imsdk.TIMValueCallBack;
 import com.tencent.liteav.TXLiteAVCode;
+import com.tencent.qcloud.tim.uikit.modules.message.CustomMessageData;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.TRTCStatistics;
+import com.yan.bsrgift.BSRGiftLayout;
+import com.yan.bsrgift.BSRGiftView;
+import com.yan.bsrgift.BSRPathBase;
+import com.yan.bsrgift.BSRPathPoint;
+import com.yan.bsrgift.BSRPathView;
+import com.yan.bsrgift.OnAnmEndListener;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
@@ -63,6 +70,8 @@ import com.yu.common.ui.DelayClickTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
@@ -77,6 +86,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -134,6 +144,8 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
     private ImageView iv_send_headimg;
     private LinearLayout ll_send_present;
     private TextView tv_send_persent;
+    private BSRGiftLayout giftLayout;
+
 
     @Override
     public void liveEndSuccess() {
@@ -261,6 +273,9 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
 
     @Override
     public void getSysGiftSuccess(SysGiftBean sysGiftBean) {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
         if (sysGiftBean != null) {
             if (sysGiftBean.rows != null && sysGiftBean.rows.size() != 0) {
                 showPresentDialog(sysGiftBean.user_amount, sysGiftBean.rows);
@@ -268,6 +283,14 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         } else {
             ToastUtils.show("获取礼物列表失败,请重试");
         }
+    }
+
+    @Override
+    public void getSysGiftFail() {
+        if (loadDialog.isShowing()) {
+            loadDialog.dismiss();
+        }
+        ToastUtils.show("获取礼物列表失败,请重试");
     }
 
     @Override
@@ -287,6 +310,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         ImageLoader.getInstance().displayImage(iv_send_headimg, resultBean.img, R.drawable.ic_placeholder, R.drawable.ic_placeholder_error);
         tv_send_persent.setText("您送出了一个");
         ll_send_present.setVisibility(View.VISIBLE);
+//        showShip();//轮船
         persentSubscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
                 .take(5)
                 .subscribeOn(Schedulers.io())
@@ -302,6 +326,97 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
                 .subscribe();
         item = null;
     }
+
+    int[] ktIds = new int[]{
+            R.drawable.youting1,
+            R.drawable.youting2,
+            R.drawable.youting3,
+            R.drawable.youting1,
+            R.drawable.youting2,
+            R.drawable.youting3,
+            R.drawable.youting1,
+            R.drawable.youting2,
+
+    };
+
+    /**
+     * 轮船动画
+     */
+    @SuppressLint("CheckResult")
+    public void showShip() {
+        final BSRGiftView bsrGiftView = new BSRGiftView(getActivity());
+        final int during = 150;
+        final Subscription[] subscription = new Subscription[1];
+        bsrGiftView.setAlphaTrigger(-1);  //淡出在动画执行到-1时
+        giftLayout.setAlphaTrigger(-1);
+        Flowable.interval(during, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new Subscriber<Long>() {
+                    int index = 0;
+
+                    @Override
+                    public void onSubscribe(Subscription s) {
+                        subscription[0] = s;
+                        s.request(Long.MAX_VALUE);
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        BSRPathPoint carOne = new BSRPathPoint();
+                        carOne.setDuring(during);
+                        carOne.setInterpolator(new LinearInterpolator());
+                        carOne.setRes(getActivity(), ktIds[index++ % 7]);
+                        carOne.adjustScaleInScreen(0.8f);
+                        carOne.setAntiAlias(true);
+                        bsrGiftView.addBSRPathPointAndDraw(carOne);
+                    }
+
+                    public void onError(Throwable t) {
+                    }
+
+                    public void onComplete() {
+                    }
+                });
+
+        BSRPathView bsrPathView = new BSRPathView();
+        bsrPathView.setChild(bsrGiftView);
+        bsrPathView.positionInScreen();
+
+        bsrPathView.addPositionControlPoint(-1f, 0.5f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(0.05f, 0.3f);
+        bsrPathView.addPositionControlPoint(1, 0.1f);
+
+        //添加缩放的控制点用于贝塞尔效果
+        bsrPathView.addScaleControl(0.2f);
+        bsrPathView.addScaleControl(0.4f);
+        bsrPathView.addScaleControl(0.6f);
+        bsrPathView.addScaleControl(0.8f);
+        bsrPathView.addScaleControl(0.8f);
+        bsrPathView.addScaleControl(0.8f);
+        bsrPathView.addScaleControl(0.8f);
+        bsrPathView.addScaleControl(0.8f);
+        bsrPathView.addScaleControl(0.6f);
+        bsrPathView.addScaleControl(0.6f);
+        bsrPathView.addScaleControl(0.6f);
+
+        bsrPathView.setDuring(7000);
+        bsrPathView.addEndListeners(new OnAnmEndListener() {
+            @Override
+            public void onAnimationEnd(BSRPathBase bsrPathPoint) {
+                subscription[0].cancel();
+            }
+        });
+        giftLayout.addChild(bsrPathView);
+    }
+
 
     private static class VideoStream {
         String userId;
@@ -341,7 +456,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         user_age = bundle.getString("USER_AGE");
         is_attent = bundle.getString("IS_ATTENT");
         String type_in = bundle.getString("TYPE_IN");
-
 
         if (mEnableCustomVideoCapture) {
             mCustomCapture = new TestSendCustomVideoData(this);
@@ -442,8 +556,6 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         bindView(R.id.iv_close_bottom, view -> {
             showExitDialog();
         });
-
-        String appMetaData = MataDataUtils.getAppMetaData(getActivity(), "");
     }
 
 
@@ -600,6 +712,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
         mVideoViewLayout.setUserId(trtcParams.userId);
         mVideoViewLayout.setListener(this);
 
+        giftLayout = (BSRGiftLayout) findViewById(R.id.gift_layout);
         ivShowMode = (ImageView) findViewById(R.id.iv_show_mode);
         ivShowMode.setOnClickListener(this);
         ivBeauty = (ImageView) findViewById(R.id.iv_beauty);
@@ -787,6 +900,7 @@ public class TRTCMainActivity extends BaseActivity implements TRTCMainActivityVi
             hideLinkMicLayout();
         } else if (v.getId() == R.id.iv_present_bottom) {
             //礼物
+            loadDialog.show();
             mPresenter.getSysGift();
         }
     }

@@ -235,4 +235,5 @@ dependencies {
     implementation 'com.tencent.liteav:LiteAVSDK_TRTC:6.5.7272'
     //    implementation 'com.tencent.imsdk:tuikit:4.4.627'
     implementation files('libs/pushsdk_v2.3.4.jar')
+    implementation project(path: ':bsrgift')
 }
