@@ -10,7 +10,6 @@ import com.hzrcht.seaofflowers.module.mine.activity.bean.ReviewListBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.SysGiftBean;
 import com.hzrcht.seaofflowers.module.mine.activity.bean.UserIsAnchorBean;
 import com.hzrcht.seaofflowers.module.mine.bean.SysMoneyBean;
-import com.tencent.qcloud.tim.uikit.modules.chat.ChatLayout;
 import com.yu.common.mvp.Viewer;
 
 
@@ -44,6 +43,8 @@ public interface MinePersonalInfoViewer extends Viewer {
     void liveStartSuccess(LiveStartBean liveStartBean);
 
     void sendGiftSuccess(SysGiftBean.ResultBean resultBean);
+
+    void sendGiftFail(String msg,int code);
 
     void getSysGiftSuccess(SysGiftBean sysGiftBean);
 }

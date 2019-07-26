@@ -11,10 +11,12 @@ import com.hzrcht.seaofflowers.utils.CheckVersionCodeUtils;
 import com.hzrcht.seaofflowers.utils.MataDataUtils;
 import com.tencent.imsdk.TIMSdkConfig;
 import com.tencent.imsdk.session.SessionWrapper;
+import com.tencent.imsdk.utils.IMFunc;
 import com.tencent.qcloud.tim.uikit.TUIKit;
 import com.tencent.qcloud.tim.uikit.config.CustomFaceConfig;
 import com.tencent.qcloud.tim.uikit.config.GeneralConfig;
 import com.tencent.qcloud.tim.uikit.config.TUIKitConfigs;
+import com.vivo.push.PushClient;
 import com.xuexiang.xhttp2.XHttp;
 import com.xuexiang.xhttp2.XHttpSDK;
 import com.xuexiang.xhttp2.model.HttpHeaders;
@@ -84,10 +86,10 @@ public class APP extends BaseApp {
 //                // 魅族离线推送
 //                PushManager.register(this, ApiServices.MZ_PUSH_APPID, ApiServices.MZ_PUSH_APPKEY);
 //            }
-//            if (IMFunc.isBrandVivo()) {
-//                // vivo离线推送
-//                PushClient.getInstance(this).initialize();
-//            }
+            if (IMFunc.isBrandVivo()) {
+                // vivo离线推送
+                PushClient.getInstance(this).initialize();
+            }
 
 //            registerActivityLifecycleCallbacks(new StatisticActivityLifecycleCallback());
         }

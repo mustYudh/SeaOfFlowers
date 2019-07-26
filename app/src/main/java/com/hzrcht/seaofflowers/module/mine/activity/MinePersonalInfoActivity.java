@@ -399,11 +399,12 @@ public class MinePersonalInfoActivity extends BaseBarActivity
             mPresenter.orderAdd(type + "", type_id);
         });
 
-        if (!is_vip) {
-            ll_vip.setVisibility(View.VISIBLE);
-        } else {
-            ll_vip.setVisibility(View.GONE);
-        }
+//        if (!is_vip) {
+//            ll_vip.setVisibility(View.VISIBLE);
+//        } else {
+//            ll_vip.setVisibility(View.GONE);
+//        }
+        ll_vip.setVisibility(View.GONE);
 
         tv_vip.setOnClickListener(view -> {
             if (rechargeDialog.isShowing()) {
@@ -869,6 +870,15 @@ public class MinePersonalInfoActivity extends BaseBarActivity
     public void sendGiftSuccess(SysGiftBean.ResultBean resultBean) {
         ToastUtils.show("打赏成功!");
         item = null;
+    }
+
+    @Override
+    public void sendGiftFail(String msg, int code) {
+        if (code == 10000) {
+            mPresenter.getSysMoney();
+        } else {
+            ToastUtils.show(msg);
+        }
     }
 
     @Override

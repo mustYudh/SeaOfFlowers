@@ -244,6 +244,12 @@ public class MinePersonalInfoPresenter extends BaseViewPresenter<MinePersonalInf
                         assert getViewer() != null;
                         getViewer().sendGiftSuccess(resultBean);
                     }
+
+                    @Override
+                    protected void onError(ApiException apiException) {
+                        assert getViewer() != null;
+                        getViewer().sendGiftFail(apiException.getDisplayMessage(), apiException.getCode());
+                    }
                 });
     }
 }

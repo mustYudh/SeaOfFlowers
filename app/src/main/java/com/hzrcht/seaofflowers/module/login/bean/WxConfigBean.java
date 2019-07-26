@@ -10,4 +10,5 @@ public class WxConfigBean {
 
     public String appid;
     public String wx_key;
+    public String app_secret;
 }

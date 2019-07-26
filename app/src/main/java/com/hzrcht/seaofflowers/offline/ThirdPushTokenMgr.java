@@ -50,10 +50,10 @@ public class ThirdPushTokenMgr {
             mIsTokenSet = false;
             return;
         }
-        if (!mIsLogin) {
-            Log.i(TAG, "setPushTokenToTIM not login, ignore");
-            return;
-        }
+//        if (!mIsLogin) {
+//            Log.i(TAG, "setPushTokenToTIM not login, ignore");
+//            return;
+//        }
         TIMOfflinePushToken param = null;
         if (IMFunc.isBrandXiaoMi()) {
             param = new TIMOfflinePushToken(ApiServices.XM_PUSH_BUZID, token);

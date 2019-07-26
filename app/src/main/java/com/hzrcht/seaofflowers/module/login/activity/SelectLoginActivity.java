@@ -10,11 +10,13 @@ import com.google.gson.Gson;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseActivity;
 import com.hzrcht.seaofflowers.data.UserProfile;
+import com.hzrcht.seaofflowers.http.ApiServices;
 import com.hzrcht.seaofflowers.module.home.HomePageActivity;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.SelectLoginPresenter;
 import com.hzrcht.seaofflowers.module.login.activity.presenter.SelectLoginViewer;
 import com.hzrcht.seaofflowers.module.login.bean.LoginBean;
 import com.hzrcht.seaofflowers.module.login.bean.WechatInfo;
+import com.hzrcht.seaofflowers.module.web.WebViewActivity;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMManager;
 import com.umeng.socialize.UMShareAPI;
@@ -49,6 +51,11 @@ public class SelectLoginActivity extends BaseActivity implements View.OnClickLis
         tv_mobile.setOnClickListener(this);
         tv_wechat.setOnClickListener(this);
         tv_qq.setOnClickListener(this);
+
+        bindView(R.id.tv_agreement, view -> {
+            //用户协议
+            getLaunchHelper().startActivity(WebViewActivity.callIntent(getActivity(), "用户协议", ApiServices.BASEURL + "/protocol.html"));
+        });
     }
 
     @Override

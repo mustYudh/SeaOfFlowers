@@ -27,8 +27,8 @@ public class ApiServices {
     /****** vivo离线推送参数start ******/
     public static final long VIVO_PUSH_BUZID = 6499;
     // vivo开放平台分配的应用APPID及APPKEY
-    public static final String VIVO_PUSH_APPID = "13892"; // 见清单文件
-    public static final String VIVO_PUSH_APPKEY = "3c041c75-d595-41d4-8c4e-85426c09611f"; // 见清单文件
+    public static final String VIVO_PUSH_APPID = "13955"; // 见清单文件
+    public static final String VIVO_PUSH_APPKEY = "87342a1c-9c16-4463-8b3b-41a830c3d0e5"; // 见清单文件
     /****** vivo离线推送参数end ******/
 
 

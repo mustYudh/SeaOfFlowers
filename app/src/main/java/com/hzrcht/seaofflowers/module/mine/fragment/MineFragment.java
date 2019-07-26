@@ -198,9 +198,9 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
                     if (mineUserInfoBean.userInfo.type == 0) {
                         //认证主播
                         if (mineUserInfoBean.is_auth == 0) {
-                            getLaunchHelper().startActivityForResult(ApplyAuthenticationActivity.class, 1);
-                        } else {
                             getLaunchHelper().startActivityForResult(InAuthenticationActivity.class, 1);
+                        } else {
+                            getLaunchHelper().startActivityForResult(ApplyAuthenticationActivity.class, 1);
                         }
                     } else {
                         //收费设置
