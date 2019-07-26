@@ -9,7 +9,7 @@ ext {
   applicationId = 'com.hzrcht.seaofflowers'
   compileSdkVersion = 28
   minSdkVersion = 17
-  targetSdkVersion = 22
+  targetSdkVersion = 26
   appTargetSdkVersion = 26
 
   rxJavaVersion = '2.1.12'
