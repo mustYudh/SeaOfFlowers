@@ -40,10 +40,11 @@ public class MinePresentActivity extends BaseBarActivity implements MinePresentV
     @Override
     public void getGiftIndexSuccess(GiftListBean giftListBean) {
         if (giftListBean != null) {
+            bindText(R.id.tv_count, giftListBean.count + "");
+
             if (giftListBean.rows != null && giftListBean.rows.size() != 0) {
                 MinePresentRvAdapter adapter = new MinePresentRvAdapter(R.layout.item_mine_present, giftListBean.rows, getActivity());
                 mPresent.setAdapter(adapter);
-                bindText(R.id.tv_count, giftListBean.rows.size() + "");
             } else {
                 bindText(R.id.tv_count, "0");
             }

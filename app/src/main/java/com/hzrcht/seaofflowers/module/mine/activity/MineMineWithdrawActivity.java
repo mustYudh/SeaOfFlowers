@@ -162,6 +162,7 @@ public class MineMineWithdrawActivity extends BaseBarActivity implements MineWit
 
     @Override
     public void userWithdrawSuccess() {
+        ToastUtils.show("操作成功");
         Intent intent = new Intent();
         setResult(1, intent);
         finish();

@@ -31,6 +31,7 @@ public class BindWithdrawAccountActivity extends BaseBarActivity implements Bind
 
     @Override
     protected void loadData() {
+        setTitle("提现账号");
         Bundle bundle = getIntent().getExtras();
         int type = bundle.getInt("TYPE");
         String numtype = bundle.getString("NUMTYPE");
@@ -64,10 +65,13 @@ public class BindWithdrawAccountActivity extends BaseBarActivity implements Bind
 
             mPresenter.userAddacc(type, et_name.getText().toString().trim(), et_account.getText().toString().trim());
         });
+
+        bindView(R.id.tv_sure, view -> getLaunchHelper().startActivity(MineWithdrawDetailActivity.class));
     }
 
     @Override
     public void userAddaccSuccess() {
+        ToastUtils.show("操作成功");
         Intent intent = new Intent();
         setResult(1, intent);
         finish();
