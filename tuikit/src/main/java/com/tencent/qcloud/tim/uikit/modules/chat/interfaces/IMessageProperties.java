@@ -23,6 +23,35 @@ public interface IMessageProperties {
 
 
     /**
+     * 设置左边头像
+     *
+     * @param drawable
+     */
+    void setLeftAvatar(Drawable drawable);
+
+    /**
+     * 获取左边头像
+     *
+     * @return
+     */
+    Drawable getLeftAvatar();
+
+
+    /**
+     * 设置右边头像
+     *
+     * @param drawable
+     */
+    void setRightAvatar(Drawable drawable);
+
+    /**
+     * 获取右边头像
+     *
+     * @return
+     */
+    Drawable getRightAvatar();
+
+    /**
      * 设置头像圆角
      *
      * @param radius

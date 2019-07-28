@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,11 +30,16 @@ import com.hzrcht.seaofflowers.module.mine.bean.MineUserInfoBean;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MinePresenter;
 import com.hzrcht.seaofflowers.module.mine.fragment.presenter.MineViewer;
 import com.hzrcht.seaofflowers.module.view.MyOneLineView;
+import com.tencent.imsdk.TIMCallBack;
+import com.tencent.imsdk.TIMFriendshipManager;
+import com.tencent.imsdk.TIMUserProfile;
 import com.yu.common.glide.ImageLoader;
 import com.yu.common.launche.LauncherHelper;
 import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 import com.yu.common.ui.DelayClickImageView;
+
+import java.util.HashMap;
 
 public class MineFragment extends BaseFragment implements MineViewer, View.OnClickListener, UpdataCurrentFragment {
 
@@ -237,7 +243,28 @@ public class MineFragment extends BaseFragment implements MineViewer, View.OnCli
             case 1:
                 mPresenter.userInfo();
                 break;
+            case 2:
+                String icon_url = data.getStringExtra("icon_url");
+                uoLoadIcon(icon_url);
+                mPresenter.userInfo();
+                break;
         }
+    }
+
+    private void uoLoadIcon(String iconUrl) {
+        HashMap<String, Object> profileMap = new HashMap<>();
+        profileMap.put(TIMUserProfile.TIM_PROFILE_TYPE_KEY_FACEURL, iconUrl);
+        TIMFriendshipManager.getInstance().modifySelfProfile(profileMap, new TIMCallBack() {
+            @Override
+            public void onError(int code, String desc) {
+                Log.e("im头像", "modifySelfProfile failed: " + code + " desc" + desc);
+            }
+
+            @Override
+            public void onSuccess() {
+                Log.e("im头像", "modifySelfProfile success");
+            }
+        });
     }
 
 

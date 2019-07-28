@@ -714,7 +714,9 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
             loadDialog.dismiss();
         }
         ToastUtils.show("修改资料成功");
-        setResult(1);
+        Intent intent = new Intent();
+        intent.putExtra("icon_url", head_img);
+        setResult(2, intent);
         finish();
     }
 
@@ -724,6 +726,7 @@ public class MineRedactDataActivity extends BaseBarActivity implements MineRedac
             head_img = uploadImgBean.url;
         }
     }
+
 
     @Override
     public void uploadCoverSuccess(UploadImgBean uploadImgBean) {

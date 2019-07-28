@@ -83,6 +83,29 @@ public abstract class MessageLayoutUI extends RecyclerView implements IMessageLa
         properties.setAvatar(resId);
     }
 
+
+    @Override
+    public Drawable getLeftAvatar() {
+        return properties.getLeftAvatar();
+    }
+
+    @Override
+    public void setLeftAvatar(Drawable drawable) {
+        properties.setLeftAvatar(drawable);
+    }
+
+
+    @Override
+    public Drawable getRightAvatar() {
+        return properties.getRightAvatar();
+    }
+
+    @Override
+    public void setRightAvatar(Drawable drawable) {
+        properties.setRightAvatar(drawable);
+    }
+
+
     @Override
     public Drawable getRightBubble() {
         return properties.getRightBubble();
@@ -282,6 +305,8 @@ public abstract class MessageLayoutUI extends RecyclerView implements IMessageLa
         private int mChatContextFontSize;
         private int mMyChatContentFontColor;
         private Drawable mMyBubble;
+        private Drawable rightBubble;
+        private Drawable leftBubble;
         private int mFriendChatContentFontColor;
         private Drawable mFriendBubble;
 
@@ -296,7 +321,7 @@ public abstract class MessageLayoutUI extends RecyclerView implements IMessageLa
         private static Properties sP = new Properties();
 
         public static Properties getInstance() {
-            if (sP == null ) {
+            if (sP == null) {
                 sP = new Properties();
             }
             return sP;
@@ -333,6 +358,26 @@ public abstract class MessageLayoutUI extends RecyclerView implements IMessageLa
         @Override
         public int getAvatar() {
             return mAvatarId;
+        }
+
+        @Override
+        public void setLeftAvatar(Drawable drawable) {
+            this.leftBubble = drawable;
+        }
+
+        @Override
+        public Drawable getLeftAvatar() {
+            return leftBubble;
+        }
+
+        @Override
+        public void setRightAvatar(Drawable drawable) {
+            this.rightBubble = drawable;
+        }
+
+        @Override
+        public Drawable getRightAvatar() {
+            return rightBubble;
         }
 
         @Override

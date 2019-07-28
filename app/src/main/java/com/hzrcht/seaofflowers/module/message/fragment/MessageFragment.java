@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.denghao.control.view.utils.UpdataCurrentFragment;
 import com.hzrcht.seaofflowers.R;
 import com.hzrcht.seaofflowers.base.BaseBarFragment;
 import com.hzrcht.seaofflowers.module.message.activity.MineCallActivity;
@@ -25,10 +26,11 @@ import com.yu.common.mvp.PresenterLifeCycle;
 import com.yu.common.toast.ToastUtils;
 
 
-public class MessageFragment extends BaseBarFragment implements MessageViewer, View.OnClickListener {
+public class MessageFragment extends BaseBarFragment implements MessageViewer, View.OnClickListener, UpdataCurrentFragment {
     @PresenterLifeCycle
     private MessagePresenter mPresenter = new MessagePresenter(this);
     private DialogUtils cleanDialog;
+    private ConversationLayout conversationLayout;
 
     @Override
     protected int getContentViewId() {
@@ -58,19 +60,24 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
         ll_online_service.setOnClickListener(this);
 
         // 从布局文件中获取会话列表面板
-        ConversationLayout conversationLayout = (ConversationLayout) findViewById(R.id.conversation_layout);
+        conversationLayout = (ConversationLayout) findViewById(R.id.conversation_layout);
+
+
+        initConversationLayout();
+        tv_clean.setOnClickListener(view -> {
+            showCleanDialog(conversationLayout);
+        });
+
+    }
+
+    private void initConversationLayout() {
         // 会话列表面板的默认UI和交互初始化
         conversationLayout.initDefault();
 
         conversationLayout.getTitleBar().setVisibility(View.GONE);
         ConversationListLayout conversationList = conversationLayout.getConversationList();
-        conversationList.enableItemRoundIcon(false);
+        conversationList.enableItemRoundIcon(true);
         conversationList.setOnItemClickListener((view, position, messageInfo) -> mPresenter.getUserCharge(messageInfo.getId(), messageInfo));
-
-        tv_clean.setOnClickListener(view -> {
-            showCleanDialog(conversationLayout);
-        });
-
     }
 
     /**
@@ -134,5 +141,10 @@ public class MessageFragment extends BaseBarFragment implements MessageViewer, V
             bundle.putString("IM_ID", messageInfo.getId());
             getLaunchHelper().startActivity(MineChatActivity.class, bundle);
         }
+    }
+
+    @Override
+    public void update(Bundle bundle) {
+        initConversationLayout();
     }
 }

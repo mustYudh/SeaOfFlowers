@@ -15,6 +15,9 @@ import com.tencent.qcloud.tim.uikit.R;
 import com.tencent.qcloud.tim.uikit.component.gatherimage.UserIconView;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class MessageContentHolder extends MessageEmptyHolder {
 
     public UserIconView leftUserIcon;
@@ -54,6 +57,19 @@ public abstract class MessageContentHolder extends MessageEmptyHolder {
             leftUserIcon.setDefaultImageResId(R.drawable.default_user_icon);
             rightUserIcon.setDefaultImageResId(R.drawable.default_user_icon);
         }
+        TIMUserProfile profileIcon = TIMFriendshipManager.getInstance().queryUserProfile(msg.getFromUser());
+        if (profileIcon != null && !TextUtils.isEmpty(profileIcon.getFaceUrl()) && !msg.isSelf()) {
+            List urllist = new ArrayList<>();
+            urllist.add(profileIcon.getFaceUrl());
+            leftUserIcon.setIconUrls(urllist);
+//            urllist.clear();
+        }else if (profileIcon != null && !TextUtils.isEmpty(profileIcon.getFaceUrl()) && msg.isSelf()){
+            List urllist = new ArrayList<>();
+            urllist.add(profileIcon.getFaceUrl());
+            rightUserIcon.setIconUrls(urllist);
+//            urllist.clear();
+        }
+
         if (properties.getAvatarRadius() != 0) {
             leftUserIcon.setRadius(properties.getAvatarRadius());
             rightUserIcon.setRadius(properties.getAvatarRadius());

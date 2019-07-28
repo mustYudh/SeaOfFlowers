@@ -1,17 +1,22 @@
 package com.tencent.qcloud.tim.uikit.modules.conversation.holder;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tencent.imsdk.TIMFriendshipManager;
+import com.tencent.imsdk.TIMUserProfile;
 import com.tencent.qcloud.tim.uikit.R;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationIconView;
 import com.tencent.qcloud.tim.uikit.modules.conversation.base.ConversationInfo;
 import com.tencent.qcloud.tim.uikit.modules.message.MessageInfo;
 import com.tencent.qcloud.tim.uikit.utils.DateTimeUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ConversationCommonHolder extends ConversationBaseHolder {
 
@@ -39,7 +44,13 @@ public class ConversationCommonHolder extends ConversationBaseHolder {
         } else {
             leftItemLayout.setBackgroundColor(Color.WHITE);
         }
-        conversationIconView.setIconUrls(null); // 如果自己要设置url，这行代码需要删除
+//        conversationIconView.setIconUrls(null); // 如果自己要设置url，这行代码需要删除
+        TIMUserProfile profile = TIMFriendshipManager.getInstance().queryUserProfile(lastMsg.getFromUser());
+        if (profile != null && !TextUtils.isEmpty(profile.getFaceUrl())) {
+            List urllist = new ArrayList<>();
+            urllist.add(profile.getFaceUrl());
+            conversationIconView.setIconUrls(urllist);
+        }
         if (conversation.isGroup()) {
             if (mAdapter.mIsShowItemRoundIcon) {
                 conversationIconView.setBitmapResId(R.drawable.conversation_group);
